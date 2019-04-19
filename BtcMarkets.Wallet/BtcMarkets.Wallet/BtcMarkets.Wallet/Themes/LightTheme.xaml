@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ResourceDictionary xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:android="clr-namespace:Xamarin.Forms.PlatformConfiguration.AndroidSpecific;assembly=Xamarin.Forms.Core"
+             xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
+             xmlns:converters="clr-namespace:BtcMarkets.Wallet.Converters"                    
+             x:Class="BtcMarkets.Wallet.Themes.LightTheme">
+    
+    <!--<Color x:Key="AccentColor">#2F4B66</Color>-->
+    <Color x:Key="Accent2Color">#673C4F</Color>
+    <Color x:Key="PrimaryColor">#3C6B3C</Color>
+    <Color x:Key="SecondaryColor">#427e42</Color>
+    <Color x:Key="SecondaryColor1">#18311A</Color>
+    <Color x:Key="NavigationPrimary">#3C6B3C</Color>
+    <Color x:Key="GradientColor1">#2193b0</Color>
+    <Color x:Key="GradientColor2">#6dd5ed</Color>
+    <!--<Color x:Key="AccentColor1">#ff9933</Color>-->
+    <Color x:Key="AccentColor">#ffAA55</Color>
+    <Color x:Key="GrayColor1">#DCDCDC</Color>
+    <Color x:Key="GrayColor2">#EAEDED</Color>
+    <Color x:Key="LightWhiteColor1">#F4F6F6</Color>
+    <Color x:Key="LightWhiteColor2">#F2F4F4</Color>
+    <Color x:Key="LightWhiteColor3">#F2F3F4</Color>
+    <Color x:Key="LightBlackColor1">#566573</Color>
+
+    
+    <Color x:Key="PageBackgroundColor">#F2F4F4</Color>
+    <Color x:Key="PageTextColor">#99A3A4</Color>
+    <Color x:Key="DefaultBackgroundColor">#F2F4F4</Color>
+    <Color x:Key="ReverseBackgroundColor">#566573</Color>
+    <Color x:Key="ReverseTextColor">#F2F4F4</Color>
+    <Color x:Key="DefaultTextColor">#99A3A4</Color>
+    <Color x:Key="DefaultHeaderColor">#ffffff</Color>
+    
+    <Color x:Key="SeparatorColor">#EAEDED</Color>
+    <Color x:Key="HighlightBackgroundColor">#ffAA55</Color>
+    <Color x:Key="HighlightTextColor">#F2F4F4</Color>
+    
+    
+    
+   
+</ResourceDictionary>

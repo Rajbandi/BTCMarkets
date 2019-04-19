@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:views="clr-namespace:BtcMarkets.Wallet.Views"
+             Title="{Binding Title}"
+             ControlTemplate="{StaticResource ActivityIndicatorTemplate}"
+           Style="{StaticResource DefaultPage}"
+             x:Class="BtcMarkets.Wallet.Views.BtcMarketsPage">
+    <Shell.TitleView>
+
+        <StackLayout Orientation="Horizontal">
+            <StackLayout HeightRequest="40" HorizontalOptions="FillAndExpand">
+                <Frame   HasShadow="False"  Padding="1" CornerRadius="5"  BorderColor="{DynamicResource ReverseBackgroundColor}" BackgroundColor="{DynamicResource DefaultBackgroundColor}">
+
+
+
+                </Frame>
+
+
+            </StackLayout>
+            <StackLayout Grid.Row="0" Grid.Column="1" Orientation="Horizontal">
+                <Image Source="{Binding Converter={StaticResource FontIconImage},ConverterParameter=settings}"></Image>
+                <Image Source="{Binding Converter={StaticResource FontIconImage},ConverterParameter=refresh}">
+                    <Image.GestureRecognizers>
+                        <!--<TapGestureRecognizer Command="{Binding BindingContext.RefreshCommand, Source={x:Reference TradeOrdersPage}}"></TapGestureRecognizer>-->
+                    </Image.GestureRecognizers>
+                </Image>
+            </StackLayout>
+        </StackLayout>
+    </Shell.TitleView>
+    <ContentPage.Content>
+        <views:MarketsView Markets="{Binding BtcMarkets}">
+
+        </views:MarketsView>
+    </ContentPage.Content>
+
+
+
+</ContentPage>

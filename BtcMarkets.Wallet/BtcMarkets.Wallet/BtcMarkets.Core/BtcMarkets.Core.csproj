@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <Authors>Raj Bandi</Authors>
+    <Company>OmkaarSol</Company>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Api\BaseRequest.cs" />
+    <Compile Remove="Api\BaseResponse.cs" />
+    <Compile Remove="Api\BtcMarketApi.cs" />
+    <Compile Remove="Api\IBtcMarketApi.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+    <PackageReference Include="Refit" Version="4.6.48" />
+    <PackageReference Include="SuperSocket.ClientEngine.Core" Version="0.10.0" />
+    <PackageReference Include="System.Collections.Immutable" Version="1.5.0" />
+    <PackageReference Include="WebSocket4Net" Version="0.15.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\EngineIoClientDotNet.netstandard20\EngineIoClientDotNet.netstandard20.csproj" />
+    <ProjectReference Include="..\SocketIoClientDotNet\SocketIoClientDotNet.csproj" />
+  </ItemGroup>
+
+</Project>

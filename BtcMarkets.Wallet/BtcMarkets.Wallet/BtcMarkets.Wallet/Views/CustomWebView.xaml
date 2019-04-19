@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="BtcMarkets.Wallet.Views.CustomWebView">
+  <ContentView.Content>
+
+        <!--<AbsoluteLayout VerticalOptions="Fill">-->
+            
+            <WebView HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" HeightRequest="{Binding CustomHeight}" WidthRequest="{Binding CustomWidth}">
+                <WebView.Source>
+                    <HtmlWebViewSource Html="{Binding HtmlSource}" />
+                </WebView.Source>
+            </WebView>
+
+            <!--<BoxView AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0,0,1,1"  BackgroundColor="Transparent" InputTransparent="false"  IsVisible="{Binding IsLoading}" />
+
+            <ActivityIndicator IsVisible="{Binding IsLoading}"
+                               IsRunning="{Binding IsLoading}"
+                               AbsoluteLayout.LayoutFlags="PositionProportional" AbsoluteLayout.LayoutBounds=".5,.5,-1,-1"
+                    />
+        </AbsoluteLayout>-->
+        
+  </ContentView.Content>
+</ContentView>

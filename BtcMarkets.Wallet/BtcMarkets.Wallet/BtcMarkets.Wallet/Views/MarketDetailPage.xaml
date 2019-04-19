@@ -1,0 +1,94 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:BtcMarkets.Wallet.Controls"
+             xmlns:oxy="clr-namespace:OxyPlot.Xamarin.Forms;assembly=OxyPlot.Xamarin.Forms"
+             Title="{Binding Title}" 
+             ControlTemplate="{StaticResource ActivityIndicatorTemplate}"
+             
+             
+             
+             x:Class="BtcMarkets.Wallet.Views.MarketDetailPage">
+
+    <!--xmlns:android="clr-namespace:Android.Widget;assembly=Mono.Android;targetPlatform=Android"
+              xmlns:androidLocal="clr-namespace:BtcMarkets.Wallet.Droid;assembly=BtcMarkets.Wallet.Android;targetPlatform=Android"  
+              xmlns:androidCustomControls="clr-namespace:BtcMarkets.Wallet.Droid.Controls;assembly=BtcMarkets.Wallet.Android;targetPlatform=Android"  
+              xmlns:androidForms="clr-namespace:Xamarin.Forms;assembly=Xamarin.Forms.Platform.Android;targetPlatform=Android"-->
+    <ContentPage.Content>
+       
+            <Grid  VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" >
+            <Grid.Margin>
+                <OnPlatform x:TypeArguments="Thickness">
+                    <On Platform="iOS" Value="0,100,0,0" />
+                </OnPlatform>
+            </Grid.Margin>
+            <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+
+                <Label  Grid.Row="0" Grid.Column="0" Text="{Binding Market.LastPriceWithSymbol}" FontAttributes="Bold" FontSize="Large"></Label>
+                <Label  Grid.Row="1" Grid.Column="0">
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="LOW"></Span>
+                            
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+                <Grid Grid.Row="2" Grid.Column="0" HorizontalOptions="FillAndExpand" >
+
+                    <!--<AbsoluteLayout VerticalOptions="Fill">-->
+                        <!--<controls:CustomWebView VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" HeightRequest="400" WidthRequest="400"   >
+                            <WebView.Source>
+                                <HtmlWebViewSource Html="{Binding ReportHtml}" />
+                            </WebView.Source>
+                        </controls:CustomWebView>-->
+                        <!--<BoxView AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0,0,1,1"  BackgroundColor="Transparent" InputTransparent="false"  IsVisible="{Binding IsLoading}" />
+
+                        <ActivityIndicator IsVisible="{Binding IsLoading}"
+                               IsRunning="{Binding IsLoading}"
+                               AbsoluteLayout.LayoutFlags="PositionProportional" AbsoluteLayout.LayoutBounds=".5,.5,-1,-1"
+                    />
+                    </AbsoluteLayout>-->
+                
+
+                    <!--<WebView VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" HeightRequest="400" WidthRequest="400">
+                        <WebView.Source>
+                            <HtmlWebViewSource Html="{Binding ReportHtml}" />
+                        </WebView.Source>
+                    </WebView>-->
+
+                  
+                    <!--<StackLayout x:Name="chartView">
+                        <Label Text="Control Below"></Label>
+                        --><!--<controls:MarketChart  HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" WidthRequest="400" HeightRequest="400"></controls:MarketChart>-->
+                        <!--<android:CheckBox x:Arguments="{x:Static androidForms:Forms.Context}" />
+                        <androidCustomControls:MarketCandleStickChart   x:Arguments="{x:Static androidForms:Forms.Context}" ></androidCustomControls:MarketCandleStickChart>--><!--
+                    </StackLayout>-->
+                    <!--<microcharts:ChartView x:Name="marketChart" HeightRequest="140" BackgroundColor="White"  HorizontalOptions="FillAndExpand"  WidthRequest="400" Chart="{Binding MarketChart}">
+                    
+                    </microcharts:ChartView>-->
+
+                <oxy:PlotView x:Name="plotView" Model="{Binding MarketChart}" HeightRequest="300"  WidthRequest="400"
+                                   HorizontalOptions="FillAndExpand" 
+                               BackgroundColor="Transparent" >
+                  
+                </oxy:PlotView>
+
+            </Grid>
+
+                <StackLayout Grid.Row="3"  Grid.Column="0" VerticalOptions="FillAndExpand">
+
+                    <Label Text="Bottom adasdasdasdasdasdasd"/>
+                </StackLayout>
+             
+            </Grid>
+       
+    </ContentPage.Content>
+</ContentPage>

@@ -1,0 +1,90 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:Refractored.XamForms.PullToRefresh;assembly=Refractored.XamForms.PullToRefresh"
+             xmlns:converters="clr-namespace:BtcMarkets.Wallet.Converters"
+           
+             Title="{Binding Title}"
+             Style="{DynamicResource DefaultPage}"
+             ControlTemplate="{DynamicResource ActivityIndicatorTemplate}"
+             x:Class="BtcMarkets.Wallet.Views.HomePage" 
+             >
+    <!-- Shell.NavBarIsVisib1le="False"-->
+    <NavigationPage.TitleView>
+        <StackLayout Orientation="Horizontal">
+            <Label Text="{Binding Title}"></Label>
+            <Slider HeightRequest="44" WidthRequest="300" />
+        </StackLayout>
+    </NavigationPage.TitleView>
+
+    <ContentPage.Content>
+       
+        <Grid VerticalOptions="FillAndExpand">
+            <Grid.Margin>
+                <OnPlatform x:TypeArguments="Thickness">
+                    <On Platform="iOS" Value="20,100,20,0" />
+                    <On Platform="Android" Value="20" />
+                </OnPlatform>
+
+            </Grid.Margin>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"></RowDefinition>
+            </Grid.RowDefinitions>
+            <controls:PullToRefreshLayout VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand"  
+                                          RefreshColor="{DynamicResource PrimaryColor}"  RefreshCommand="{Binding RefreshCommand}" IsRefreshing="{Binding IsRefreshing}"
+                                           Grid.Row="1" Grid.Column="0" IsPullToRefreshEnabled="True" >
+
+                <ScrollView VerticalOptions="FillAndExpand">
+                    <StackLayout>
+                    <Grid IsVisible="{Binding IsAccountValid, Converter={converters:InverseBoolConverter}}"  VerticalOptions="CenterAndExpand">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"></RowDefinition>
+                            <RowDefinition Height="Auto"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <StackLayout Grid.Row="0" Grid.Column="0">
+                            <Frame Style="{StaticResource HighlightPanel}">
+                                <StackLayout>
+                                    <Label Text="Bitcoin(BTC)" Style="{StaticResource MediumHightlightText}"></Label>
+                                    <Label Text="{Binding BtcAudCoin.LastPriceString}" Style="{StaticResource MediumHightlightText}"></Label>
+                                </StackLayout>
+                            </Frame>
+                        </StackLayout>
+                        <StackLayout Grid.Row="1" Grid.Column="0" >
+                            <Label Text="{Binding AccountErrorMessage}"></Label>
+                            <Button Text="Settings" Clicked="Button_Clicked"/>
+                        </StackLayout>
+                    </Grid>
+                    <Grid  IsVisible="{Binding IsAccountValid}">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"></RowDefinition>
+                            <RowDefinition Height="Auto"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Frame Grid.Row="0" Grid.Column="0" Style="{StaticResource HighlightPanel}">
+                            <StackLayout HorizontalOptions="FillAndExpand">
+
+                                <StackLayout Orientation="Horizontal">
+                                    <Label Text="{Binding BtcAudCoin.Name}"></Label>
+                                    <Label Text="{Binding BtcAudCoin.Currency}"></Label>
+                                    <Label Text="{Binding BtcAudCoin.LastPrice}" FontSize="Large" FontAttributes="Bold" TextColor="White" ></Label>
+                                </StackLayout>
+                            </StackLayout>
+                        </Frame>
+                        <StackLayout Grid.Row="1" Grid.Column="0" >
+
+
+                        </StackLayout>
+                    </Grid>
+                    </StackLayout>
+                </ScrollView>
+            </controls:PullToRefreshLayout>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

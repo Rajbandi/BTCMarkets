@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Shell xmlns="http://xamarin.com/schemas/2014/forms" 
+       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+       xmlns:local="clr-namespace:BtcMarkets.Wallet.Views"
+       RouteHost="companyname.com"
+       RouteScheme="app"
+       Route="BtcMarkets.Wallet"
+       FlyoutBehavior="Flyout"
+       Title="BtcMarkets.Wallet"
+       x:Name="MainPageRef"
+       x:Class="BtcMarkets.Wallet.AppShell" Navigating="Shell_Navigating" Navigated="MainPageRef_Navigated"  
+       
+       Style="{StaticResource DefaultShell}">
+
+    <!--
+        XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+        XXXXXXXX|                            |XXXXXXXX
+        XXXXXXX'                              'XXXXXXX
+        XXXXXx.                                .xNXXXX
+        XXXNo.        ,ll;.        .;ll,        .oNXXX
+        XXX|.         ,OXNo.      .oNXO,          cXXX
+        XX|            'XXNx.    .xNXX'            |XX
+        X|              .xXXX.  .XXXx.              |X
+        |                .xXXOllOXXx.                |
+        |                .xXXXccXXXx.                |
+        X|              .XXXx.  .xXXX.              |X
+        XXc            ,OXNd.    .dNXO,            cXX
+        XXXl.         ;XXXo.      .oNXX;         .lXXX
+        XXXNd.        'cc,          ,cc'        .dNXXX
+        XXXXXx.                                .xXXXXX
+        XXXXXXO'                              'OXXXXXX
+        XXXXXXXX|                            |XXXXXXXX
+        XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+        Shell is an all new way to quickly get started with your application. There are 3 levels to a Shell app:
+        * ShellItem: populates the Flyout menu along with special menu items
+        * ShellSection: groups of 1 or more ContentPage displayed as bottom tabs
+        * ShellContent: a ContentPage host. Multiple ShellContent within a ShellSection are navigable by top tabs
+
+        For more details about building apps with Shell, visit these resources:
+        * MSDN Article: https://aka.ms/xf-msdn
+        * Preview Documentation: https://aka.ms/xf-shell-docs
+        * Blog Introduction: https://aka.ms/xf-40-blog
+
+        PLEASE give us feedback on your experience: good, bad, and ugly.
+        https://www.surveymonkey.com/r/VTJNWTM
+
+        Thanks for trying out this preview! 
+
+        - David Ortinau, Senior Program Manager for Mobile Dev Tools [david.ortinau@microsoft.com]
+    -->
+
+    <!-- #2196F3
+        Styles and Resources 
+    -->
+    <Shell.Resources>
+        <ResourceDictionary>
+         
+            <Style TargetType="ShellItem" BasedOn="{StaticResource BaseStyle}" />
+        </ResourceDictionary>
+    </Shell.Resources>
+
+    <!-- Your Pages -->
+    <ShellItem Route="Pages">
+
+        <ShellSection Title="Home" Icon="{Binding Converter={StaticResource FontIconImage}, ConverterParameter=home}" Route="Home"  >
+            <ShellContent ContentTemplate="{DataTemplate local:HomePage}" />
+        </ShellSection>
+        <ShellSection Title="Markets" Icon="{Binding Converter={StaticResource FontIconImage},ConverterParameter=timeline}" Route="Markets" >
+            
+            <ShellContent  ContentTemplate="{DataTemplate local:AudMarketsPage}" Title="AUD Markets"  Route="Aud"  />
+            <ShellContent ContentTemplate="{DataTemplate local:BtcMarketsPage}" Title="BTC Markets" Route="Btc" />
+            <ShellContent ContentTemplate="{DataTemplate local:FavMarketsPage}" Title="Favourites" Route="Fav" />
+        </ShellSection>
+
+        <ShellSection Title="Trades"  Icon="{Binding Converter={StaticResource FontIconImage},ConverterParameter=swap_vert}"  Route="Trades" >
+            <ShellContent ContentTemplate="{DataTemplate local:TradesPage}" Title="Market Trades" Route="Trades"/>
+            <ShellContent ContentTemplate="{DataTemplate local:OrdersHistoryPage}" Title="Orders History" Route="OrdersHistory"/>
+            <ShellContent ContentTemplate="{DataTemplate local:OpenOrdersPage}" Title="Open Orders" Route="OpenOrders"/>
+        </ShellSection>
+      
+        <ShellSection Title="Account"  Icon="{Binding Converter={StaticResource FontIconImage},ConverterParameter=account_box}"  Route="Account" >
+            <ShellContent ContentTemplate="{DataTemplate local:ApiKeysPage}" Title="Api Keys" Route="ApiKeys"/>
+            <ShellContent ContentTemplate="{DataTemplate local:AccountPage}" Title="Settings" Route="Settings"/>
+            <ShellContent ContentTemplate="{DataTemplate local:AccountPage}}" Title="About" Route="About"/>
+        </ShellSection>
+        <ShellSection Title="News" Icon="{Binding Converter={StaticResource FontIconImage},ConverterParameter=view_list}" Route="News">
+            <ShellContent ContentTemplate="{DataTemplate local:NewsPage}" />
+        </ShellSection>
+    </ShellItem>
+
+    <!-- Optional Templates 
+    // These may be provided inline as below or as separate classes.
+
+    // This header appears at the top of the Flyout.
+   
+
+    -->
+    <Shell.FlyoutHeaderTemplate>
+        <DataTemplate>
+            <Grid VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" BackgroundColor="{StaticResource PrimaryColor}" HeightRequest="100"><!--ContentHere-->
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <!--<Image x:Name="HeaderImage" Grid.Row="0" Grid.Column="0" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" Source="{Binding BindingContext.Logo, Source={x:Reference MainPageRef}, Converter={StaticResource Base64ToImage}}"></Image>-->
+                <Label Grid.Row="1" Grid.Column="0" Text="BTC Markets" FontAttributes="Bold" FontSize="Large" TextColor="White" HorizontalTextAlignment="Center" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand" VerticalTextAlignment="Center"> </Label>
+            </Grid>
+        </DataTemplate>
+    </Shell.FlyoutHeaderTemplate>
+
+    <!--// ItemTemplate is for ShellItems as displayed in a Flyout-->
+    <Shell.ItemTemplate>
+        <DataTemplate>
+            <ContentView>
+                <!-- Properties: Title, Icon-->
+            </ContentView>
+        </DataTemplate>
+    </Shell.ItemTemplate>
+
+    <!-- MenuItemTemplate is for MenuItems as displayed in a Flyout-->
+    <Shell.MenuItemTemplate>
+        <DataTemplate>
+            <ContentView>
+                <!-- Properties: Text, Icon-->
+            </ContentView>
+        </DataTemplate>
+    </Shell.MenuItemTemplate>
+</Shell>

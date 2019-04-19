@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+              Title="{Binding Title}"
+             ControlTemplate="{StaticResource ActivityIndicatorTemplate}"
+             Style="{StaticResource DefaultPage}"
+             
+             x:Class="BtcMarkets.Wallet.Views.NewsPage">
+    <ContentPage.Content>
+        <StackLayout>
+            <Label Text="Latest News" FontAttributes="Bold" FontSize="Large"></Label>
+
+            <CollectionView ItemsSource="{Binding MarketNews}"  HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+
+                <CollectionView.ItemTemplate >
+                    <DataTemplate>
+                        <StackLayout>
+                            <Label Text="{Binding Title}" FontAttributes="Bold">
+                            </Label>
+                            <Label>
+                                <Label.FormattedText>
+                                    <FormattedString>
+                                        <Span Text="Published on "></Span>
+                                        <Span Text="{Binding DatePublished}"></Span>
+                                    </FormattedString>
+                                </Label.FormattedText>
+                            </Label>
+                        </StackLayout>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

@@ -1,0 +1,179 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:effects="clr-namespace:BtcMarkets.Wallet.Effects"
+             xmlns:controls="clr-namespace:Refractored.XamForms.PullToRefresh;assembly=Refractored.XamForms.PullToRefresh"
+             x:Name="marketView"
+             Style="{StaticResource DefaultView}"
+             x:Class="BtcMarkets.Wallet.Views.MarketsView" >
+    <ContentView.Content>
+
+        <Grid Style="{StaticResource DefaultGrid}">
+            <Grid.Margin>
+                <OnPlatform x:TypeArguments="Thickness">
+                    <On Platform="iOS" Value="0,100,0,50" />
+                </OnPlatform>
+            </Grid.Margin>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Grid  Grid.Row="0" Grid.Column="0"  Style="{StaticResource ListHeader}">
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="40*" />
+                    <ColumnDefinition Width="30*" />
+                    <ColumnDefinition Width="20*" />
+                    <ColumnDefinition Width="15*" />
+                </Grid.ColumnDefinitions>
+                <Label Grid.Column="0" Grid.Row="0"  
+                               Text="Coin" 
+                              Style="{StaticResource SmallHeaderText}"/>
+
+                <Label Grid.Column="1" Grid.Row="0"  
+                               Text="Price" 
+                              Style="{StaticResource SmallHeaderText}"/>
+                <Label Grid.Column="2" Grid.Row="0"  
+                               Text="Holdings" 
+                               Style="{StaticResource SmallHeaderText}"/>
+
+            </Grid>
+
+            <!--<ScrollView  Grid.Row="1" Grid.Column="0" VerticalOptions="FillAndExpand"    HorizontalOptions="StartAndExpand">-->
+
+
+            <!--<controls:PullToRefreshLayout VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand"  
+                                          RefreshColor="{StaticResource PrimaryColor}"  RefreshCommand="{Binding RefreshCommand}" IsRefreshing="{Binding IsRefreshing}"
+                                           Grid.Row="1" Grid.Column="0" IsPullToRefreshEnabled="True" >-->
+            <StackLayout Grid.Row="1" Grid.Column="0" Spacing="0" >
+                <!--<ActivityIndicator IsVisible="{Binding IsBusy}" IsRunning="{Binding IsBusy}"></ActivityIndicator>-->
+                <ListView  x:Name="marketsListView" Style="{StaticResource MarketList}" ItemsSource="{Binding Markets}"  SelectedItem="{Binding SelectedMarket, Mode=TwoWay}"
+                                SelectionMode="Single"   IsPullToRefreshEnabled="True" RefreshCommand="{Binding RefreshCommand}" IsRefreshing="{Binding IsRefreshing}" SeparatorColor="{StaticResource SeparatorColor}" 
+                     HasUnevenRows="True"  >
+
+                    <!-- SelectionChangedCommand="{Binding BindingContext.SelectionChangedCommand, Source={x:Reference marketsListView}}" -->
+
+
+                    <ListView.ItemTemplate  >
+                        <DataTemplate>
+                            <ViewCell>
+
+                                <!--<StackLayout BindableLayout.ItemsSource="{Binding Markets}" x:Name="marketsListView" Spacing="1">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate>-->
+                                <Grid  Style="{StaticResource MarketListTemplate}">
+
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="40*" />
+                                        <ColumnDefinition Width="30*" />
+                                        <ColumnDefinition Width="20*" />
+                                        <ColumnDefinition Width="15*" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <StackLayout Grid.Column="0" Grid.Row="0" Orientation="Horizontal" >
+                                        <Frame Style="{StaticResource MarketListFrame}">
+                                            <Image Source="{Binding Image,Converter={StaticResource Base64ToImage}}" WidthRequest="24" HeightRequest="24">
+
+                                                <Image.VerticalOptions>
+                                                    <OnPlatform x:TypeArguments="LayoutOptions">
+                                                        <On Platform="Android" Value="StartAndExpand"/>
+                                                        <On Platform="iOS" Value="StartAndExpand"/>
+                                                    </OnPlatform>
+                                                </Image.VerticalOptions>
+                                            </Image>
+                                        </Frame>
+                                        <StackLayout Spacing="0" Padding="0">
+                                            <Label Text="{Binding Instrument}"  Style="{StaticResource MarketListInstrumentCode}"/>
+                                            <Label  Style="{StaticResource MicroDefaultText}">
+                                                <Label.FormattedText>
+                                                    <FormattedString>
+                                                        <Span Text="("></Span>
+                                                        <Span Text="{Binding Name}" Style="{StaticResource MarketListInstrumentName}"></Span>
+                                                        <Span Text=")"></Span>
+                                                    </FormattedString>
+                                                </Label.FormattedText>
+                                            </Label>
+                                        </StackLayout>
+                                    </StackLayout>
+
+                                    <StackLayout Grid.Column="1" Grid.Row="0">
+                                        <Label  >
+                                            <Label.FormattedText>
+                                                <FormattedString>
+                                                    <Span Text="{Binding CurrencySymbol} " Style="{StaticResource MarketListPriceSymbol}"></Span>
+                                                    <Span Text="{Binding LastPriceString}" Style="{StaticResource MarketListPriceValue}"></Span>
+                                                </FormattedString>
+                                            </Label.FormattedText>
+                                        </Label>
+                                        <Label  >
+                                            <Label.FormattedText>
+                                                <FormattedString>
+                                                    <Span Text="V(24H) "  Style="{StaticResource MarketListVolumeLabel}"></Span>
+                                                    <Span Text="{Binding Volume}" Style="{StaticResource MarketListVolumeValue}"></Span>
+                                                </FormattedString>
+                                            </Label.FormattedText>
+                                        </Label>
+                                    </StackLayout>
+                                    <Label Grid.Column="2" Grid.Row="0"  Text="{Binding HoldingsString}" Style="{StaticResource MarketListHoldingsValue}"></Label>
+
+                                    <Grid Grid.Column="3" Grid.Row="0"   >
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"></RowDefinition>
+                                            <RowDefinition Height="Auto"></RowDefinition>
+                                        </Grid.RowDefinitions>
+                                        <Image Grid.Row="0" Grid.Column="0" Source="{Binding ToggleStarred, Converter={StaticResource ToggleImage}}"  Style="{StaticResource MarketListFavouriteImage}">
+                                            <Image.GestureRecognizers>
+                                                <TapGestureRecognizer Command="{Binding BindingContext.FavouriteCommand, Source={x:Reference marketsListView}}" CommandParameter="{Binding .}" ></TapGestureRecognizer>
+                                            </Image.GestureRecognizers>
+                                        </Image>
+                                        <Image Grid.Row="1" Grid.Column="0" Source="{Binding ToggleNotification, Converter={StaticResource ToggleImage}}"  Style="{StaticResource MarketListNotificationImage}">
+                                            <Image.GestureRecognizers>
+                                                <TapGestureRecognizer Command="{Binding BindingContext.NotificationCommand, Source={x:Reference marketsListView}}" CommandParameter="{Binding .}" ></TapGestureRecognizer>
+                                            </Image.GestureRecognizers>
+                                        </Image>
+
+                                    </Grid>
+                                    <!--<StackLayout Grid.Column="3" Grid.Row="0">
+                                        <Label Text="{Binding ToggleStarred, Converter={StaticResource ToggleTextIcon}}"  Style="{DynamicResource MarketListFavouriteIcon}">
+                                            <Label.GestureRecognizers>
+                                                <TapGestureRecognizer Command="{Binding BindingContext.FavouriteCommand, Source={x:Reference marketsListView}}" CommandParameter="{Binding .}" ></TapGestureRecognizer>
+                                            </Label.GestureRecognizers>
+                                        </Label>
+                                        <Label Text="{Binding ToggleNotification, Converter={StaticResource ToggleTextIcon}}" Style="{DynamicResource MarketListNotificationIcon}">
+                                            <Label.GestureRecognizers>
+                                                <TapGestureRecognizer Command="{Binding BindingContext.NotificationCommand, Source={x:Reference marketsListView}}"  CommandParameter="{Binding .}" ></TapGestureRecognizer>
+                                            </Label.GestureRecognizers>
+                                        </Label>
+                                    </StackLayout>-->
+                                </Grid>
+
+                                <!--<BoxView Grid.Column="0" Grid.Row="1" Style="{StaticResource Seperator1}">
+
+                                </BoxView>-->
+
+                            </ViewCell>
+                        </DataTemplate>
+
+                    </ListView.ItemTemplate>
+                </ListView>
+            </StackLayout>
+            <!--</StackLayout>-->
+            <!--</DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </StackLayout>
+            </ScrollView>-->
+            <!--</controls:PullToRefreshLayout>-->
+        </Grid>
+
+    </ContentView.Content>
+</ContentView>

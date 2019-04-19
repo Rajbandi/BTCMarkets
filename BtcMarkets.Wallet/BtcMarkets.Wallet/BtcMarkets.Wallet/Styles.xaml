@@ -1,0 +1,411 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ResourceDictionary xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:android="clr-namespace:Xamarin.Forms.PlatformConfiguration.AndroidSpecific;assembly=Xamarin.Forms.Core"
+             xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
+             xmlns:converters="clr-namespace:BtcMarkets.Wallet.Converters"      
+             x:Class="BtcMarkets.Wallet.Styles">
+
+
+    <OnPlatform x:Key="MaterialDesign" x:TypeArguments="x:String">
+        <On Platform="Android" Value="materialdesign.ttf#Material Icons" />
+        <On Platform="iOS" Value="Material Icons" />
+    </OnPlatform>
+
+    <ControlTemplate x:Key="ActivityIndicatorTemplate">
+        <AbsoluteLayout VerticalOptions="Fill" BackgroundColor="{DynamicResource DefaultBackgroundColor}">
+            <ContentPresenter  AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0,0,1,1" >
+            </ContentPresenter>
+            <BoxView AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0,0,1,1"  BackgroundColor="Transparent" InputTransparent="false"  IsVisible="{TemplateBinding BindingContext.IsBusy}" 
+/>
+
+            <Frame HasShadow="false" AbsoluteLayout.LayoutFlags="PositionProportional" AbsoluteLayout.LayoutBounds=".5,.5,-1,-1"    IsVisible="{TemplateBinding BindingContext.IsBusy}" 
+                   BackgroundColor="{DynamicResource ReverseBackgroundColor}" >
+               
+
+                <Frame.Padding>
+                    <OnPlatform x:TypeArguments="Thickness">
+                        <On Platform="Android" Value="1" />
+                        <On Platform="iOS" Value="10" />
+                    </OnPlatform>
+                </Frame.Padding>
+
+                <Frame.CornerRadius>
+                    <OnPlatform x:TypeArguments="x:Single">
+                        <On Platform="iOS" Value="20"/>
+                        <On Platform="Android" Value="25"/>
+                    </OnPlatform>
+                </Frame.CornerRadius>
+                <ActivityIndicator IsVisible="{TemplateBinding BindingContext.IsBusy}" 
+                               IsRunning="{TemplateBinding BindingContext.IsBusy}"
+                                   Color="{DynamicResource ReverseTextColor}"
+                                />
+            </Frame>
+           
+        </AbsoluteLayout>
+    </ControlTemplate>
+
+
+    <!-- Converters -->
+
+    <converters:Base64ToImageConverter x:Key="Base64ToImage"/>
+    <converters:StarredConverter x:Key="Starred"/>
+    <converters:FontIconToImageConverter x:Key="FontIconImage"/>
+    <converters:ToggleImageConverter x:Key="ToggleImage"/>
+    <converters:ToggleTextIconConverter x:Key="ToggleTextIcon"/>
+    <converters:TradeSelectedStyleConverter x:Key="SelectedStyle"/>
+
+    <Style x:Key="Seperator1" TargetType="BoxView">
+        <Setter Property="HeightRequest" Value="1"></Setter>
+        <Setter Property="BackgroundColor" Value="{DynamicResource SeparatorColor}"></Setter>
+        <Setter Property="HorizontalOptions" Value="FillAndExpand"></Setter>
+    </Style>
+
+    <Style x:Key="HighlightPanel" TargetType="Frame">
+        <Setter Property="BackgroundColor" Value="{DynamicResource HighlightBackgroundColor}"/>
+        <Setter Property="HeightRequest" Value="45"/>
+        <Setter Property="HorizontalOptions" Value="FillAndExpand"/>
+        <Setter Property="CornerRadius" Value="10"/>
+    </Style>
+
+    <!-- Default text styles-->
+    <Style x:Key="DefaultText" TargetType="Label">
+        <Setter Property="TextColor" Value="{DynamicResource DefaultTextColor}"></Setter>
+    </Style>
+    <Style x:Key="MicroDefaultText" TargetType="Label" BasedOn="{StaticResource DefaultText}">
+        <Setter Property="FontSize" Value="Micro"/>
+    </Style>
+    <Style x:Key="SmallDefaultText" TargetType="Label" BasedOn="{StaticResource DefaultText}">
+        <Setter Property="FontSize" Value="Small"/>
+    </Style>
+    <Style x:Key="MediumDefaultText" TargetType="Label" BasedOn="{StaticResource DefaultText}">
+        <Setter Property="FontSize" Value="Medium"/>
+    </Style>
+    <Style x:Key="LargeDefaultText" TargetType="Label" BasedOn="{StaticResource DefaultText}">
+        <Setter Property="FontSize" Value="Large"/>
+    </Style>
+
+
+
+    <Style x:Key="DefaultAccentText" TargetType="Label">
+        <Setter Property="FontSize" Value="Small"/>
+        <Setter Property="TextColor" Value="{DynamicResource AccentColor}"></Setter>
+    </Style>
+    <Style x:Key="MicroDefaultAccentText" TargetType="Label" BasedOn="{StaticResource DefaultAccentText}">
+        <Setter Property="FontSize" Value="Micro"/>
+
+    </Style>
+    
+    <!-- Market list view styles -->
+
+    <Style x:Key="ListHeader" TargetType="Grid" >
+        <Setter Property="BackgroundColor" Value="{DynamicResource AccentColor}" />
+        <Setter Property="HeightRequest" Value="30"/>
+        <Setter Property="Padding" Value="5"/>
+        <Setter Property="HorizontalOptions" Value="FillAndExpand"/>
+        <Setter Property="VerticalOptions" Value="FillAndExpand"/>
+    </Style>
+
+    <Style x:Key="MarketList" TargetType="ListView">
+        <Setter Property="BackgroundColor" Value="{DynamicResource DefaultBackgroundColor}" />
+        <Setter Property="HorizontalOptions" Value="FillAndExpand"/>
+        <Setter Property="VerticalOptions" Value="FillAndExpand"/>
+    </Style>
+    <Style x:Key="MarketListTemplate" TargetType="Grid">
+        <Setter Property="BackgroundColor" Value="{DynamicResource DefaultBackgroundColor}" />
+        <Setter Property="Padding" Value="5"/>
+        <Setter Property="HorizontalOptions" Value="FillAndExpand"/>
+        <Setter Property="VerticalOptions" Value="FillAndExpand"/>
+    </Style>
+    <Style x:Key="MarketListInstrumentCode" TargetType="Label">
+        <Setter Property="FontSize" Value="Small"></Setter>
+        <Setter Property="TextColor" Value="{DynamicResource AccentColor}"/>
+    </Style>
+
+    <Style x:Key="MarketListInstrumentName" TargetType="Label">
+        <Setter Property="FontSize" Value="Micro"></Setter>
+        <Setter Property="TextColor" Value="{DynamicResource DefaultTextColor}"/>
+    </Style>
+
+    <Style x:Key="MarketListPriceSymbol" TargetType="Label">
+        <Setter Property="FontSize" Value="Small"></Setter>
+        <Setter Property="TextColor" Value="{DynamicResource AccentColor}"/>
+    </Style>
+
+    <Style x:Key="MarketListPriceValue" TargetType="Label">
+        <Setter Property="FontSize" Value="Small"></Setter>
+        <Setter Property="TextColor" Value="{DynamicResource DefaultTextColor}"/>
+    </Style>
+    <Style x:Key="MarketListVolumeLabel" TargetType="Label">
+        <Setter Property="FontSize" Value="Micro"></Setter>
+        <Setter Property="TextColor" Value="{DynamicResource AccentColor}"/>
+    </Style>
+    <Style x:Key="MarketListVolumeValue" TargetType="Label">
+        <Setter Property="FontSize" Value="Micro"></Setter>
+        <Setter Property="TextColor" Value="{DynamicResource DefaultTextColor}"/>
+    </Style>
+    <Style x:Key="MarketListHoldingsValue" TargetType="Label">
+        <Setter Property="FontSize" Value="Small"></Setter>
+        <Setter Property="TextColor" Value="{DynamicResource DefaultTextColor}"/>
+    </Style>
+    <Style x:Key="MarketListFavouriteIcon" TargetType="Label">
+        <Setter Property="FontFamily" Value="{StaticResource MaterialDesign}"/>
+        <Setter Property="FontSize" Value="20"></Setter>
+        <Setter Property="TextColor" Value="{DynamicResource DefaultTextColor}"/>
+    </Style>
+    <Style x:Key="MarketListNotificationIcon" TargetType="Label">
+        <Setter Property="FontFamily" Value="{StaticResource MaterialDesign}"/>
+        <Setter Property="FontSize" Value="20"></Setter>
+        <Setter Property="TextColor" Value="{DynamicResource AccentColor}"/>
+    </Style>
+    <Style x:Key="MarketListNotificationImage" TargetType="Image">
+        <Setter Property="HeightRequest" Value="20"></Setter>
+        <Setter Property="WidthRequest" Value="20"></Setter>
+    </Style>
+    <Style x:Key="MarketListFavouriteImage" TargetType="Image">
+        <Setter Property="HeightRequest" Value="20"></Setter>
+        <Setter Property="WidthRequest" Value="20"></Setter>
+
+    </Style>
+    <Style x:Key="MarketListFrame" TargetType="Frame">
+        <Setter Property="CornerRadius" Value="5"/>
+        <Setter Property="BackgroundColor" Value="{DynamicResource ReverseBackgroundColor}"/>
+        <Setter Property="HasShadow" Value="false"/>
+        <Setter Property="WidthRequest" Value="30"/>
+        <Setter Property="HeightRequest" Value="26"/>
+        <Setter Property="Padding" Value="2"/>
+        <Setter Property="Margin" Value="0"/>
+        <Setter Property="VerticalOptions" Value="StartAndExpand"/>
+    </Style>
+
+    <!-- Trades styles-->
+    <Style x:Key="TradeGrid" TargetType="Grid">
+        <Setter Property="BackgroundColor" Value="{DynamicResource DefaultBackgroundColor}" />
+        <Setter Property="Padding" Value="5"/>
+        <Setter Property="HorizontalOptions" Value="FillAndExpand"/>
+        <Setter Property="VerticalOptions" Value="FillAndExpand"/>
+    </Style>
+    <Style x:Key="TradeListTemplate" TargetType="Grid">
+        <Setter Property="BackgroundColor" Value="{DynamicResource DefaultBackgroundColor}" />
+        <Setter Property="HorizontalOptions" Value="FillAndExpand"/>
+        <Setter Property="VerticalOptions" Value="FillAndExpand"/>
+        <Setter Property="Padding" Value="5,0,0,0"/>
+        <Setter Property="Margin" Value="0"></Setter>
+    </Style>
+
+    <Style x:Key="TradesListBorder" TargetType="Frame">
+        <Setter Property="BackgroundColor" Value="{DynamicResource DefaultBackgroundColor}" />
+        <Setter Property="BorderColor" Value="{DynamicResource ReverseBackgroundColor}" />
+        <Setter Property="HorizontalOptions" Value="FillAndExpand"/>
+        <Setter Property="VerticalOptions" Value="FillAndExpand"/>
+        <Setter Property="Padding" Value="1"/>
+        <Setter Property="HasShadow" Value="False"/>
+    </Style>
+    <Style x:Key="TradesListPanel" TargetType="StackLayout">
+        <Setter Property="BackgroundColor" Value="{DynamicResource DefaultBackgroundColor}" />
+        <Setter Property="HorizontalOptions" Value="FillAndExpand"/>
+        <Setter Property="VerticalOptions" Value="FillAndExpand"/>
+        <Setter Property="Padding" Value="3"/>
+    </Style>
+    <Style x:Key="TradesList" TargetType="ListView">
+        <Setter Property="BackgroundColor" Value="{DynamicResource DefaultBackgroundColor}" />
+        <Setter Property="HorizontalOptions" Value="FillAndExpand"/>
+        <Setter Property="VerticalOptions" Value="FillAndExpand"/>
+        <Setter Property="HasUnevenRows" Value="True"/>
+        <Setter Property="SelectionMode" Value="None"/>
+    </Style>
+
+    <Style x:Key="TradesMarketPair" TargetType="Picker">
+        <Setter Property="BackgroundColor" Value="{DynamicResource DefaultBackgroundColor}" />
+        <Setter Property="HorizontalOptions" Value="FillAndExpand"/>
+        <Setter Property="VerticalOptions" Value="FillAndExpand"/>
+    </Style>
+    <Style x:Key="TradeListHeader" TargetType="Grid" >
+        <Setter Property="BackgroundColor" Value="{DynamicResource AccentColor}" />
+        <Setter Property="HeightRequest" Value="15"/>
+        <Setter Property="Padding" Value="5"/>
+        <Setter Property="HorizontalOptions" Value="FillAndExpand"/>
+        <Setter Property="VerticalOptions" Value="FillAndExpand"/>
+    </Style>
+    <Style x:Key="TradeMarketPairs" TargetType="Picker">
+        <Setter Property="BackgroundColor" Value="{DynamicResource DefaultBackgroundColor}" />
+        <Setter Property="TextColor" Value="{DynamicResource AccentColor}"/>
+        <Setter Property="Margin" Value="0,-10,0,0"></Setter>
+        <Setter Property="FontSize" Value="Small"></Setter>
+        <Setter Property="HorizontalOptions" Value="FillAndExpand"></Setter>
+        <Setter Property="HorizontalOptions" Value="StartAndExpand"></Setter>
+    </Style>
+    <Style x:Key="AccentFieldLabel" TargetType="Label">
+        <Setter Property="TextColor" Value="{DynamicResource AccentColor}"/>
+        <Setter Property="FontSize" Value="Small"/>
+    </Style>
+    
+    <DataTemplate x:Key="TradeDataTemplate">
+        <ViewCell>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="33*"></ColumnDefinition>
+                    <ColumnDefinition Width="33*"></ColumnDefinition>
+                    <ColumnDefinition Width="33*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                </Grid.RowDefinitions>
+                <Label Grid.Row="0" Grid.Column="0" Text="{Binding Price}"  Style="{StaticResource SmallDefaultText}"></Label>
+                <Label Grid.Row="0" Grid.Column="1" Text="{Binding Volume}" Style="{StaticResource SmallDefaultText}"></Label>
+                <Label Grid.Row="0" Grid.Column="2" Text="{Binding Value}" Style="{StaticResource SmallDefaultText}"></Label>
+            </Grid>
+        </ViewCell>
+    </DataTemplate>
+
+    <ControlTemplate x:Key="MarketPairsListAndroid">
+        <ScrollView HeightRequest="50" Orientation="Horizontal" VerticalOptions="CenterAndExpand">
+            <ScrollView.IsVisible>
+                <OnPlatform  x:TypeArguments="x:Boolean">
+                    <On Platform="Android" Value="true"/>
+                    <On Platform="iOS" Value="false"/>
+                </OnPlatform>
+            </ScrollView.IsVisible>
+            <StackLayout   BindableLayout.ItemsSource="{Binding BindingContext.TradeMarketPairs, Source={x:Reference TradeOrdersPage}}"  Orientation="Horizontal" >
+                <BindableLayout.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Margin="5,0,5,0" HorizontalOptions="FillAndExpand" >
+                            <Label  Text="{Binding .}" Style="{StaticResource SmallDefaultText}" VerticalOptions="CenterAndExpand">
+                            </Label>
+                        </Grid>
+                    </DataTemplate>
+                </BindableLayout.ItemTemplate>
+            </StackLayout>
+        </ScrollView>
+
+    </ControlTemplate>
+    <ControlTemplate x:Key="MarketPairsListIos">
+        <CollectionView   x:Name="MarketPairsGrid" ItemsSource="{Binding BindingContext.TradeMarketPairs, Source={x:Reference TradeOrdersPage}}" HorizontalOptions="FillAndExpand" >
+            <CollectionView.IsVisible>
+                <OnPlatform  x:TypeArguments="x:Boolean">
+                    <On Platform="Android" Value="false"/>
+                    <On Platform="iOS" Value="true"/>
+                </OnPlatform>
+            </CollectionView.IsVisible>
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Grid Padding="5,0,5,0" BackgroundColor="{DynamicResource DefaultBackgroundColor}">
+
+                        <StackLayout HeightRequest="15">
+                            <Label  Text="{Binding .}" Style="{StaticResource SmallDefaultText}" VerticalOptions="CenterAndExpand">
+                            </Label>
+                        </StackLayout>
+
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </ControlTemplate>
+    
+    <!--Highlight panel text styles -->
+
+    <Style x:Key="HighlightText" TargetType="Label">
+        <Setter Property="TextColor" Value="{DynamicResource HighlightTextColor}"></Setter>
+    </Style>
+
+    <Style x:Key="LargeHightlightText" TargetType="Label" BasedOn="{StaticResource HighlightText}">
+        <Setter Property="FontAttributes" Value="Bold"/>
+        <Setter Property="FontSize" Value="Large"/>
+    </Style>
+    <Style x:Key="MediumHightlightText" TargetType="Label" BasedOn="{StaticResource HighlightText}">
+        <Setter Property="FontAttributes" Value="Bold"/>
+        <Setter Property="FontSize" Value="Medium"/>
+    </Style>
+
+    <!-- List Header styles -->
+    <Style x:Key="DefaultHeader" TargetType="Label">
+        <Setter Property="TextColor" Value="{DynamicResource DefaultHeaderColor}"></Setter>
+    </Style>
+
+    <Style x:Key="DefaultHeaderText" TargetType="Label">
+        <Setter Property="TextColor" Value="{DynamicResource DefaultHeaderColor}"></Setter>
+    </Style>
+    <Style x:Key="MicroHeaderText" TargetType="Label" BasedOn="{StaticResource DefaultHeaderText}">
+        <Setter Property="FontSize" Value="Micro"/>
+        <Setter Property="LineBreakMode" Value="NoWrap"/>
+    </Style>
+    <Style x:Key="SmallHeaderText" TargetType="Label" BasedOn="{StaticResource DefaultHeaderText}">
+        <Setter Property="FontSize" Value="Small"/>
+        <Setter Property="LineBreakMode" Value="NoWrap"/>
+    </Style>
+
+    <Style x:Key="MediumHeaderText" TargetType="Label" BasedOn="{StaticResource DefaultHeaderText}">
+        <Setter Property="FontSize" Value="Medium"/>
+        <Setter Property="LineBreakMode" Value="NoWrap"/>
+    </Style>
+    <Style x:Key="LargeHeaderText" TargetType="Label" BasedOn="{StaticResource DefaultHeaderText}">
+        <Setter Property="FontSize" Value="Large"/>
+        <Setter Property="LineBreakMode" Value="NoWrap"/>
+    </Style>
+    <Style x:Key="MediumIconText" TargetType="Label">
+        <Setter Property="FontFamily" Value="{StaticResource MaterialDesign}"/>
+        <Setter Property="FontSize" Value="24" />
+    </Style>
+    <Style x:Key="MediumIconTextPrimary" TargetType="Label" BasedOn="{StaticResource MediumIconText}">
+
+        <Setter Property="TextColor" Value="{DynamicResource PrimaryColor}"/>
+    </Style>
+    <Style x:Key="MediumIconTextAccent" TargetType="Label" BasedOn="{StaticResource MediumIconText}">
+        <Setter Property="TextColor" Value="{DynamicResource AccentColor}"/>
+    </Style>
+
+
+    <Style x:Key="DefaultButtonStyle" TargetType="Button">
+        <Setter Property="BackgroundColor" Value="{DynamicResource NavigationPrimary}" />
+        <!--<Setter Property="Padding">
+        <Thickness
+        Left="{DynamicResource Default2Margin}"
+        Right="{DynamicResource Default2Margin}" />
+        </Setter>
+        <Setter Property="TextColor" Value="{DynamicResource AccentColor}" />-->
+    </Style>
+
+    <Style x:Key="DefaultShadowfullButtonStyle" BasedOn="{StaticResource DefaultButtonStyle}" TargetType="Button">
+        <Setter Property="CornerRadius">24</Setter>
+        <Setter Property="HeightRequest">64</Setter>
+        <Setter Property="android:Button.UseDefaultShadow">true</Setter>
+        <Setter Property="ios:VisualElement.IsShadowEnabled">true</Setter>
+        <Setter Property="ios:VisualElement.ShadowColor">Black</Setter>
+        <Setter Property="ios:VisualElement.ShadowOffset" Value="10,10" />
+        <Setter Property="ios:VisualElement.ShadowOpacity">0.2</Setter>
+    </Style>
+
+    <Style x:Key="BaseStyle" TargetType="Element">
+        <Setter Property="Shell.ShellBackgroundColor" Value="{DynamicResource NavigationPrimary}" />
+        <Setter Property="Shell.ShellForegroundColor" Value="White" />
+        <Setter Property="Shell.ShellTitleColor" Value="White" />
+        <Setter Property="Shell.ShellDisabledColor" Value="#B4FFFFFF" />
+        <Setter Property="Shell.ShellUnselectedColor" Value="#95FFFFFF" />
+        <Setter Property="Shell.ShellTabBarBackgroundColor" Value="{DynamicResource NavigationPrimary}" />
+        <Setter Property="Shell.ShellTabBarForegroundColor" Value="White"/>
+        <Setter Property="Shell.ShellTabBarUnselectedColor" Value="#95FFFFFF"/>
+        <Setter Property="Shell.ShellTabBarTitleColor" Value="White"/>
+    </Style>
+
+
+    <Style x:Key="DefaultShell" TargetType="Shell">
+        <Setter Property="BackgroundColor" Value="{DynamicResource PageBackgroundColor}"/>
+    </Style>
+
+    <Style x:Key="DefaultPage" TargetType="ContentPage">
+        <Setter Property="BackgroundColor" Value="{DynamicResource PageBackgroundColor}"/>
+        <Setter Property="Visual" Value="Material"/>
+    </Style>
+
+    <Style x:Key="DefaultView" TargetType="ContentView">
+        <Setter Property="BackgroundColor" Value="{DynamicResource PageBackgroundColor}"/>
+    </Style>
+
+    <Style x:Key="DefaultGrid" TargetType="Grid">
+        <Setter Property="BackgroundColor" Value="{DynamicResource DefaultBackgroundColor}"></Setter>
+        <Setter Property="RowSpacing" Value="0"/>
+        <Setter Property="HorizontalOptions" Value="FillAndExpand"/>
+        <Setter Property="VerticalOptions" Value="FillAndExpand"/>
+    </Style>
+
+</ResourceDictionary>
