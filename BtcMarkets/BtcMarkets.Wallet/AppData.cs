@@ -9,6 +9,8 @@ using BtcMarkets.Core.Helpers;
 using BtcMarkets.Core.Sockets;
 using BtcMarkets.Wallet.Helpers;
 using BtcMarkets.Wallet.Models;
+using BtcMarkets.Wallet.Services;
+using Newtonsoft.Json;
 
 namespace BtcMarkets.Wallet
 {
@@ -18,6 +20,7 @@ namespace BtcMarkets.Wallet
         Hour,
         Hour12,
         Day,
+        HalfWeek,
         Week,
         FortNight,
         Month,
@@ -97,6 +100,8 @@ namespace BtcMarkets.Wallet
 
         public List<Market> Markets { get; private set; }
 
+        public List<AccountBalance> Balances { get; private set; }
+
         public List<Market> BtcMarkets => Markets?.Where(x => x.Currency == ApiConstants.Btc).ToList();
         public List<Market> AudMarkets => Markets?.Where(x => x.Currency == ApiConstants.Aud).ToList();
 
@@ -128,6 +133,7 @@ namespace BtcMarkets.Wallet
 
             SockClient = new SocketClient();
             Markets = new List<Market>();
+            Balances = new List<AccountBalance>();
 
             LoadAppSettings();
         }
@@ -155,7 +161,7 @@ namespace BtcMarkets.Wallet
             {
                 _marketUpdated?.Invoke(this, e);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 AppHelper.TrackError(ex);
             }
@@ -167,7 +173,7 @@ namespace BtcMarkets.Wallet
 
                 _marketsUpdated?.Invoke(this, e ?? EventArgs.Empty);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 AppHelper.TrackError(ex);
             }
@@ -178,7 +184,7 @@ namespace BtcMarkets.Wallet
             {
                 _favouritesUpdated?.Invoke(this, e ?? EventArgs.Empty);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 AppHelper.TrackError(ex);
             }
@@ -282,7 +288,7 @@ namespace BtcMarkets.Wallet
                 }
             }
 
-           
+
         }
 
         public async Task RefreshMarkets()
@@ -316,6 +322,8 @@ namespace BtcMarkets.Wallet
                 }
             }
 
+            await LoadAccountBalances();
+
             OnMarketsUpdated(new EventArgs());
 
         }
@@ -326,6 +334,129 @@ namespace BtcMarkets.Wallet
             if (activeMarkets == null || !activeMarkets.Any())
             {
                 await LoadActiveMarkets();
+            }
+        }
+
+        public async Task LoadAccountBalances()
+        {
+            try
+            {
+                if (!IsAccountSetup)
+                    return;
+
+                var data = await Client.GetAccountBalance();
+                if (data.Success.HasValue)
+                {
+                    var balances = data.Balances;
+
+                    if (Markets != null)
+                    {
+                        Balances.Clear();
+
+                        foreach (var balance in balances)
+                        {
+
+                            var bal = new AccountBalance
+                            {
+                                Balance = balance.Balance,
+                                BalanceDecimal = balance.BalanceDecimal,
+                                Currency = balance.Currency
+                            };
+
+
+
+                            var market = Markets.FirstOrDefault(x => x.Instrument == bal.Currency && x.Currency == Constants.Aud);
+                            if (market != null)
+                            {
+                                market.Holdings = bal.BalanceDecimal;
+                                bal.Name = market.Name;
+                                bal.CurrencySymbol = market.InstrumentSymbol;
+                                bal.Image = market.Image;
+                                bal.TotalAud = bal.BalanceDecimal * market.LastPrice;
+                            }
+                            else
+                            {
+
+                                var coin = Settings?.Config?.Coinmarkets?.FirstOrDefault(x => x.Symbol == bal.Currency);
+                                if (coin != null)
+                                {
+                                    bal.Name = coin.Name;
+                                    if (bal.Currency == Constants.Aud)
+                                    {
+                                        bal.CurrencySymbol = Constants.AudSymbol;
+                                    }
+                                    else
+                                        bal.CurrencySymbol = "  ";
+                                    bal.Image = coin.Image;
+                                    bal.TotalAud = bal.BalanceDecimal;
+                                }
+                            }
+                            Balances.Add(bal);
+                        }
+                    }
+                }
+                else
+                {
+                    var error = "Something went wrong with balances.";
+                    AppHelper.TrackError(new Exception($"{error}{data.ToJson()}"));
+                    AppHelper.ShowError(error);
+                }
+            }
+            catch (Exception ex)
+            {
+                AppHelper.TrackError(ex);
+                AppHelper.ShowError("Something went wrong with balances.");
+            }
+        }
+
+        public double TotalHoldingsInAud
+        {
+            get
+            {
+                double holdings = 0.0d;
+
+                if (Markets != null)
+                {
+                    foreach (var balance in Balances)
+                    {
+
+                        var market = Markets.FirstOrDefault(x => x.Instrument == balance.Currency && x.Currency == Constants.Aud);
+                        if (market != null)
+                        {
+                            holdings += balance.BalanceDecimal * market.LastPrice;
+                        }
+                        else
+                        {
+                            if (balance.Currency == Constants.Aud)
+                            {
+                                holdings += balance.BalanceDecimal;
+                            }
+                        }
+                    }
+                }
+
+                return holdings;
+            }
+        }
+
+        public double TotalHoldingsInBtc
+        {
+            get
+            {
+                double holdings = 0.0d;
+
+                double audHoldings = TotalHoldingsInAud;
+
+                if (Markets != null)
+                {
+                    var market = Markets.FirstOrDefault(x => x.Instrument == Constants.Btc && x.Currency == Constants.Aud);
+                    if (market != null && audHoldings > 0)
+                    {
+                        holdings = audHoldings / market.LastPrice;
+                    }
+                }
+
+                return holdings;
             }
         }
 
@@ -415,18 +546,115 @@ namespace BtcMarkets.Wallet
             }
             catch (Exception ex)
             {
+                AppHelper.ShowError("Something went wrong while retrieving trade history");
                 AppHelper.TrackError(ex);
             }
 
             return history;
         }
+
+        public async Task<List<MarketOrderData>> GetOpenOrders()
+        {
+            var orders = new List<MarketOrderData>();
+
+            try
+            {
+
+                var response = await Api.GetOpenOrdersV2Raw();
+
+                var openOrders = await Api.GetOpenOrdersV2();
+
+                if (openOrders.Success)
+                {
+                    foreach (var value in openOrders.Orders)
+                    {
+                        var order = new MarketOrderData
+                        {
+                            Id = value.Id.HasValue?value.Id.Value:0,
+                            Price = ApiHelper.ToDoubleValue(value.Price.HasValue ? value.Price.Value : 0),
+                            Volume = ApiHelper.ToDoubleValue(value.Volume.HasValue ? value.Volume.Value : 0),
+                            OpenVolume = ApiHelper.ToDoubleValue(value.OpenVolume.HasValue ? value.OpenVolume.Value : 0),
+                            Timestamp = Convert.ToInt64(value.CreationTime),
+                            Currency = value.Currency,
+                            Instrument = value.Instrument,
+                            OrderSide = value.OrderSide,
+                            OrderType = value.Ordertype,
+                            Status = value.Status
+                        };
+
+                        orders.Add(order);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                AppHelper.ShowError("Something went wrong while retrieving open orders");
+                AppHelper.TrackError(ex);
+            }
+
+            return orders;
+        }
+
+        public async Task<List<MarketOrderData>> GetOrderHistory(string instrument = Constants.Btc, string currency = Constants.Aud, long? since = null)
+        {
+            var orders = new List<MarketOrderData>();
+
+            try
+            {
+
+                Core.Api.Contracts.MarketParams args = null;
+                if (since.HasValue )
+                {
+                    args = new Core.Api.Contracts.MarketParams();
+                    args.Since = since;
+                    args.Forward = false;
+                }
+
+                var orderhistory = await Api.GetOrderHistoryV2(instrument, currency, args);
+
+                if (orderhistory.Success)
+                {
+                    foreach (var value in orderhistory.Orders)
+                    {
+                        var order = new MarketOrderData
+                        {
+                            Id = value.Id.HasValue ? value.Id.Value : 0,
+                            Price = ApiHelper.ToDoubleValue(value.Price.HasValue ? value.Price.Value : 0),
+                            Volume = ApiHelper.ToDoubleValue(value.Volume.HasValue ? value.Volume.Value : 0),
+                            OpenVolume = ApiHelper.ToDoubleValue(value.OpenVolume.HasValue ? value.OpenVolume.Value : 0),
+                            Timestamp = Convert.ToInt64(value.CreationTime),
+                            Currency = value.Currency,
+                            Instrument = value.Instrument,
+                            OrderSide = value.OrderSide,
+                            OrderType = value.Ordertype,
+                            Status = value.Status
+                        };
+
+                        orders.Add(order);
+                    }
+                }
+                else
+                {
+                    AppHelper.ShowError();
+                    AppHelper.TrackError(new Exception(JsonConvert.SerializeObject(orderhistory)));
+                }
+            }
+            catch (Exception ex)
+            {
+                AppHelper.ShowError("Something went wrong while retrieving order history");
+                AppHelper.TrackError(ex);
+            }
+
+            return orders;
+        }
+
         public async Task<List<MarketHistory>> GetMarketHistory(Market market, HistoryPeriod period = HistoryPeriod.Day)
         {
             var history = new List<MarketHistory>();
 
             DateTime startDate;
 
-            var frequency = "hour";
+            string frequency;
 
             switch (period)
             {
@@ -434,6 +662,14 @@ namespace BtcMarkets.Wallet
 
                     startDate = DateTime.Now.AddHours(-1);
                     frequency = "minute";
+                    break;
+                case HistoryPeriod.Hour12:
+                    startDate = DateTime.Now.AddHours(-12);
+                    frequency = "minute";
+                    break;
+                case HistoryPeriod.HalfWeek:
+                    startDate = DateTime.Now.AddDays(-3).Date;
+                    frequency = "hour";
                     break;
                 case HistoryPeriod.Week:
                     startDate = DateTime.Now.AddDays(-7).Date;
@@ -448,8 +684,24 @@ namespace BtcMarkets.Wallet
                     startDate = DateTime.Now.AddMonths(-1).Date;
                     frequency = "day";
                     break;
+                case HistoryPeriod.Quarter:
+
+                    startDate = DateTime.Now.AddMonths(-3).Date;
+                    frequency = "day";
+                    break;
+                case HistoryPeriod.HalfYear:
+
+                    startDate = DateTime.Now.AddMonths(-6).Date;
+                    frequency = "day";
+                    break;
+                case HistoryPeriod.Year:
+
+                    startDate = DateTime.Now.AddYears(-1).Date;
+                    frequency = "day";
+                    break;
                 default:
                     startDate = DateTime.Today.AddDays(-1).Date;
+                    frequency = "hour";
                     break;
             }
 
@@ -458,7 +710,7 @@ namespace BtcMarkets.Wallet
             var queryParams = new Core.Api.Contracts.MarketParams
             {
                 Since = timestamp,
-                IndexForward = true
+                Forward = true
             };
 
             var marketHistory = await Api.GetMarketHistory(market.Instrument, market.Currency, frequency, queryParams);
@@ -510,8 +762,6 @@ namespace BtcMarkets.Wallet
         //                var apiSettings = new Core.ApiSettings
         //                {
         //                    BaseUrl = "https://api.btcmarkets.net",
-        //                    ApiKey = "c313c21c-3908-45ed-93e4-71c6b9f841ab",
-        //                    Secret = "9poMsaAxsFskxhkL7IWCEaX5GKMxPPhippkshRjZ/dFzk33+4xMh/CTvgLaIK3UE6JpLQTpK/OqgxfF87DEeEg=="
         //                };
 
         //                _api = new BtcMarketApi(apiSettings);
@@ -537,8 +787,7 @@ namespace BtcMarkets.Wallet
                         var apiSettings = new Core.ApiSettings
                         {
                             BaseUrl = "https://api.btcmarkets.net",
-                            //      ApiKey = "c313c21c-3908-45ed-93e4-71c6b9f841ab",
-                            //      Secret = "9poMsaAxsFskxhkL7IWCEaX5GKMxPPhippkshRjZ/dFzk33+4xMh/CTvgLaIK3UE6JpLQTpK/OqgxfF87DEeEg=="
+                          
                         };
 
                         _client = new BtcMarketsClient(apiSettings);

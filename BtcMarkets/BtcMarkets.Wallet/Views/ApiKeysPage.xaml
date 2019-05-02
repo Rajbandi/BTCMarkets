@@ -1,17 +1,44 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+          
              x:Class="BtcMarkets.Wallet.Views.ApiKeysPage"
                 Title="{Binding Title}"
-             ControlTemplate="{StaticResource ActivityIndicatorTemplate}"
-             Style="{StaticResource DefaultPage}"
-
-             >
+           
+             Style="{StaticResource DefaultPage}" >
+  
     <ContentPage.Content>
-        <StackLayout>
-            <Label Text="Welcome to Xamarin.Forms!"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
+        
+        
+        <StackLayout Padding="10" >
+            
+            <StackLayout Spacing="10" VerticalOptions="CenterAndExpand" >
+
+                <StackLayout HorizontalOptions="FillAndExpand">
+                    <Label Grid.Row="0" Grid.Column="0" Text="Api Key" Style="{StaticResource MediumDefaultAccentText}" ></Label>
+                    <Entry Grid.Row="0" Grid.Column="1" Placeholder="Api Key here"  Style="{StaticResource SmallDefaultEntry}"  >
+                        <!--<Entry.Triggers>
+                            <Trigger  TargetType="Entry" Property="IsFocused" Value="True">
+                                <Setter Property="Style" Value="{StaticResource MediumDefaultEntry}"/>
+                            </Trigger>
+                            <Trigger  TargetType="Entry" Property="IsFocused" Value="False">
+                                <Setter Property="Style" Value="{StaticResource SmallDefaultEntry}"/>
+                            </Trigger>
+                        </Entry.Triggers>-->
+                        
+                    </Entry>
+                </StackLayout>
+                <StackLayout HorizontalOptions="FillAndExpand">
+                    <Label Grid.Row="1" Grid.Column="0" Text="Api Secret" Style="{StaticResource MediumDefaultAccentText}"  ></Label>
+                    <Entry Grid.Row="1" Grid.Column="1" Placeholder="Api Secret here"  Style="{StaticResource SmallDefaultEntry}"></Entry>
+                </StackLayout>
+            </StackLayout>
+
+
+            <Button Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Text="Save" Style="{StaticResource DefaultButton}">
+            </Button>
         </StackLayout>
+
+   
     </ContentPage.Content>
 </ContentPage>

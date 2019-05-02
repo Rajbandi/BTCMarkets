@@ -7,11 +7,18 @@
              
              x:Class="BtcMarkets.Wallet.Views.NewsPage">
     <ContentPage.Content>
-        <StackLayout>
-            <Label Text="Latest News" FontAttributes="Bold" FontSize="Large"></Label>
 
-            <CollectionView ItemsSource="{Binding MarketNews}"  HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+        <Grid Style="{StaticResource DefaultGrid}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
 
+            <CollectionView Grid.Row="0" Grid.Column="0" ItemsSource="{Binding MarketNews}"  HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
                 <CollectionView.ItemTemplate >
                     <DataTemplate>
                         <StackLayout>
@@ -29,6 +36,8 @@
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
-        </StackLayout>
+
+        </Grid>
+
     </ContentPage.Content>
 </ContentPage>

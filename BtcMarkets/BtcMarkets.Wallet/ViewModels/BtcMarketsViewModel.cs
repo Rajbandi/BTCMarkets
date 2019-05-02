@@ -14,6 +14,8 @@ namespace BtcMarkets.Wallet.ViewModels
         public BtcMarketsViewModel() :base()
         {
             Title = "BTC Markets";
+            _btcHoldings = true;
+            IsSearchBarVisible = false;
            // Subscribe();
         }
 
@@ -27,10 +29,30 @@ namespace BtcMarkets.Wallet.ViewModels
                 Markets.Add(market);
             }
 
+            base.LoadMarkets();
 
             //Markets = new ObservableCollection<Market>(AppData.Current.BtcMarkets);
         }
 
+        public override void SearchMarkets(string coin)
+        {
+            if (string.IsNullOrWhiteSpace(coin))
+            {
+                LoadMarkets();
+            }
+            else
+            {
+                if (Markets.Any())
+                    Markets.Clear();
+                var txt = coin.ToLower();
+                var markets = AppData.Current.AudMarkets.Where(x => x.Instrument.ToLower().Contains(txt) || x.Name.ToLower().Contains(txt));
+                foreach (var market in markets)
+                {
+                    Markets.Add(market);
+                }
 
+            }
+            OnPropertyChanged(nameof(Markets));
+        }
     }
 }

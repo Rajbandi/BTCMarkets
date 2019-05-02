@@ -28,8 +28,26 @@ namespace BtcMarkets.Wallet.ViewModels
         public bool IsBusy
         {
             get { return isBusy; }
-            set { SetProperty(ref isBusy, value); }
+            set {
+                SetProperty(ref isBusy, value);
+                try
+                {
+                    if (value)
+                    {
+                        AppService.Instance.ShowLoader();
+                    }
+                    else
+                    {
+                        AppService.Instance.HideLoader();
+                    }
+                }
+                catch(Exception ex)
+                {
+
+                }
+            }
         }
+
 
         string title = string.Empty;
         public string Title

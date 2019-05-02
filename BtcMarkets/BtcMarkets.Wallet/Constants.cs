@@ -16,6 +16,10 @@ namespace BtcMarkets.Wallet
         public const string Eth = "ETH";
         public const string Xrp = "XRP";
 
+        public const string BtcSymbol = "Ƀ";
+
+        public const string AudSymbol = "$";
+
         public const int SECOND = 1;
         public const int MINUTE = 60 * SECOND;
         public const int HOUR = 60 * MINUTE;

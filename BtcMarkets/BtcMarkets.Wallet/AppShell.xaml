@@ -8,6 +8,8 @@
        FlyoutBehavior="Flyout"
        Title="BtcMarkets.Wallet"
        x:Name="MainPageRef"
+        xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core" 
+    ios:Page.UseSafeArea="true" 
        x:Class="BtcMarkets.Wallet.AppShell" Navigating="Shell_Navigating" Navigated="MainPageRef_Navigated"  
        
        Style="{StaticResource DefaultShell}">
@@ -74,15 +76,16 @@
         </ShellSection>
 
         <ShellSection Title="Trades"  Icon="{Binding Converter={StaticResource FontIconImage},ConverterParameter=swap_vert}"  Route="Trades" >
-            <ShellContent ContentTemplate="{DataTemplate local:TradesPage}" Title="Market Trades" Route="Trades"/>
+            <ShellContent ContentTemplate="{DataTemplate local:MarketTradesPage}" Title="Market Trades" Route="Trades"/>
             <ShellContent ContentTemplate="{DataTemplate local:OrdersHistoryPage}" Title="Orders History" Route="OrdersHistory"/>
             <ShellContent ContentTemplate="{DataTemplate local:OpenOrdersPage}" Title="Open Orders" Route="OpenOrders"/>
+           
         </ShellSection>
       
         <ShellSection Title="Account"  Icon="{Binding Converter={StaticResource FontIconImage},ConverterParameter=account_box}"  Route="Account" >
             <ShellContent ContentTemplate="{DataTemplate local:ApiKeysPage}" Title="Api Keys" Route="ApiKeys"/>
-            <ShellContent ContentTemplate="{DataTemplate local:AccountPage}" Title="Settings" Route="Settings"/>
-            <ShellContent ContentTemplate="{DataTemplate local:AccountPage}}" Title="About" Route="About"/>
+            <ShellContent ContentTemplate="{DataTemplate local:SettingsPage}" Title="Settings" Route="Settings"/>
+            <ShellContent ContentTemplate="{DataTemplate local:AboutPage}}" Title="About" Route="About"/>
         </ShellSection>
         <ShellSection Title="News" Icon="{Binding Converter={StaticResource FontIconImage},ConverterParameter=view_list}" Route="News">
             <ShellContent ContentTemplate="{DataTemplate local:NewsPage}" />

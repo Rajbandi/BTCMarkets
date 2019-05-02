@@ -1,10 +1,13 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
 using Foundation;
+using Plugin.Toasts;
 using Refractored.XamForms.PullToRefresh.iOS;
 using UIKit;
+using UserNotifications;
+using Xamarin.Forms;
 
 namespace BtcMarkets.Wallet.iOS
 {
@@ -27,11 +30,35 @@ namespace BtcMarkets.Wallet.iOS
 
             global::Xamarin.Forms.Forms.SetFlags("Shell_Experimental", "Visual_Experimental", "CollectionView_Experimental", "FastRenderers_Experimental");
             global::Xamarin.Forms.Forms.Init();
-            OxyPlot.Xamarin.Forms.Platform.iOS.PlotViewRenderer.Init();
+           
             PullToRefreshLayoutRenderer.Init();
+
+            DependencyService.Register<ToastNotification>(); // Register your dependency
+            ToastNotification.Init();
+
+            if (UIDevice.CurrentDevice.CheckSystemVersion(10, 0))
+            {
+                // Ask the user for permission to get notifications on iOS 10.0+
+                UNUserNotificationCenter.Current.RequestAuthorization(
+                        UNAuthorizationOptions.Alert | UNAuthorizationOptions.Badge | UNAuthorizationOptions.Sound,
+                        (approved, error) => { });
+            }
+            else if (UIDevice.CurrentDevice.CheckSystemVersion(8, 0))
+            {
+                // Ask the user for permission to get notifications on iOS 8.0+
+                var settings = UIUserNotificationSettings.GetSettingsForTypes(
+                        UIUserNotificationType.Alert | UIUserNotificationType.Badge | UIUserNotificationType.Sound,
+                        new NSSet());
+
+                UIApplication.SharedApplication.RegisterUserNotificationSettings(settings);
+            }
+
+            Syncfusion.SfChart.XForms.iOS.Renderers.SfChartRenderer.Init();
+
             LoadApplication(new App());
 
             return base.FinishedLaunching(app, options);
         }
+
     }
 }

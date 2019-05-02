@@ -36,5 +36,6 @@ namespace BtcMarkets.Wallet.Views
             AppHelper.TrackEvent(AppTrackEvents.BtcMarkets);
 
         }
+
     }
 }

@@ -16,20 +16,38 @@ namespace BtcMarkets.Core.Api
         [Get("/market/{instrument}/{currency}/tick")]
         Task<MarketTick> GetMarketTick(string instrument, string currency);
 
+        [Get("/market/{instrument}/{currency}/tick")]
+        Task<HttpResponseMessage> GetMarketTickRaw(string instrument, string currency);
+
         [Get("/market/{instrument}/{currency}/orderbook")]
         Task<MarketOrderBook> GetMarketOrderBook(string instrument, string currency);
+
+        [Get("/market/{instrument}/{currency}/orderbook")]
+        Task<HttpResponseMessage> GetMarketOrderBookRaw(string instrument, string currency);
 
         [Get("/market/{instrument}/{currency}/trades")]
         Task<IList<MarketTrade>> GetMarketTrades(string instrument, string currency);
 
+        [Get("/market/{instrument}/{currency}/trades")]
+        Task<HttpResponseMessage> GetMarketTradesRaw(string instrument, string currency);
+
         [Get("/v2/market/active")]
         Task<ActiveMarkets> GetActiveMarkets();
+
+        [Get("/v2/market/active")]
+        Task<HttpResponseMessage> GetActiveMarketsRaw();
 
         [Get("/v2/market/{instrument}/{currency}/trades")]
         Task<MarketTradesV2> GetMarketTradesV2(string instrument, string currency, MarketParams query = null);
 
+        [Get("/v2/market/{instrument}/{currency}/trades")]
+        Task<HttpResponseMessage> GetMarketTradesV2Raw(string instrument, string currency, MarketParams query = null);
+
         [Get("/v2/market/{instrument}/{currency}/tickByTime/{time}")]
         Task<MarketHistoryV2> GetMarketHistory(string instrument, string currency, string time, MarketParams query = null);
+
+        [Get("/v2/market/{instrument}/{currency}/tickByTime/{time}")]
+        Task<HttpResponseMessage> GetMarketHistoryRaw(string instrument, string currency, string time, MarketParams query = null);
 
         #endregion
 
@@ -38,9 +56,14 @@ namespace BtcMarkets.Core.Api
         [Get("/account/balance")]
         Task<IList<AccountBalance>> GetAccountBalance();
 
+        [Get("/account/balance")]
+        Task<HttpResponseMessage> GetAccountBalanceRaw();
+
         [Get("/account/{instrument}/{currency}/tradingfee")]
         Task<TradingFee> GetTradingFee(string instrument, string currency);
 
+        [Get("/account/{instrument}/{currency}/tradingfee")]
+        Task<HttpResponseMessage> GetTradingFeeRaw(string instrument, string currency);
         #endregion
 
         #region  Order Related
@@ -54,6 +77,9 @@ namespace BtcMarkets.Core.Api
         [Post("/order/history")]
         Task<OrderHistoryResponse> GetOrderHistory([Body] OrderHistoryRequest request);
 
+        [Get("/v2/order/history/{instrument}/{currency}")]
+        Task<OrderHistoryResponse> GetOrderHistoryV2(string instrument, string currency, MarketParams query = null);
+
         [Post("/order/open")]
         Task<OrderHistoryResponse> GetOpenOrders([Body] OrderHistoryRequest request);
 
@@ -65,6 +91,16 @@ namespace BtcMarkets.Core.Api
 
         [Post("/v2/order/open")]
         Task<OrderHistoryResponse> GetOpenOrdersV2([Body] OrderHistoryRequest request);
+
+        [Get("/v2/order/open")]
+        Task<OrderHistoryResponse> GetOpenOrdersV2();
+
+
+        [Get("/v2/order/open")]
+        Task<HttpResponseMessage> GetOpenOrdersV2Raw();
+
+        [Get("/v2/order/open/{instrument}/{currency}")]
+        Task<OrderHistoryResponse> GetOpenOrdersV2(string instrument, string currency);
 
         #endregion
 

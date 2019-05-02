@@ -39,5 +39,17 @@ namespace BtcMarkets.Wallet.Helpers
 
             return config;
         }
+
+        public static string GetChartHtml()
+        {
+            var assembly = IntrospectionExtensions.GetTypeInfo(typeof(CoinConfig)).Assembly;
+            Stream stream = assembly.GetManifestResourceStream("BtcMarkets.Wallet.Resources.chart.html");
+            var text = "";
+            using (var reader = new StreamReader(stream))
+            {
+                text = reader.ReadToEnd();
+            }
+            return text;
+        }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using BtcMarkets.Wallet.Models;
+using BtcMarkets.Wallet.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -57,11 +58,14 @@ namespace BtcMarkets.Wallet.ViewModels
 
         public void RefreshData()
         {
-            Device.BeginInvokeOnMainThread(async () =>
-            {
-                await Task.Run( async () =>
+            //Device.BeginInvokeOnMainThread(async () =>
+            //{
+                 Task.Run( async () =>
                 {
                     IsBusy = true;
+
+                    AppService.Instance.SetLoaderMessage("Loading Trades");
+
                     var appData = AppData.Current;
 
                     var market = TradeMarket;
@@ -82,6 +86,7 @@ namespace BtcMarkets.Wallet.ViewModels
                         BuyOrders.Add(order);
                     }
 
+                    
                     BuyString = $"(Top {BuyOrders.Count})";
 
                     SellOrders.Clear();
@@ -105,7 +110,7 @@ namespace BtcMarkets.Wallet.ViewModels
                     HistoryString = $"(Top {TradeHistory.Count})";
                     IsBusy = false;
                 });
-            });
+           // });
         }
 
     }

@@ -2,93 +2,263 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:controls="clr-namespace:BtcMarkets.Wallet.Controls"
+             xmlns:chart="clr-namespace:Syncfusion.SfChart.XForms;assembly=Syncfusion.SfChart.XForms"
              xmlns:oxy="clr-namespace:OxyPlot.Xamarin.Forms;assembly=OxyPlot.Xamarin.Forms"
              Title="{Binding Title}" 
-             ControlTemplate="{StaticResource ActivityIndicatorTemplate}"
+             Style="{StaticResource DefaultPage}"
              
-             
-             
+             x:Name="MarketDetails"
              x:Class="BtcMarkets.Wallet.Views.MarketDetailPage">
-
-    <!--xmlns:android="clr-namespace:Android.Widget;assembly=Mono.Android;targetPlatform=Android"
-              xmlns:androidLocal="clr-namespace:BtcMarkets.Wallet.Droid;assembly=BtcMarkets.Wallet.Android;targetPlatform=Android"  
-              xmlns:androidCustomControls="clr-namespace:BtcMarkets.Wallet.Droid.Controls;assembly=BtcMarkets.Wallet.Android;targetPlatform=Android"  
-              xmlns:androidForms="clr-namespace:Xamarin.Forms;assembly=Xamarin.Forms.Platform.Android;targetPlatform=Android"-->
+    <Shell.TitleView>
+        <StackLayout Orientation="Horizontal"  BindingContext="{Binding BindingContext,Source={x:Reference MarketDetails}}">
+            <StackLayout  HorizontalOptions="FillAndExpand">
+                <Label  Text="{Binding Title}" Style="{StaticResource LargeDefaultText}" HorizontalOptions="StartAndExpand"  VerticalOptions="CenterAndExpand" VerticalTextAlignment="Center">
+                </Label>
+            </StackLayout>
+            <StackLayout  Orientation="Horizontal">
+                <!--<Image Source="{Binding Converter={StaticResource FontIconImage},ConverterParameter=settings}"></Image>-->
+                <Image Source="{Binding Converter={StaticResource FontIconImage},ConverterParameter=refresh}">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding BindingContext.RefreshCommand, Source={x:Reference MarketDetails}}"></TapGestureRecognizer>
+                    </Image.GestureRecognizers>
+                </Image>
+            </StackLayout>
+        </StackLayout>
+    </Shell.TitleView>
     <ContentPage.Content>
-       
-            <Grid  VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" >
-            <Grid.Margin>
+        <ScrollView Style="{StaticResource PageScroll}">
+            <ScrollView.Margin>
                 <OnPlatform x:TypeArguments="Thickness">
-                    <On Platform="iOS" Value="0,100,0,0" />
+                    <On Platform="iOS" Value="0,60,0,0" />
                 </OnPlatform>
-            </Grid.Margin>
-            <Grid.RowDefinitions>
+            </ScrollView.Margin>
+            <Grid Style="{StaticResource PageScrollGrid}">
+
+                <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"></RowDefinition>
                     <RowDefinition Height="Auto"></RowDefinition>
                     <RowDefinition Height="Auto"></RowDefinition>
-                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
 
-                <Label  Grid.Row="0" Grid.Column="0" Text="{Binding Market.LastPriceWithSymbol}" FontAttributes="Bold" FontSize="Large"></Label>
-                <Label  Grid.Row="1" Grid.Column="0">
-                    <Label.FormattedText>
-                        <FormattedString>
-                            <Span Text="LOW"></Span>
-                            
-                        </FormattedString>
-                    </Label.FormattedText>
-                </Label>
-                <Grid Grid.Row="2" Grid.Column="0" HorizontalOptions="FillAndExpand" >
+                <Grid  Grid.Row="0" Grid.Column="0" HorizontalOptions="FillAndExpand"   RowSpacing="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"></RowDefinition>
+                        <RowDefinition Height="Auto"></RowDefinition>
+                        <RowDefinition Height="Auto"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="35*"></ColumnDefinition>
+                        <ColumnDefinition Width="32*"></ColumnDefinition>
+                        <ColumnDefinition Width="33*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
 
-                    <!--<AbsoluteLayout VerticalOptions="Fill">-->
-                        <!--<controls:CustomWebView VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" HeightRequest="400" WidthRequest="400"   >
-                            <WebView.Source>
-                                <HtmlWebViewSource Html="{Binding ReportHtml}" />
-                            </WebView.Source>
-                        </controls:CustomWebView>-->
-                        <!--<BoxView AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0,0,1,1"  BackgroundColor="Transparent" InputTransparent="false"  IsVisible="{Binding IsLoading}" />
+                    <StackLayout Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3"  Orientation="Horizontal" HorizontalOptions="FillAndExpand" Spacing="25">
+                        <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand" >
+                            <Image Source="{Binding Market.Image,Converter={StaticResource Base64ToImage}}" WidthRequest="20" HeightRequest="20" />
+                            <Label Text="{Binding Market.Pair}" Style="{StaticResource LargeDefaultText}" HorizontalOptions="FillAndExpand" />
+                        </StackLayout>
+                        <Label Text="{Binding Market.LastPriceWithSymbol}" Style="{StaticResource LargeDefaultText}" HorizontalOptions="FillAndExpand" />
+                    </StackLayout>
 
-                        <ActivityIndicator IsVisible="{Binding IsLoading}"
-                               IsRunning="{Binding IsLoading}"
-                               AbsoluteLayout.LayoutFlags="PositionProportional" AbsoluteLayout.LayoutBounds=".5,.5,-1,-1"
-                    />
-                    </AbsoluteLayout>-->
-                
 
-                    <!--<WebView VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" HeightRequest="400" WidthRequest="400">
-                        <WebView.Source>
-                            <HtmlWebViewSource Html="{Binding ReportHtml}" />
-                        </WebView.Source>
-                    </WebView>-->
 
-                  
-                    <!--<StackLayout x:Name="chartView">
-                        <Label Text="Control Below"></Label>
-                        --><!--<controls:MarketChart  HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" WidthRequest="400" HeightRequest="400"></controls:MarketChart>-->
-                        <!--<android:CheckBox x:Arguments="{x:Static androidForms:Forms.Context}" />
-                        <androidCustomControls:MarketCandleStickChart   x:Arguments="{x:Static androidForms:Forms.Context}" ></androidCustomControls:MarketCandleStickChart>--><!--
-                    </StackLayout>-->
-                    <!--<microcharts:ChartView x:Name="marketChart" HeightRequest="140" BackgroundColor="White"  HorizontalOptions="FillAndExpand"  WidthRequest="400" Chart="{Binding MarketChart}">
-                    
-                    </microcharts:ChartView>-->
+                    <StackLayout Grid.Row="1" Grid.Column="0">
+                        <Label Style="{StaticResource AccentFieldLabel}" Text="Bid" />
+                        <Label Style="{StaticResource SmallDefaultText}"  Text="{Binding Market.BidString}" />
+                    </StackLayout>
+                    <StackLayout Grid.Row="1" Grid.Column="1">
+                        <Label Style="{StaticResource AccentFieldLabel}" Text="Ask" />
+                        <Label Style="{StaticResource SmallDefaultText}"  Text="{Binding Market.AskString}" />
+                    </StackLayout>
+                    <StackLayout Grid.Row="1" Grid.Column="2">
+                        <Label Style="{StaticResource AccentFieldLabel}" Text="Vol(24H)" />
+                        <Label Style="{StaticResource SmallDefaultText}"  Text="{Binding Market.VolumeString}" />
+                    </StackLayout>
+                    <StackLayout Grid.Row="2" Grid.Column="0">
+                        <Label Style="{StaticResource AccentFieldLabel}" >
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="Low ("/>
+                                    <Span Text="{Binding CurrentPeriod.Period}"/>
+                                    <Span Text=")"/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
 
-                <oxy:PlotView x:Name="plotView" Model="{Binding MarketChart}" HeightRequest="300"  WidthRequest="400"
-                                   HorizontalOptions="FillAndExpand" 
+                        <Label Style="{StaticResource SmallDefaultText}"  Text="{Binding Low}" />
+                    </StackLayout>
+                    <StackLayout Grid.Row="2" Grid.Column="1">
+                        <Label Style="{StaticResource AccentFieldLabel}">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="High ("/>
+                                    <Span Text="{Binding CurrentPeriod.Period}"/>
+                                    <Span Text=")"/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Label Style="{StaticResource SmallDefaultText}"  Text="{Binding High}" />
+                    </StackLayout>
+                    <StackLayout Grid.Row="2" Grid.Column="2">
+                        <Frame Style="{StaticResource DefaultFrame}" HeightRequest="25" BorderColor="{DynamicResource ReversebackgroundColor}" Padding="3" BackgroundColor="{DynamicResource PrimaryColor}">
+                            <Button x:Name="BtnTrades" Text="Market Trades" Style="{StaticResource DefaultButton}" Clicked="BtnTrades_Clicked"></Button>
+                        </Frame>
+                    </StackLayout>
+
+                </Grid>
+                <StackLayout Grid.Row="1" Grid.Column="0" HorizontalOptions="FillAndExpand" BackgroundColor="{DynamicResource DefaultBackgroundColor}" >
+                    <Frame Style="{StaticResource DefaultFrame}">
+                        <StackLayout Spacing="0">
+                            <StackLayout HeightRequest="30" Orientation="Horizontal" VerticalOptions="StartAndExpand" HorizontalOptions="CenterAndExpand" Spacing="3">
+
+                                <CollectionView Margin="3"  x:Name="ChartPeriodList" ItemsSource="{Binding ChartPeriods}" HorizontalOptions="CenterAndExpand" ItemsLayout="{Binding ChartPeriodLayout, Source={x:Reference MarketDetails}}"
+                                                          SelectionMode="Single" SelectionChangedCommand="{Binding PeriodCommand}"  SelectedItem="{Binding CurrentPeriod, Mode=TwoWay}">
+                                    <CollectionView.Resources>
+                                        <Style  TargetType="StackLayout">
+                                            <Setter Property="VisualStateManager.VisualStateGroups">
+                                                <VisualStateGroupList>
+                                                    <VisualStateGroup x:Name="CommonStates">
+                                                        <VisualState x:Name="Normal" >
+                                                            <VisualState.Setters>
+                                                                <Setter Property="BackgroundColor" Value="{DynamicResource DefaultBackgroundColor}" />
+                                                            </VisualState.Setters>
+                                                        </VisualState>
+                                                        <VisualState x:Name="Selected">
+                                                            <VisualState.Setters>
+                                                                <Setter Property="BackgroundColor" Value="{DynamicResource AccentColor}" />
+
+                                                            </VisualState.Setters>
+                                                        </VisualState>
+                                                    </VisualStateGroup>
+                                                </VisualStateGroupList>
+                                            </Setter>
+                                        </Style>
+                                    </CollectionView.Resources>
+                                    <CollectionView.ItemTemplate>
+                                        <DataTemplate>
+
+
+                                            <StackLayout Padding="10,0,10,0" HeightRequest="20" Orientation="Horizontal" HorizontalOptions="FillAndExpand"   >
+
+                                                <Label  Text="{Binding Period}"  Style="{StaticResource SmallDefaultText}" VerticalOptions="CenterAndExpand">
+                                                </Label>
+
+                                            </StackLayout>
+
+
+                                        </DataTemplate>
+                                    </CollectionView.ItemTemplate>
+                                </CollectionView>
+
+
+                                <Image  Source="{Binding CurrentChart, Converter={StaticResource ToggleImage}}"  Style="{StaticResource MediumDefaultImage}" BackgroundColor="{DynamicResource AccentColor}">
+                                    <Image.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding BindingContext.ChangeChartCommand, Source={x:Reference MarketDetails}}"  ></TapGestureRecognizer>
+                                    </Image.GestureRecognizers>
+                                </Image>
+
+                            </StackLayout>
+
+                            <!--<oxy:PlotView x:Name="plotView" Model="{Binding CandleChart}" HeightRequest="250"  HorizontalOptions="FillAndExpand" 
                                BackgroundColor="Transparent" >
-                  
-                </oxy:PlotView>
 
-            </Grid>
+                            </oxy:PlotView>-->
 
-                <StackLayout Grid.Row="3"  Grid.Column="0" VerticalOptions="FillAndExpand">
 
-                    <Label Text="Bottom adasdasdasdasdasdasd"/>
+                            <chart:SfChart IsVisible="{Binding ViewCandleChart}" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" HeightRequest="250"  BackgroundColor="{DynamicResource ReverseBackgroundColor}"  >
+                                <chart:SfChart.Margin>
+                            <OnPlatform x:TypeArguments="Thickness" WinPhone="0,0,20,0" />
+                        </chart:SfChart.Margin>
+                                <chart:SfChart.Title>
+                                    <chart:ChartTitle Text="{Binding Market.Pair}"  TextColor="{DynamicResource DefaultTextColor}" />
+                                </chart:SfChart.Title>
+                                <chart:SfChart.PrimaryAxis>
+                                    <chart:DateTimeAxis LabelRotationAngle="-45"   >
+                                        <chart:DateTimeAxis.Title>
+                                            <chart:ChartAxisTitle Text="Date" TextColor="{DynamicResource DefaultTextColor}">
+                                                <chart:ChartAxisTitle.Margin>
+                                                    <OnPlatform x:TypeArguments="Thickness" Android="0,10,0,0" />
+                                                </chart:ChartAxisTitle.Margin>
+                                            </chart:ChartAxisTitle>
+                                        </chart:DateTimeAxis.Title>
+                                        <chart:DateTimeAxis.LabelStyle>
+                                    <chart:ChartAxisLabelStyle LabelFormat="MM/dd" />
+                                </chart:DateTimeAxis.LabelStyle>
+                                    </chart:DateTimeAxis>
+                                </chart:SfChart.PrimaryAxis>
+                                <chart:SfChart.SecondaryAxis>
+                                    <chart:NumericalAxis OpposedPosition="True" >
+                                        <chart:NumericalAxis.Title>
+                                            <chart:ChartAxisTitle Text="Price" TextColor="{DynamicResource DefaultTextColor}">
+                                                <chart:ChartAxisTitle.Margin>
+                                                    <OnPlatform x:TypeArguments="Thickness" Android="0,0,10,0" />
+                                                </chart:ChartAxisTitle.Margin>
+                                            </chart:ChartAxisTitle>
+                                        </chart:NumericalAxis.Title>
+                                        <chart:NumericalAxis.LabelStyle >
+                                    <chart:ChartAxisLabelStyle x:Name="secondaryAxisLabelStyle" />
+                                </chart:NumericalAxis.LabelStyle>
+                                    </chart:NumericalAxis>
+                                </chart:SfChart.SecondaryAxis>
+                                <chart:SfChart.Series>
+                                    <chart:CandleSeries x:Name="MarketCandleSeries" ItemsSource="{Binding ChartData}" XBindingPath="Date" High="High" Low="Low" Open="Open" Close="Close" EnableTooltip="true" EnableAnimation="True" BearFillColor="#831024" BullFillColor="#497920" EnableSolidCandles="True">
+                                    </chart:CandleSeries>
+                                </chart:SfChart.Series>
+                            </chart:SfChart>
+
+                            <chart:SfChart x:Name="MarketAreaChart" IsVisible="{Binding ViewLineChart}" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" HeightRequest="250"  BackgroundColor="{DynamicResource ReverseBackgroundColor}"  >
+
+                                <chart:SfChart.Title>
+                                    <chart:ChartTitle Text="{Binding Market.Pair}"  TextColor="{DynamicResource DefaultTextColor}" />
+                                </chart:SfChart.Title>
+                                <chart:SfChart.PrimaryAxis>
+                                    <chart:DateTimeAxis LabelRotationAngle="-45"   Minimum="{Binding AreaChartDateMinimum}" Maximum="{Binding AreaChartDateMaximum}"  >
+                                        <chart:DateTimeAxis.Title>
+                                            <chart:ChartAxisTitle Text="Date" TextColor="{DynamicResource DefaultTextColor}">
+                                                <chart:ChartAxisTitle.Margin>
+                                                    <OnPlatform x:TypeArguments="Thickness" Android="0,10,0,0" />
+                                                </chart:ChartAxisTitle.Margin>
+                                            </chart:ChartAxisTitle>
+                                        </chart:DateTimeAxis.Title>
+
+                                    </chart:DateTimeAxis>
+                                </chart:SfChart.PrimaryAxis>
+                                <chart:SfChart.SecondaryAxis>
+                                    <chart:NumericalAxis OpposedPosition="True"  Minimum="{Binding AreaChartPriceMinimum}" Maximum="{Binding AreaChartPriceMaximum}">
+                                        <chart:NumericalAxis.Title>
+                                            <chart:ChartAxisTitle Text="Price" TextColor="{DynamicResource DefaultTextColor}">
+                                                <chart:ChartAxisTitle.Margin>
+                                                    <OnPlatform x:TypeArguments="Thickness" Android="0,0,10,0" />
+                                                </chart:ChartAxisTitle.Margin>
+                                            </chart:ChartAxisTitle>
+                                        </chart:NumericalAxis.Title>
+
+                                    </chart:NumericalAxis>
+                                </chart:SfChart.SecondaryAxis>
+                                <chart:SfChart.Series>
+                                    <chart:AreaSeries x:Name="MarketAreaSeries" ItemsSource="{Binding AreaChartData}" XBindingPath="Date" YBindingPath="Value" EnableTooltip="true" EnableAnimation="True" Color="#497920" >
+                                    </chart:AreaSeries>
+                                </chart:SfChart.Series>
+                            </chart:SfChart>
+                        </StackLayout>
+                    </Frame>
                 </StackLayout>
-             
+
+
+
+                <StackLayout Grid.Row="3"  Grid.Column="0">
+
+
+
+
+
+                </StackLayout>
+
             </Grid>
-       
+        </ScrollView>
     </ContentPage.Content>
 </ContentPage>

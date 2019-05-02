@@ -1,17 +1,105 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="BtcMarkets.Wallet.Views.OpenOrdersPage"
-                Title="{Binding Title}"
-             ControlTemplate="{StaticResource ActivityIndicatorTemplate}"
+             x:Name="TradeOrdersPage"
              Style="{StaticResource DefaultPage}"
+              xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core" 
+                ios:Page.UseSafeArea="true" 
+             
+             x:Class="BtcMarkets.Wallet.Views.OpenOrdersPage">
 
-             >
     <ContentPage.Content>
-        <StackLayout>
-            <Label Text="Welcome to Xamarin.Forms!"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
-        </StackLayout>
+
+        <Grid Style="{StaticResource DefaultGrid}" RowSpacing="0">
+            <Grid.Margin>
+                <OnPlatform x:TypeArguments="Thickness">
+                    <On Platform="iOS" Value="0,35,0,0"/>
+                </OnPlatform>
+            </Grid.Margin>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <StackLayout   Grid.Row="0" Grid.Column="0" Style="{StaticResource DefaultStackLayout}" Spacing="0" Padding="0">
+
+                <Grid Style="{StaticResource TradeListHeader}"  HeightRequest="30">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="40*"></ColumnDefinition>
+                        <ColumnDefinition Width="35*"></ColumnDefinition>
+                        <ColumnDefinition Width="20*"></ColumnDefinition>
+                        <ColumnDefinition Width="5*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    
+                    <Label Grid.Row="0" Grid.Column="0" Text="Time/Type"  Style="{StaticResource SmallHeaderText}"></Label>
+                    <Label Grid.Row="0" Grid.Column="1" Text="Price/Vol" Style="{StaticResource SmallHeaderText}"></Label>
+                    <Label Grid.Row="0" Grid.Column="2" Text="Status" Style="{StaticResource SmallHeaderText}"></Label>
+                    
+
+                </Grid>
+                <ListView Style="{StaticResource TradesList}"  ItemsSource="{Binding GroupedOrders}" SelectionMode="None" IsGroupingEnabled="True" >
+                    <ListView.GroupHeaderTemplate>
+                        <DataTemplate>
+                            <ViewCell Height="25">
+
+                                <StackLayout Padding="5,0,5,0" Orientation="Horizontal" HeightRequest="20" BackgroundColor="{DynamicResource AccentColor}" HorizontalOptions="FillAndExpand">
+                                    <Label  Text="{Binding Key}" Style="{StaticResource SmallDefaultText}" FontAttributes="Bold" VerticalTextAlignment="Center" VerticalOptions="CenterAndExpand"></Label>
+
+                                </StackLayout>
+
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.GroupHeaderTemplate>
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+
+                                <Grid Style="{StaticResource TradeListTemplate}" Padding="10">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="40*"></ColumnDefinition>
+                                        <ColumnDefinition Width="35*"></ColumnDefinition>
+                                        <ColumnDefinition Width="20*"></ColumnDefinition>
+                                        <ColumnDefinition Width="5*"></ColumnDefinition>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"></RowDefinition>
+                                    </Grid.RowDefinitions>
+
+                                    <StackLayout Grid.Row="0" Grid.Column="0">
+                                        <Label  Text="{Binding DateString}"  Style="{StaticResource SmallDefaultText}"></Label>
+                                        <Label  Text="{Binding OrderSideString}" Style="{StaticResource MicroDefaultText}"></Label>
+                                    </StackLayout>
+                                    <StackLayout Grid.Row="0" Grid.Column="1">
+                                        <Label  Text="{Binding PriceString}" Style="{StaticResource SmallDefaultText}"></Label>
+                                        <Label  Text="{Binding VolumeString}" Style="{StaticResource MicroDefaultText}"></Label>
+                                    </StackLayout>
+                                    <Label Grid.Row="0" Grid.Column="2" Text="{Binding Status}" Style="{StaticResource SmallDefaultText}"></Label>
+                                    <Image Grid.Row="0" Grid.Column="3" WidthRequest="20" HeightRequest="20" Source="{Binding Converter={StaticResource FontIconImage},ConverterParameter=cancel}" HorizontalOptions="StartAndExpand" VerticalOptions="StartAndExpand">
+                                        <Image.GestureRecognizers>
+                                            <!--<TapGestureRecognizer Command="{Binding BindingContext.RefreshCommand, Source={x:Reference MarketDetails}}"></TapGestureRecognizer>-->
+                                        </Image.GestureRecognizers>
+                                    </Image>
+                                </Grid>
+
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+
+                </ListView>
+
+
+
+            </StackLayout>
+
+
+        </Grid>
+
     </ContentPage.Content>
 </ContentPage>

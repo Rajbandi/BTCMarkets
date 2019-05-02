@@ -12,29 +12,38 @@
 
   <ItemGroup>
     <Compile Remove="Controls\MarkerChart.cs" />
+    <Compile Remove="Models\TapTouchManipulator.cs" />
     <Compile Remove="Views\CustomWebView.xaml.cs" />
+    <Compile Remove="Views\TradeDataView.xaml.cs" />
+    <Compile Remove="Views\TradesPage.xaml.cs" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Remove="Views\CustomWebView.xaml" />
+    <EmbeddedResource Remove="Views\TradeDataView.xaml" />
+    <EmbeddedResource Remove="Views\TradesPage.xaml" />
   </ItemGroup>
 
   <ItemGroup>
     <None Remove="Config\settings.json" />
+    <None Remove="Resources\chart.html" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="Config\settings.json" />
+    <EmbeddedResource Include="Resources\chart.html" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Acr.UserDialogs" Version="7.0.4" />
     <PackageReference Include="Microsoft.AppCenter.Analytics" Version="1.14.0" />
     <PackageReference Include="Microsoft.AppCenter.Crashes" Version="1.14.0" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
-    <PackageReference Include="OxyPlot.Xamarin.Forms" Version="1.1.0-unstable0011" />
     <PackageReference Include="Refractored.XamForms.PullToRefresh" Version="2.4.1.1-beta" />
     <PackageReference Include="SkiaSharp" Version="1.68.0" />
-    <PackageReference Include="SkiaSharp.Views" Version="1.68.0" />  
+    <PackageReference Include="SkiaSharp.Views" Version="1.68.0" />
+    <PackageReference Include="Syncfusion.Xamarin.SfChart" Version="17.1.0.42" />
+    <PackageReference Include="Toasts.Forms.Plugin" Version="3.3.2" />  
     <PackageReference Include="Xamarin.Essentials" Version="1.1.0" />  
     <PackageReference Include="Xamarin.Forms" Version="4.0.0.346134-pre9" />
   </ItemGroup>
@@ -64,9 +73,6 @@
     <Compile Update="Views\FavMarketsPage.xaml.cs">
       <DependentUpon>FavMarketsPage.xaml</DependentUpon>
     </Compile>
-    <Compile Update="Views\TradesPage.xaml.cs">
-      <DependentUpon>TradesPage.xaml</DependentUpon>
-    </Compile>
   </ItemGroup>
 
   <ItemGroup>
@@ -77,7 +83,19 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>AppResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\TradeDataView.xaml">
+    <EmbeddedResource Update="Views\AccountHoldingsView.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\MarketTradesPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\OpenOrdersPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\OrdersHistoryPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\SettingsPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Styles.xaml">
@@ -116,9 +134,6 @@
     <EmbeddedResource Update="Views\BtcMarketsPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\LoadingPage.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
     <EmbeddedResource Update="Views\MarketDetailPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
@@ -126,15 +141,6 @@
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\NewsPage.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Views\OpenOrdersPage.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Views\OrdersHistoryPage.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Views\TradesPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
   </ItemGroup>

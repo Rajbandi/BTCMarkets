@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using BtcMarkets.Core.Helpers;
+using System.Threading.Tasks;
 
 namespace BtcMarkets.Core.Tests
 {
@@ -175,6 +176,19 @@ namespace BtcMarkets.Core.Tests
             Assert.IsNotNull(response);
 
             ProcessResponse(response);
+
+        }
+        [TestMethod]
+        public void TestGetOpenOrdersV2()
+        {
+            
+                var response = _client.Api.GetOpenOrdersV2().Result;
+                //Console.WriteLine(response);
+                Assert.IsNotNull(response);
+
+                ProcessResponse(response);
+
+         
 
         }
 

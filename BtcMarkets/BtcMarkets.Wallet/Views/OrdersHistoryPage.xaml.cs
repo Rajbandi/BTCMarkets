@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BtcMarkets.Wallet.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,6 +16,17 @@ namespace BtcMarkets.Wallet.Views
         public OrdersHistoryPage()
         {
             InitializeComponent();
+            BindingContext = ViewModel = new OrdersHistoryViewModel();
+        }
+
+        public OrdersHistoryViewModel ViewModel { get; private set; }
+
+        public IItemsLayout MarketsLayout => ListItemsLayout.HorizontalList;
+
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+            ViewModel.InitMarket();
         }
     }
 }

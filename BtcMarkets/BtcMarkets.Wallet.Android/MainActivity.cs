@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 using Android.App;
 using Android.Content.PM;
@@ -10,6 +10,9 @@ using BtcMarkets.Wallet.Droid;
 using BtcMarkets.Wallet;
 using Refractored.XamForms.PullToRefresh.Droid;
 using Plugin.CurrentActivity;
+using Xamarin.Forms;
+using Plugin.Toasts;
+using Acr.UserDialogs;
 
 namespace BtcMarkets.Wallet.Droid
 {
@@ -23,13 +26,15 @@ namespace BtcMarkets.Wallet.Droid
 
             base.OnCreate(savedInstanceState);
             PullToRefreshLayoutRenderer.Init();
+            DependencyService.Register<ToastNotification>(); // Register your dependency
+
+            ToastNotification.Init(this);
+            UserDialogs.Init(this);
 
             global::Xamarin.Forms.Forms.SetFlags("Shell_Experimental", "Visual_Experimental", "CollectionView_Experimental", "FastRenderers_Experimental");
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             CrossCurrentActivity.Current.Init(this, savedInstanceState);
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
-
-            OxyPlot.Xamarin.Forms.Platform.Android.PlotViewRenderer.Init();
 
             LoadApplication(new App());
         }

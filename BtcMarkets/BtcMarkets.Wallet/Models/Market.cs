@@ -97,11 +97,12 @@ namespace BtcMarkets.Wallet.Models
         public string LastPriceWithSymbol {
             get
             {
-                var str = $"{CurrencySymbol}{LastPrice}";
+                var str = $"{CurrencySymbol}{LastPrice:0.00}";
                 if(Currency == Constants.Btc)
                 {
                     str = $"{CurrencySymbol}{LastPrice:F8}";
                 }
+                
                 return str;
             }
         }
@@ -126,7 +127,18 @@ namespace BtcMarkets.Wallet.Models
             set => SetProperty(ref _holdings, value);
         }
 
-        public string HoldingsString => $"{Holdings:F2}";
+        public string HoldingsString {
+            get
+            {
+                if (Instrument == Constants.Aud)
+                {
+                    return $"{Holdings:0.00}";
+                }
+                else
+                    return $"{Holdings:0.00000000}";
+                
+            }
+        }
 
         private bool _starred;
 
@@ -207,9 +219,24 @@ namespace BtcMarkets.Wallet.Models
             set => SetProperty(ref _toggleNotification, value);
         }
 
-       
 
-   
+        [JsonProperty("InstrumentSymbol")]
+        public string InstrumentSymbol
+        {
+            get
+            {
+
+                var currency = "  ";
+                
+                if (Instrument == Constants.Btc)
+                {
+                    currency = Constants.BtcSymbol;
+                }
+
+                return currency;
+            }
+        }
+
 
         [JsonProperty("CurrencySymbol")]
         public string CurrencySymbol

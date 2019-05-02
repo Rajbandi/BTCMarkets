@@ -10,9 +10,9 @@ using Xamarin.Forms.Xaml;
 namespace BtcMarkets.Wallet.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class LoadingPage : ContentPage
+    public partial class AccountHoldingsView : ContentView
     {
-        public LoadingPage()
+        public AccountHoldingsView()
         {
             InitializeComponent();
         }

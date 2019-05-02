@@ -8,29 +8,28 @@ using Xamarin.Forms;
 
 namespace BtcMarkets.Wallet.Converters
 {
-    public class TradeSelectedStyleConverter : IValueConverter
+    public class SelectedStyleConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            
-            var styleName = "SmallDefaultText";
+            var defaultStyle = (string)parameter;
 
-           
-            if( value != null)
+            var targetStyle = (string)value;
+        
+            if(string.IsNullOrWhiteSpace(targetStyle))
             {
-                var arg = parameter as TradesPage;
-                if (arg != null)
-                {
-                    var viewModel = arg.BindingContext as TradesViewModel;
-
-                    if (viewModel != null)
-                    {
-                      
-                    }
-                }
+                targetStyle = defaultStyle;
             }
 
-            var style = (Style)Application.Current.Resources[styleName];
+            Style style = null;
+            try
+            {
+                style = (Style)Application.Current.Resources[targetStyle];
+            }
+            catch(Exception)
+            {
+
+            }
             return style;
         }
 

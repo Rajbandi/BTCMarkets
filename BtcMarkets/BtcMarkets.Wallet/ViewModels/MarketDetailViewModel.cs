@@ -8,12 +8,12 @@ using BtcMarkets.Wallet.Models;
 using Newtonsoft.Json;
 //using Microcharts;
 using SkiaSharp;
-using OxyPlot;
-using OxyPlot.Axes;
-using OxyPlot.Series;
 using Xamarin.Forms;
 using Xamarin.Forms.Internals;
 using System.Threading.Tasks;
+using BtcMarkets.Core.Helpers;
+using BtcMarkets.Wallet.Controls;
+using System.Windows.Input;
 
 namespace BtcMarkets.Wallet.ViewModels
 {
@@ -26,16 +26,204 @@ namespace BtcMarkets.Wallet.ViewModels
         [JsonProperty("y")]
         public double[] Y { get; set; }
     }
+
+    public class ChartPeriod : BaseBindableObject
+    {
+        public ChartPeriod()
+        {
+            Style = "DefaultStackLayout";
+        }
+
+        public string Period { get; set; }
+        public string Description { get; set; }
+
+        private string _style;
+        public string Style
+        {
+            get => _style;
+            set => SetProperty(ref _style, value, nameof(Style));
+        }
+        public static HistoryPeriod GetPeriodValue(string periodStr)
+        {
+
+            HistoryPeriod period = HistoryPeriod.Day;
+            switch (periodStr)
+            {
+                case "1H":
+                    period = HistoryPeriod.Hour;
+                    break;
+                case "12H":
+                    period = HistoryPeriod.Hour12;
+                    break;
+                case "1D":
+                    period = HistoryPeriod.Day;
+                    break;
+                case "3D":
+                    period = HistoryPeriod.HalfWeek;
+                    break;
+                case "1W":
+                    period = HistoryPeriod.Week;
+                    break;
+                case "2W":
+                    period = HistoryPeriod.FortNight;
+                    break;
+                case "1M":
+                    period = HistoryPeriod.Month;
+                    break;
+                case "3M":
+                    period = HistoryPeriod.Quarter;
+                    break;
+                case "6M":
+                    period = HistoryPeriod.HalfYear;
+                    break;
+                case "1Y":
+                    period = HistoryPeriod.Year;
+                    break;
+
+                default:
+                    period = HistoryPeriod.Day;
+                    break;
+            }
+            return period;
+        }
+    }
+
     public class MarketDetailViewModel : BaseViewModel
     {
 
-        public Market Market { get; private set; }
-        public MarketDetailViewModel(Market market)
-        {
-            Market = market;
-            Title = $"{market.Name}({market.Pair})";
-            ChartData = new List<HighLowItem>();
 
+        private Market _market;
+        public Market Market
+        {
+            get => _market;
+            private set => SetProperty(ref _market, value, nameof(Market));
+        }
+
+        private string _low;
+        public string Low
+        {
+            get => _low;
+            set => SetProperty(ref _low, value, nameof(Low));
+        }
+
+        private string _high;
+        public string High
+        {
+            get => _high;
+            set => SetProperty(ref _high, value, nameof(High));
+        } 
+
+        private List<ChartPeriod> _chartPeriods;
+        public List<ChartPeriod> ChartPeriods
+        {
+            get => _chartPeriods;
+            private set => SetProperty(ref _chartPeriods, value, nameof(ChartPeriods));
+        }
+
+        private ChartPeriod _currentPeriod;
+        public ChartPeriod CurrentPeriod
+        {
+            get => _currentPeriod;
+            set => SetProperty(ref _currentPeriod, value, nameof(CurrentPeriod));
+        }
+
+        private ToggleImage _currentChart;
+        public ToggleImage CurrentChart
+        {
+            get => _currentChart;
+            set => SetProperty(ref _currentChart, value, nameof(CurrentChart));
+        }
+
+        private List<CandleStickEntry> _chartData;
+        public List<CandleStickEntry> ChartData
+        {
+            get => _chartData;
+            set
+            {
+                SetProperty(ref _chartData, value, nameof(ChartData));
+                //Task.Run(() =>
+                //{
+                //    CandleChart = GetCandleChart();
+                //});
+                
+            }
+        }
+
+        private List<DateValueEntry> _areaChartData;
+        public List<DateValueEntry> AreaChartData
+        {
+            get => _areaChartData;
+            set
+            {
+                SetProperty(ref _areaChartData, value, nameof(AreaChartData));
+            }
+        }
+
+        private double? _areaChartPriceMinimum;
+        public double? AreaChartPriceMinimum
+        {
+            get => _areaChartPriceMinimum;
+            set => SetProperty(ref _areaChartPriceMinimum, value, nameof(AreaChartPriceMinimum));
+        }
+
+        private double? _areaChartPriceMaximum;
+        public double? AreaChartPriceMaximum
+        {
+            get => _areaChartPriceMaximum;
+            set => SetProperty(ref _areaChartPriceMaximum, value, nameof(AreaChartPriceMaximum));
+        }
+
+        private DateTime? _areaChartDateMinimum;
+        public DateTime? AreaChartDateMinimum
+        {
+            get => _areaChartDateMinimum;
+            set => SetProperty(ref _areaChartDateMinimum, value, nameof(AreaChartDateMinimum));
+        }
+
+        private DateTime? _areaChartDateMaximum;
+        public DateTime? AreaChartDateMaximum
+        {
+            get => _areaChartDateMaximum;
+            set => SetProperty(ref _areaChartDateMaximum, value, nameof(AreaChartDateMaximum));
+        }
+
+        private bool _isLoading;
+        public bool IsLoading
+        {
+            get => _isLoading;
+            set => SetProperty(ref _isLoading, value, nameof(IsLoading));
+        }
+
+        public bool ViewLineChart => CurrentChart != null && !CurrentChart.Value;
+        public bool ViewCandleChart => CurrentChart != null && CurrentChart.Value;
+
+        public MarketDetailViewModel(Market market = null)
+        {
+            if (market == null)
+            {
+                market = AppData.Current.Market;
+            }
+            if (market != null)
+            {
+                Market = market;
+                Title = $"{market.Name} ({market.Pair})";
+            }
+            // ChartData = new List<HighLowItem>();
+
+            ChartData = new List<CandleStickEntry>();
+            AreaChartData = new List<DateValueEntry>();
+
+            ChartPeriods = new List<ChartPeriod>();
+            LoadChartPeriods();
+          
+            CurrentChart = new ToggleImage
+            {
+                FontFamily = "MaterialDesign",
+                Value = true,
+                OnImage = "timeline",
+                OffImage = "\uE85C",
+                Color = "DefaultTextColor"
+            };
         }
 
 
@@ -53,280 +241,135 @@ namespace BtcMarkets.Wallet.ViewModels
             }
         }
 
-        public async Task LoadReport()
+        public void LoadChartPeriods()
         {
-            IsBusy = true;
-            var data = await AppData.Current.GetMarketHistory(Market);
-            ChartData.Clear();
-            foreach (var entry in data)
+            if (ChartPeriods.Any())
+                ChartPeriods.Clear();
+
+            ChartPeriods.Add(new ChartPeriod { Period = "1D" });
+            ChartPeriods.Add(new ChartPeriod { Period = "3D" });
+            ChartPeriods.Add(new ChartPeriod { Period = "1W" });
+            ChartPeriods.Add(new ChartPeriod { Period = "2W" });
+            ChartPeriods.Add(new ChartPeriod { Period = "1M" });
+            ChartPeriods.Add(new ChartPeriod { Period = "3M" });
+            ChartPeriods.Add(new ChartPeriod { Period = "6M" });
+            ChartPeriods.Add(new ChartPeriod { Period = "1Y" });
+        }
+
+
+        public  void InitReport()
+        {
+            if(CurrentPeriod == null)
             {
-                double t = DateTimeAxis.ToDouble(entry.Date);
-                var item = new HighLowItem(t, entry.High, entry.Low, entry.Open, entry.Close);
-                ChartData.Add(item);
+                CurrentPeriod = ChartPeriods.FirstOrDefault();
             }
-
-            MarketChart = GetMarketChart();
-
-            Title = (ChartData.Count > 0) ? "Loaded" : "Not Loaded";
-            IsBusy = false;
+            //if (CurrentPeriod != null)
+            //{
+            //    await LoadReport();
+            //}
         }
 
-
-        //public async void LoadReport()
-        //{
-        //    IsBusy = true;
-        //    var data = await AppData.Current.GetMarketHistory(Market);
-
-        //    ReportHtml = GetReportHtml(data);
-        //    IsBusy = false;
-        //}
-
-        public string GetReportHtml(List<MarketHistory> history)
+        public async Task LoadReport(HistoryPeriod period = HistoryPeriod.Day)
         {
-            var html = new StringBuilder();
-            var inlineStyle = "style=\"width:95%;height:100%;\"";
-            var inlineStyle1 = "style=\"width:100%;height:100%;\"";
-            html.AppendLine("<html style=\"width:95%;height:100%;\">");
-            html.AppendLine("<head>");
-            html.AppendLine("<script src=\"https://cdn.jsdelivr.net/npm/apexcharts\"></script>");
-            html.AppendLine("</head>");
-            html.AppendLine($"<body {inlineStyle}>");
-            html.AppendLine($"<div id=\"chart\" {inlineStyle1}>");
-
-            html.AppendLine("</div>");
-            html.AppendLine("<script>");
-
-            var data = GetMarketData(history);
-
-            html.AppendLine(@"  var options = {
-                          chart: {
-                            height: 300,
-                            type: 'candlestick',
-                            toolbar: {
-                                show: true,
-                                tools: {
-                                    selection:true,
-                                    zoom:true,
-                                    zoomin:true,
-                                    zoomout:true,
-                                    download:false,
-                                    pan:false,
-                                    reset: true
-                                }
-                            },
-                            
-                            animations: {
-                                enabled: false
-                            }
-                          },
-                          series: [{           ");
-
-            html.AppendLine($"data: {data}");
-            html.AppendLine(@"
-                           }],
-                          title: {
-                            text: 'CandleStick Chart',
-                            align: 'left'
-                          },
-                          xaxis: {
-                            type: 'datetime'
-                          },
-                          yaxis: {
-                            tooltip: {
-                              enabled: true
-                            }
-                          }
-                        }");
-
-            html.AppendLine(@"var chart = new ApexCharts(document.querySelector('#chart'), options); 
-                            chart.render(); ");
-            html.AppendLine("</script>");
-            html.AppendLine("</body>");
-
-            html.AppendLine("</html>");
-
-            return html.ToString();
-        }
-
-        public bool IsLoading { get; set; }
-
-        private string GetMarketData(List<MarketHistory> history)
-        {
-            string json = "[]";
-
-            var entries = new List<ChartEntry>();
-            var values = new List<string>();
-            foreach (var data in history)
+            await Task.Run(() =>
             {
-                double t = DateTimeAxis.ToDouble(data.Date);
-                var value = "{" + $"x:new Date({t}),y:[{data.Open},{data.High},{data.Low},{data.Close}]" + "}";
-                values.Add(value);
-                //var entry = new ChartEntry
-                //{
-                //    X = $"new Date({data.Timestamp})",
-                //    Y = new[] { data.Open, data.High, data.Low, data.Close }
-                //};
+                Device.BeginInvokeOnMainThread(async () =>
+            {
+                IsBusy = true;
 
-                //entries.Add(entry);
-            }
+                var data = await AppData.Current.GetMarketHistory(Market, period);
+                var dt = data.OrderBy(x => x.Date).ToList();
+            
+                var chartData = new List<CandleStickEntry>();
+                foreach (var entry in dt)
+                {
+                    chartData.Add(new CandleStickEntry(entry.Date, entry.Open, entry.High, entry.Low, entry.Close));
+                }
 
-            json = "[" + string.Join("," + Environment.NewLine, values) + "]";
-            return json;
+                ChartData = chartData; 
+
+                var areaChartData = chartData.Select(x => new DateValueEntry(x.Date, x.Close)).ToList();
+
+                AreaChartData = areaChartData;
+
+                var low = chartData.Min(x => x.Low);
+                var high = chartData.Max(x => x.High);
+
+                Low = $"{low:0.00}";
+                High = $"{high:0.00}";
+
+                AreaChartPriceMinimum = low;
+                AreaChartPriceMaximum = high;
+
+                AreaChartDateMinimum = chartData.Min(x => x.Date);
+                AreaChartDateMaximum = chartData.Max(x => x.Date);
 
 
+                await Task.Delay(100);
 
+                IsBusy = false;
+            });
+            });
         }
-        //public async void RefreshChartEntries()
-        //{
-        //    IsBusy = true;
-        //    var history = await AppData.Current.GetMarketHistory(Market);
-        //    var entries = new List<ChartEntry>();
-        //    foreach (var data in history)
-        //    {
-        //        var val = (float)(data.High / data.Low) / 2;
-        //        var entry = new ChartEntry(val)
-        //        {
-        //            Label = "",
-        //            ValueLabel = $"{val}",
-        //            Color = SKColor.Parse("#3498db")
-        //        };
+        public async Task<List<MarketHistory>> GetMarketHistory(HistoryPeriod period = HistoryPeriod.Day)
+        {
+            var data = await AppData.Current.GetMarketHistory(Market, period);
+            var orderedHistory = data.OrderBy(x => x.Date).ToList();
 
-        //        entries.Add(entry);
-        //    }
-        //    var high = (float)history.Min(x => x.High);
-        //    MarketChart = new LineChart()
-        //    {
-        //        Entries = entries,
-        //        LineMode = LineMode.Straight,
-        //        LineSize = 8,
-        //        PointMode = PointMode.Square,
-        //        PointSize = 18,
+            return orderedHistory;
+        }
+     
+        public async void Refresh()
+        {
+            var current = CurrentPeriod;
 
-        //        MaxValue = high + (0.20f * high)
-        //    };
+            if (current != null)
+            {
+                var period = current.Period;
+                var periodValue = ChartPeriod.GetPeriodValue(period);
 
-        //    OnPropertyChanged(nameof(MarketChart));
-
-        //    IsBusy = false;
-        //}
-
-        //public LineChart MarketChart { get; private set; }
-
-        private PlotModel _marketChart;
-        public PlotModel MarketChart
+                await LoadReport(periodValue);
+            }
+        }
+        public ICommand PeriodCommand
         {
             get
             {
-                return _marketChart;
-            }
-            private set
-            {
-                _marketChart = value;
-                OnPropertyChanged(nameof(MarketChart));
+                return new Command((value) =>
+                {
+                    Refresh();
+                });
+
             }
         }
-
-        public List<HighLowItem> ChartData { get; private set; }
-        public PlotModel GetMarketChart()
+        public ICommand RefreshCommand
         {
-
-            var model = new PlotModel { Title = "LineSeries with default style" };
-            //model.ResetAllAxes();
-            model.InvalidatePlot(false);
-            model.PlotAreaBorderColor = OxyColor.Parse("#B2BABB");
-            model.TextColor = OxyColor.Parse("#B2BABB");
-            model.LegendTextColor = OxyColor.Parse("#B2BABB");
-
-            var dtAxis = new DateTimeAxis { Position = AxisPosition.Bottom };
-            var laAxis = new LinearAxis { Position = AxisPosition.Left };
-
-            model.Axes.Add(dtAxis);
-            model.Axes.Add(laAxis);
-            var items = ChartData.OrderBy(x=>x.X).ToArray();
-            var series = new CandleStickSeries
+            get
             {
-                Color = OxyColor.Parse("#B2BABB"),
-                Selectable = true,
-                Background = OxyColors.Transparent,
-                SelectionMode = OxyPlot.SelectionMode.Single,
-                IncreasingColor = OxyColor.Parse("#88FF88"),
-                DecreasingColor = OxyColor.Parse("#FF5F5F"),
-                TrackerFormatString =
-                               "High: {2:0.00}\nLow: {3:0.00}\nOpen: {4:0.00}\nClose: {5:0.00}",
-                ItemsSource = items
-            };
+                return new Command((value) =>
+                {
+                    Refresh();
+                });
 
-            series.Title = Market.Pair;
-
-
-
-            if (items.Length > 0)
-            {
-                dtAxis.Minimum = items[0].X;
-                dtAxis.Maximum = items[items.Length - 1].X;
-
-                laAxis.Minimum = items.Select(x => x.Low).Min();
-                laAxis.Maximum = items.Select(x => x.High).Max();
             }
-            model.Series.Add(series);
-            model.InvalidatePlot(true);
-            //foreach (var ax in plotView.Model.Axes)
-            //    ax.Maximum = ax.Minimum = Double.NaN;
-            //plotView.Model.InvalidatePlot()
-
-            return model;
-
         }
+        public ICommand ChangeChartCommand
+        {
+            get
+            {
+                return new Command(async (value) =>
+                {
+                    if (CurrentChart != null)
+                    {
+                        CurrentChart.Value = !CurrentChart.Value;
+                        OnPropertyChanged(nameof(CurrentChart));
+                        OnPropertyChanged(nameof(ViewLineChart));
+                        OnPropertyChanged(nameof(ViewCandleChart));
+                    }
+                });
 
-
-
-        //private ObservableCollection<MarketOrder> _askList;
-        //private ObservableCollection<MarketOrder> _bidList;
-        //private ObservableCollection<Market> _tradeList;
-
-
-        //public ObservableCollection<MarketOrder> AskList
-        //{
-        //    get => _askList;
-        //    set
-        //    {
-        //        _askList = value;
-        //        OnPropertyChanged(nameof(AskList));
-        //    }
-        //}
-
-        //public ObservableCollection<MarketOrder> BidList
-        //{
-        //    get => _bidList;
-        //    set
-        //    {
-        //        _bidList = value;
-        //        OnPropertyChanged(nameof(BidList));
-        //    }
-        //}
-
-        //private FormattedString _formattedPrice;
-        //public FormattedString FormattedPrice
-        //{
-        //    get => _formattedPrice;
-        //    set => SetProperty(ref _formattedPrice, value);
-        //}
-
-        //private FormattedString _formattedVolume;
-        //public FormattedString FormattedVolume
-        //{
-        //    get => _formattedVolume;
-        //    set => SetProperty(ref _formattedVolume, value);
-        //}
-
-        //private Market _marketDetail;
-        //public Market MarketDetail
-        //{
-        //    get => _marketDetail;
-        //    set => SetProperty(ref _marketDetail, value);
-        //}
-
-
+            }
+        }
 
     }
 }

@@ -1,17 +1,135 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="BtcMarkets.Wallet.Views.OrdersHistoryPage"
-                Title="{Binding Title}"
-             ControlTemplate="{StaticResource ActivityIndicatorTemplate}"
-             Style="{StaticResource DefaultPage}"
-
-             >
+                 x:Name="TradeOrdersPage"
+            xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core" 
+            ios:Page.UseSafeArea="true" 
+             Style="{StaticResource DefaultPage}" 
+             x:Class="BtcMarkets.Wallet.Views.OrdersHistoryPage">
     <ContentPage.Content>
-        <StackLayout>
-            <Label Text="Welcome to Xamarin.Forms!"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
-        </StackLayout>
+        <Grid Style="{StaticResource DefaultGrid}" RowSpacing="0">
+            <Grid.Margin>
+                <OnPlatform x:TypeArguments="Thickness">
+                    <On Platform="iOS" Value="0,35,0,0"/>
+                </OnPlatform>
+            </Grid.Margin>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Frame Grid.Row="0" Grid.Column="0" HeightRequest="45" Style="{StaticResource DefaultFrame}">
+                <StackLayout >
+                    <CollectionView Margin="3" x:Name="MarketPairsGrid" ItemsSource="{Binding TradeMarketPairs}" HorizontalOptions="FillAndExpand" ItemsLayout="{Binding MarketsLayout, Source={x:Reference TradeOrdersPage}}"
+                                                          SelectionMode="Single" 
+                                                          SelectedItem="{Binding TradingMarketPair, Mode=TwoWay}"  SelectionChangedCommand="{Binding MarketChangedCommand}">
+                        <CollectionView.Resources>
+                            <Style  TargetType="StackLayout">
+                                <Setter Property="VisualStateManager.VisualStateGroups">
+                                    <VisualStateGroupList>
+                                        <VisualStateGroup x:Name="CommonStates">
+                                            <VisualState x:Name="Normal" >
+                                                <VisualState.Setters>
+                                                    <Setter Property="BackgroundColor" Value="{DynamicResource DefaultBackgroundColor}" />
+                                                </VisualState.Setters>
+                                            </VisualState>
+                                            <VisualState x:Name="Selected">
+                                                <VisualState.Setters>
+                                                    <Setter Property="BackgroundColor" Value="{DynamicResource AccentColor}" />
+
+                                                </VisualState.Setters>
+                                            </VisualState>
+                                        </VisualStateGroup>
+                                    </VisualStateGroupList>
+                                </Setter>
+                            </Style>
+                        </CollectionView.Resources>
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+
+                                <StackLayout Margin="5" HeightRequest="20" Orientation="Horizontal" HorizontalOptions="FillAndExpand"  BackgroundColor="{DynamicResource DefaultBackgroundColor}" >
+                                    <Image Source="{Binding Image,Converter={StaticResource Base64ToImage}}" WidthRequest="20" HeightRequest="20" />
+                                    <Label  Text="{Binding Pair}" Style="{Binding Style}"  VerticalOptions="CenterAndExpand">
+                                    </Label>
+                                </StackLayout>
+
+
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </StackLayout>
+            </Frame>
+            <StackLayout   Grid.Row="1" Grid.Column="0" Spacing="0" Padding="0">
+
+                <Grid Style="{StaticResource TradeListHeader}"  HeightRequest="30">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="40*"></ColumnDefinition>
+                        <ColumnDefinition Width="35*"></ColumnDefinition>
+                        <ColumnDefinition Width="25*"></ColumnDefinition>
+
+
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Label Grid.Row="0" Grid.Column="0" Text="Time/Type"  Style="{StaticResource SmallHeaderText}"></Label>
+                    <Label Grid.Row="0" Grid.Column="1" Text="Price/Vol" Style="{StaticResource SmallHeaderText}"></Label>
+                    <Label Grid.Row="0" Grid.Column="2" Text="Status" Style="{StaticResource SmallHeaderText}"></Label>
+
+                </Grid>
+                <ListView Style="{StaticResource TradesList}"  ItemsSource="{Binding OrderHistory}" SelectionMode="None" >
+                 
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+
+                                <Grid Style="{StaticResource TradeListTemplate}" Padding="10">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="40*"></ColumnDefinition>
+                                        <ColumnDefinition Width="35*"></ColumnDefinition>
+                                        <ColumnDefinition Width="25*"></ColumnDefinition>
+                                       
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"></RowDefinition>
+                                    </Grid.RowDefinitions>
+
+                                    <StackLayout Grid.Row="0" Grid.Column="0">
+                                        <Label  Text="{Binding DateString}"  Style="{StaticResource SmallDefaultText}" HorizontalOptions="FillAndExpand" ></Label>
+                                        <Label  Text="{Binding OrderSideString}" Style="{StaticResource MicroDefaultText}"></Label>
+                                    </StackLayout>
+                                    <StackLayout Grid.Row="0" Grid.Column="1">
+                                        <Label  Text="{Binding PriceString}" Style="{StaticResource SmallDefaultText}"></Label>
+                                        <Label  Text="{Binding VolumeString}" Style="{StaticResource MicroDefaultText}"></Label>
+                                    </StackLayout>
+                                    <Label Grid.Row="0" Grid.Column="2" Text="{Binding Status}" Style="{StaticResource SmallDefaultText}"></Label>
+                                </Grid>
+
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                    <!--<ListView.Footer>
+
+                        <StackLayout HorizontalOptions="FillAndExpand" HeightRequest="20" Padding="5" IsVisible="{Binding HasMoreOrders}">
+                            <Label Text="Load More ..." HorizontalTextAlignment="Center" HorizontalOptions="CenterAndExpand" Style="{StaticResource SmallDefaultText}" >
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding ViewMoreCommand}">
+                                        
+                                    </TapGestureRecognizer>                                    
+                                    
+                                </Label.GestureRecognizers>
+                            </Label>
+                        </StackLayout>
+
+                    </ListView.Footer>-->
+                </ListView>
+
+
+
+            </StackLayout>
+        </Grid>
     </ContentPage.Content>
 </ContentPage>

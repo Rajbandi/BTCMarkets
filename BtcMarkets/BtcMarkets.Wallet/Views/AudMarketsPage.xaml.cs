@@ -17,7 +17,7 @@ namespace BtcMarkets.Wallet.Views
             InitializeComponent();
 
             BindingContext = ViewModel = new AudMarketsViewModel();
-
+         
         }
 
 
@@ -27,7 +27,13 @@ namespace BtcMarkets.Wallet.Views
 
             AppHelper.TrackEvent(AppTrackEvents.AudMarkets);
 
-            CheckFavourites();
+            //  CheckFavourites();
+
+
+            //CrossLocalNotifications.Current.Show("Hello", "My First ");
+
+            AppHelper.ShowNotification("Help","Loadded ");
+
         }
 
         private static bool isFirst = true;
@@ -62,5 +68,6 @@ namespace BtcMarkets.Wallet.Views
                 }
             }
         }
+
     }
 }

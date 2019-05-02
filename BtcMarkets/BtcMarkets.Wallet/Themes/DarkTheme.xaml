@@ -14,7 +14,7 @@
     <Color x:Key="NavigationPrimary">#3C6B3C</Color>
     <Color x:Key="GradientColor1">#2193b0</Color>
     <Color x:Key="GradientColor2">#6dd5ed</Color>
-    <!--<Color x:Key="AccentColor1">#ff9933</Color>-->
+    <!--<Color x:Key="AccentColor1">#ff9933 #ffAA55</Color>-->
     <Color x:Key="AccentColor">#ffAA55</Color>
     <Color x:Key="GrayColor1">#DCDCDC</Color>
     <Color x:Key="GrayColor2">#EAEDED</Color>
@@ -38,6 +38,8 @@
     <Color x:Key="HighlightBackgroundColor">#ffAA55</Color>
     <Color x:Key="HighlightTextColor">#F2F4F4</Color>
 
-
+    <Color x:Key="LoaderColor">#3C6B3C</Color>
+    <Color x:Key="LoaderBackgroundColor">#F2F4F4</Color>
+    <Color x:Key="HighlightTransparentColor">#E6ff9933</Color>
 
 </ResourceDictionary>

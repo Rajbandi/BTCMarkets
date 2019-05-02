@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using BtcMarkets.Wallet.ViewModels;
 
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -15,6 +11,11 @@ namespace BtcMarkets.Wallet.Views
         public OpenOrdersPage()
         {
             InitializeComponent();
+            BindingContext = ViewModel = new OpenOrdersViewModel();
         }
+
+        public OpenOrdersViewModel ViewModel { get; private set; }
+
+       
     }
 }

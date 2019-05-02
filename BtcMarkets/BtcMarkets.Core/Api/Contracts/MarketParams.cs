@@ -6,9 +6,14 @@ namespace BtcMarkets.Core.Api.Contracts
     [DataContract]
     public class MarketParams : BaseObject
     {
+
+        public bool? Forward { get; set; }
+
+        public bool? Sort { get; set; }
+
         [AliasAs("indexForward")]
         [DataMember(Name = "indexForward")]
-        public bool IndexForward { get; set; }
+        public string IndexForward => Forward.HasValue ? Forward.Value.ToString().ToLower() : null;
 
         [AliasAs("limit")]
         [DataMember(Name = "limit")]
@@ -20,6 +25,6 @@ namespace BtcMarkets.Core.Api.Contracts
 
         [AliasAs("sortForward")]
         [DataMember(Name = "sortForward")]
-        public bool SortForward { get; set; }
+        public string SortForward => Sort.HasValue ? Sort.Value.ToString().ToLower() : null;
     }
 }

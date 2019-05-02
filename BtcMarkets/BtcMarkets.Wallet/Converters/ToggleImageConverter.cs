@@ -32,12 +32,16 @@ namespace BtcMarkets.Wallet.Converters
                     }
                     var resources = Application.Current.Resources;
                     icon = toggle.Value ? toggle.OnImage : toggle.OffImage;
+
                     source = new FontImageSource();
                     var font = (OnPlatform<string>)resources[fontFamily];
                     source.FontFamily = font;
                     source.Glyph = icon;
-                    source.Color = (Color)resources[toggle.Color];
-                    
+
+                    if (!string.IsNullOrWhiteSpace(toggle.Color))
+                    {
+                        source.Color = (Color)resources[toggle.Color];
+                    }
                 }
 
             }

@@ -1,7 +1,9 @@
 ﻿using BtcMarkets.Wallet.Droid.Renderers;
+using BtcMarkets.Wallet.Helpers;
 using Refractored.XamForms.PullToRefresh;
 using Refractored.XamForms.PullToRefresh.Droid;
 using System;
+using System.ComponentModel;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 
@@ -14,6 +16,20 @@ namespace BtcMarkets.Wallet.Droid.Renderers
         {
 
         }
+
+        protected override void OnElementPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            try
+            {
+                base.OnElementPropertyChanged(sender, e);
+            }
+            catch(Exception ex)
+            {
+
+            }
+            
+        }
+      
         protected override void Dispose(bool disposing)
         {
             try

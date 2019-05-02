@@ -37,24 +37,24 @@ namespace BtcMarkets.Wallet.Views
 
         private void MarketsListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            //var market = (Market)marketsListView.SelectedItem;
-            //if(market != null)
-            //{
-            //    var shell = (Shell)Application.Current.MainPage;
-                
-            //    if (market != null)
-            //    {
-                    
-            //        AppData.Current.Market = market;
-            //        var detailsPage = new MarketDetailPage();
-            //        detailsPage.InputTransparent = false;
-            //        detailsPage.BackgroundColor = Color.White;
-            //        Navigation.PushAsync(detailsPage);
-            //        marketsListView.SelectedItem = null;
-                    
+            var market = (Market)marketsListView.SelectedItem;
+            if (market != null)
+            {
+                var shell = (Shell)Application.Current.MainPage;
 
-            //    }
-            //}
+                if (market != null)
+                {
+
+                    AppData.Current.Market = market;
+                    var detailsPage = new MarketDetailPage();
+                    detailsPage.InputTransparent = false;
+                    detailsPage.BackgroundColor = Color.White;
+                    Navigation.PushAsync(detailsPage);
+                    marketsListView.SelectedItem = null;
+
+
+                }
+            }
 
         }
 
@@ -72,5 +72,38 @@ namespace BtcMarkets.Wallet.Views
         //        }
         //    }
         //}
+
+
+        private void SearchCoin_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            ViewModel.SearchMarkets(e.NewTextValue);
+        }
+
+        private void SearchCoin_SearchButtonPressed(object sender, EventArgs e)
+        {
+            ViewModel.SearchMarkets(SearchCoin.Text);
+        }
+
+        private void MarketsListView_ItemSelected(object sender, SelectedItemChangedEventArgs e)
+        {
+            var market = (Market)marketsListView.SelectedItem;
+            if (market != null)
+            {
+                var shell = (Shell)Application.Current.MainPage;
+
+                if (market != null)
+                {
+
+                    AppData.Current.Market = market;
+                    var detailsPage = new MarketDetailPage();
+                    detailsPage.InputTransparent = false;
+                    detailsPage.BackgroundColor = Color.White;
+                    Navigation.PushAsync(detailsPage);
+                    marketsListView.SelectedItem = null;
+
+
+                }
+            }
+        }
     }
 }

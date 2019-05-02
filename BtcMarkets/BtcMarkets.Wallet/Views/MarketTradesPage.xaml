@@ -1,0 +1,285 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             Title="{Binding Title}"
+             Style="{StaticResource DefaultPage}" 
+              xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core" 
+    ios:Page.UseSafeArea="true" 
+             x:Name="TradeOrdersPage" 
+             x:Class="BtcMarkets.Wallet.Views.MarketTradesPage">
+    <ContentPage.Content>
+
+        <ScrollView Style="{StaticResource PageScroll}">
+
+            <Grid Style="{StaticResource PageScrollGrid}">
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Frame Grid.Row="0" Grid.Column="0" HeightRequest="45" Style="{StaticResource DefaultFrame}" IsVisible="{Binding IsMarketsVisible}">
+                    <StackLayout >
+                        <CollectionView Margin="3" x:Name="MarketPairsGrid" ItemsSource="{Binding TradeMarketPairs}" HorizontalOptions="FillAndExpand" ItemsLayout="{Binding MarketsLayout, Source={x:Reference TradeOrdersPage}}"
+                                                          SelectionMode="Single" SelectionChangedCommand="{Binding MarketChangedCommand}"
+                                                          SelectedItem="{Binding TradingMarketPair, Mode=TwoWay}"   >
+                            <CollectionView.Resources>
+                                <Style  TargetType="StackLayout">
+                                    <Setter Property="VisualStateManager.VisualStateGroups">
+                                        <VisualStateGroupList>
+                                            <VisualStateGroup x:Name="CommonStates">
+                                                <VisualState x:Name="Normal" >
+                                                    <VisualState.Setters>
+                                                        <Setter Property="BackgroundColor" Value="{DynamicResource DefaultBackgroundColor}" />
+                                                    </VisualState.Setters>
+                                                </VisualState>
+                                                <VisualState x:Name="Selected">
+                                                    <VisualState.Setters>
+                                                        <Setter Property="BackgroundColor" Value="{DynamicResource AccentColor}" />
+
+                                                    </VisualState.Setters>
+                                                </VisualState>
+                                            </VisualStateGroup>
+                                        </VisualStateGroupList>
+                                    </Setter>
+                                </Style>
+                            </CollectionView.Resources>
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+
+                                    <StackLayout Margin="5" HeightRequest="20" Orientation="Horizontal" HorizontalOptions="FillAndExpand"  >
+                                        <Image Source="{Binding Image,Converter={StaticResource Base64ToImage}}" WidthRequest="20" HeightRequest="20" />
+                                        <Label  Text="{Binding Pair}" Style="{StaticResource SmallDefaultText}" VerticalOptions="CenterAndExpand">
+                                        </Label>
+                                    </StackLayout>
+
+
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </StackLayout>
+                </Frame>
+                <StackLayout  Grid.Row="1" Grid.Column="0" HorizontalOptions="FillAndExpand">
+
+                    <Grid  Grid.Row="0" Grid.Column="0" HorizontalOptions="FillAndExpand"   RowSpacing="10">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"></RowDefinition>
+                            <RowDefinition Height="Auto"></RowDefinition>
+                            <RowDefinition Height="Auto"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="35*"></ColumnDefinition>
+                            <ColumnDefinition Width="32*"></ColumnDefinition>
+                            <ColumnDefinition Width="33*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+
+                        <StackLayout Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3"  Orientation="Horizontal" HorizontalOptions="FillAndExpand" Spacing="25">
+                            <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand" >
+                                <Image Source="{Binding TradeMarket.Image,Converter={StaticResource Base64ToImage}}" WidthRequest="20" HeightRequest="20" />
+                                <Label Text="{Binding TradeMarket.Pair}" Style="{StaticResource LargeDefaultText}" HorizontalOptions="FillAndExpand" />
+                            </StackLayout>
+                            <Label Text="{Binding TradeMarket.LastPriceWithSymbol}" Style="{StaticResource LargeDefaultText}" HorizontalOptions="FillAndExpand" />
+                        </StackLayout>
+
+
+
+                        <StackLayout Grid.Row="1" Grid.Column="0">
+                            <Label Style="{StaticResource AccentFieldLabel}" Text="Bid" />
+                            <Label Style="{StaticResource SmallDefaultText}"  Text="{Binding TradeMarket.BidString}" />
+                        </StackLayout>
+                        <StackLayout Grid.Row="1" Grid.Column="1">
+                            <Label Style="{StaticResource AccentFieldLabel}" Text="Ask" />
+                            <Label Style="{StaticResource SmallDefaultText}"  Text="{Binding TradeMarket.AskString}" />
+                        </StackLayout>
+                        <StackLayout Grid.Row="1" Grid.Column="2">
+                            <Label Style="{StaticResource AccentFieldLabel}" Text="Vol(24H)" />
+                            <Label Style="{StaticResource SmallDefaultText}"  Text="{Binding TradeMarket.VolumeString}" />
+                        </StackLayout>
+                        <!--<StackLayout Grid.Row="2" Grid.Column="0">
+                            <Label Style="{StaticResource AccentFieldLabel}" >
+                                <Label.FormattedText>
+                                    <FormattedString>
+                                        <Span Text="Low ("/>
+                                        <Span Text="{Binding CurrentPeriod.Period}"/>
+                                        <Span Text=")"/>
+                                    </FormattedString>
+                                </Label.FormattedText>
+                            </Label>
+
+                            <Label Style="{StaticResource SmallDefaultText}"  Text="{Binding Low}" />
+                        </StackLayout>
+                        <StackLayout Grid.Row="2" Grid.Column="1">
+                            <Label Style="{StaticResource AccentFieldLabel}">
+                                <Label.FormattedText>
+                                    <FormattedString>
+                                        <Span Text="High ("/>
+                                        <Span Text="{Binding CurrentPeriod.Period}"/>
+                                        <Span Text=")"/>
+                                    </FormattedString>
+                                </Label.FormattedText>
+                            </Label>
+                            <Label Style="{StaticResource SmallDefaultText}"  Text="{Binding High}" />
+                        </StackLayout>-->
+
+                    </Grid>
+
+                </StackLayout>
+
+
+                <!-- Buy Orders -->
+                <StackLayout Grid.Row="2" Grid.Column="0" HorizontalOptions="FillAndExpand">
+                    <Label >
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="Buy Orders"  Style="{StaticResource DefaultAccentText}"></Span>
+                                <Span Text="{Binding BuyString}"  Style="{StaticResource MicroDefaultText}"></Span>
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+                    <Frame Style="{StaticResource TradesListBorder}">
+                        <StackLayout Style="{StaticResource TradesListPanel}" >
+                            <Grid Style="{StaticResource TradeListHeader}"  >
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="35*"></ColumnDefinition>
+                                    <ColumnDefinition Width="65*"></ColumnDefinition>
+
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"></RowDefinition>
+                                </Grid.RowDefinitions>
+                                <Label Grid.Row="0" Grid.Column="0" Text="Price"  Style="{StaticResource SmallHeaderText}"></Label>
+                                <Label Grid.Row="0" Grid.Column="1" Text="Volume" Style="{StaticResource SmallHeaderText}"></Label>
+                            </Grid>
+                            <ListView Style="{StaticResource TradesList}"  ItemsSource="{Binding BuyOrders}" HeightRequest="100"  >
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <ViewCell>
+                                            <Grid Style="{StaticResource TradeListTemplate}">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="35*"></ColumnDefinition>
+                                                    <ColumnDefinition Width="65*"></ColumnDefinition>
+                                                </Grid.ColumnDefinitions>
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="Auto"></RowDefinition>
+                                                </Grid.RowDefinitions>
+
+                                                <Label Grid.Row="0" Grid.Column="0" Text="{Binding PriceString}"  Style="{StaticResource SmallDefaultText}"></Label>
+                                                <Label Grid.Row="0" Grid.Column="1" Text="{Binding VolumeString}" Style="{StaticResource SmallDefaultText}"></Label>
+                                            </Grid>
+                                        </ViewCell>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
+
+                        </StackLayout>
+                    </Frame>
+                </StackLayout>
+                <StackLayout Grid.Row="3" Grid.Column="0" HorizontalOptions="FillAndExpand">
+                    <Label >
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="Sell Orders"  Style="{StaticResource DefaultAccentText}"></Span>
+                                <Span Text="{Binding SellString}"  Style="{StaticResource MicroDefaultText}"></Span>
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+                    <Frame Style="{StaticResource TradesListBorder}">
+                        <StackLayout Style="{StaticResource TradesListPanel}" >
+                            <Grid Style="{StaticResource TradeListHeader}"   >
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="35*"></ColumnDefinition>
+                                    <ColumnDefinition Width="65*"></ColumnDefinition>
+                                    <!--<ColumnDefinition Width="33*"></ColumnDefinition>-->
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"></RowDefinition>
+                                </Grid.RowDefinitions>
+                                <Label Grid.Row="0" Grid.Column="0" Text="Price"  Style="{StaticResource SmallHeaderText}"></Label>
+                                <Label Grid.Row="0" Grid.Column="1" Text="Volume" Style="{StaticResource SmallHeaderText}"></Label>
+
+                                <!--<Label Grid.Row="0" Grid.Column="2" Text="Value" Style="{StaticResource SmallHeaderText}"></Label>-->
+                            </Grid>
+                            <ListView Style="{StaticResource TradesList}"  ItemsSource="{Binding SellOrders}" HeightRequest="100"  >
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <ViewCell>
+                                            <Grid Style="{StaticResource TradeListTemplate}">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="35*"></ColumnDefinition>
+                                                    <ColumnDefinition Width="65*"></ColumnDefinition>
+                                                </Grid.ColumnDefinitions>
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="Auto"></RowDefinition>
+                                                </Grid.RowDefinitions>
+
+                                                <Label Grid.Row="0" Grid.Column="0" Text="{Binding PriceString}"  Style="{StaticResource SmallDefaultText}"></Label>
+                                                <Label Grid.Row="0" Grid.Column="1" Text="{Binding VolumeString}" Style="{StaticResource SmallDefaultText}"></Label>
+                                            </Grid>
+                                        </ViewCell>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
+
+                        </StackLayout>
+                    </Frame>
+                </StackLayout>
+                <StackLayout Grid.Row="4" Grid.Column="0" HorizontalOptions="FillAndExpand">
+                    <Label Style="{StaticResource SmallDefaultText}">
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="Trade History"  Style="{StaticResource DefaultAccentText}"></Span>
+                                <Span Text="{Binding HistoryString}"  Style="{StaticResource MicroDefaultText}"></Span>
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+                    <Frame Style="{StaticResource TradesListBorder}">
+                        <StackLayout Style="{StaticResource TradesListPanel}" >
+                            <Grid Style="{StaticResource TradeListHeader}" ColumnSpacing="2" >
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="40*"></ColumnDefinition>
+                                    <ColumnDefinition Width="30*"></ColumnDefinition>
+                                    <ColumnDefinition Width="30*"></ColumnDefinition>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"></RowDefinition>
+                                </Grid.RowDefinitions>
+                                <Label Grid.Row="0" Grid.Column="0" Text="Time" Style="{StaticResource SmallHeaderText}"></Label>
+                                <Label Grid.Row="0" Grid.Column="1" Text="Volume" Style="{StaticResource SmallHeaderText}"></Label>
+                                <Label Grid.Row="0" Grid.Column="2" Text="Price" Style="{StaticResource SmallHeaderText}"></Label>
+                            </Grid>
+
+                            <ListView Style="{StaticResource TradesList}" ItemsSource="{Binding TradeHistory}" HeightRequest="150" >
+
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <ViewCell>
+                                            <Grid Style="{StaticResource TradeListTemplate}">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="40*"></ColumnDefinition>
+                                                    <ColumnDefinition Width="30*"></ColumnDefinition>
+                                                    <ColumnDefinition Width="30*"></ColumnDefinition>
+                                                </Grid.ColumnDefinitions>
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="Auto"></RowDefinition>
+                                                </Grid.RowDefinitions>
+                                                <Label  Grid.Row="0" Grid.Column="0" Text="{Binding CreatedDate}" Style="{StaticResource SmallDefaultText}"></Label>
+                                                <Label Grid.Row="0" Grid.Column="1" Text="{Binding VolumeString}" Style="{StaticResource SmallDefaultText}"></Label>
+                                                <Label Grid.Row="0" Grid.Column="2" Text="{Binding PriceString}" Style="{StaticResource SmallDefaultText}"></Label>
+                                            </Grid>
+                                        </ViewCell>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
+
+                        </StackLayout>
+                    </Frame>
+                </StackLayout>
+            </Grid>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>

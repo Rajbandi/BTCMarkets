@@ -2,39 +2,23 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
               xmlns:views="clr-namespace:BtcMarkets.Wallet.Views"
+             xmlns:effects="clr-namespace:BtcMarkets.Wallet.Effects"
              Title="{Binding Title}"
-             ControlTemplate="{StaticResource ActivityIndicatorTemplate}"
+             xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core" 
+             ios:Page.UseSafeArea="true" 
              Style="{StaticResource DefaultPage}"
+             x:Name="AudPage" 
              x:Class="BtcMarkets.Wallet.Views.AudMarketsPage">
+
     <Shell.TitleView>
+        <views:AccountHoldingsView BindingContext="{Binding BindingContext,Source={x:Reference AudPage}}" >
 
-        <StackLayout Orientation="Horizontal">
-            <StackLayout HeightRequest="40" HorizontalOptions="FillAndExpand">
-                <Frame   HasShadow="False"  Padding="1" CornerRadius="5"  BorderColor="{DynamicResource ReverseBackgroundColor}" BackgroundColor="{DynamicResource DefaultBackgroundColor}">
-
-
-
-                </Frame>
-
-
-            </StackLayout>
-            <StackLayout Grid.Row="0" Grid.Column="1" Orientation="Horizontal">
-                <Image Source="{Binding Converter={StaticResource FontIconImage},ConverterParameter=settings}"></Image>
-                <Image Source="{Binding Converter={StaticResource FontIconImage},ConverterParameter=refresh}">
-                    <Image.GestureRecognizers>
-                        <!--<TapGestureRecognizer Command="{Binding BindingContext.RefreshCommand, Source={x:Reference TradeOrdersPage}}"></TapGestureRecognizer>-->
-                    </Image.GestureRecognizers>
-                </Image>
-            </StackLayout>
-        </StackLayout>
+        </views:AccountHoldingsView>
     </Shell.TitleView>
+
     <ContentPage.Content>
-
-
-        <views:MarketsView Markets="{Binding AudMarkets}" BackgroundColor="Transparent">
-
+        <views:MarketsView Grid.Row="1" Grid.Column="0" Markets="{Binding AudMarkets}">
+          
         </views:MarketsView>
-
-        <!--ControlTemplate="{StaticResource ActivityIndicatorTemplate}"-->
     </ContentPage.Content>
 </ContentPage>

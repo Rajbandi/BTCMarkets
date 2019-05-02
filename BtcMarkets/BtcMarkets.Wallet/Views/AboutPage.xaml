@@ -4,7 +4,7 @@
              x:Class="BtcMarkets.Wallet.Views.AboutPage"
              xmlns:vm="clr-namespace:BtcMarkets.Wallet.ViewModels"
                  Title="{Binding Title}"
-             ControlTemplate="{StaticResource ActivityIndicatorTemplate}"
+           
              Style="{StaticResource DefaultPage}"
 
              >

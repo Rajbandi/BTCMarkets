@@ -1,5 +1,6 @@
 ﻿using BtcMarkets.Wallet.Helpers;
 using BtcMarkets.Wallet.Models;
+using BtcMarkets.Wallet.Services;
 using BtcMarkets.Wallet.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -29,17 +30,18 @@ namespace BtcMarkets.Wallet.Views
         {
             base.OnAppearing();
             AppHelper.TrackEvent(AppTrackEvents.Home);
-        }
-        private void Button_Clicked(object sender, EventArgs e)
-        {
-            var app = ((App)Application.Current);
 
-            if(app.CurrentTheme == ThemeList.LightTheme)
-            {
-                app.ChangeTheme(ThemeList.DarkTheme);
-            }
-            else
-                app.ChangeTheme(ThemeList.LightTheme);
+         
+
+        }
+        private void BtnSetupApiKeys_Clicked(object sender, EventArgs e)
+        {
+
+            var page = new ApiKeysPage();
+
+            Navigation.PushAsync(page);
+
+           
 
         }
     }

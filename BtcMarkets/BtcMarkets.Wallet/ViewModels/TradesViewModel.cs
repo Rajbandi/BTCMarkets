@@ -1,18 +1,26 @@
 ﻿using BtcMarkets.Wallet.Models;
+using BtcMarkets.Wallet.Services;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
 
 namespace BtcMarkets.Wallet.ViewModels
 {
-    public class TradesViewModel : TradeDataViewModel
+    public class TradesViewModel : BaseViewModel
     {
-
-        private List<Market> _tradeMarkets;
         public List<Market> TradeMarkets => AppData.Current.Markets;
-       
+
+
+        private bool _isMarketsVisible;
+
+        public bool IsMarketsVisible
+        {
+            get =>  _isMarketsVisible;
+            set => SetProperty(ref _isMarketsVisible, value, nameof(IsMarketsVisible));
+        }
 
         private MarketTradePair _tradingMarketPair;
         public MarketTradePair TradingMarketPair
@@ -25,57 +33,175 @@ namespace BtcMarkets.Wallet.ViewModels
             {
                 if (_tradingMarketPair != value)
                 {
-                    SetProperty(ref _tradingMarketPair, value);
-                    if(_tradingMarketPair != null && TradeMarketPairs != null && TradeMarketPairs.Any())
-                    {
-
-                        var accentStyle = Application.Current.Resources["DefaultAccentText"] as Style; 
-                        var defaultStyle = Application.Current.Resources["SmallDefaultText"] as Style;
-                        foreach (var pair in TradeMarketPairs)
-                        {
-
-                            if (pair.Pair == _tradingMarketPair.Pair)
-                                pair.Style = accentStyle;
-                            else
-                                pair.Style = defaultStyle;
-                        }
-                    }
-                    RefreshMarketPair(value);
+                    SetProperty(ref _tradingMarketPair, value, nameof(TradingMarketPair));
                 }
             }
         }
         public ObservableCollection<MarketTradePair> TradeMarketPairs { get; private set; }
 
-        public TradesViewModel()
+        public TradesViewModel(Market market = null)
         {
+            Title = "Trades";
+            
             TradeMarketPairs = new ObservableCollection<MarketTradePair>();
+            SellOrders = new ObservableCollection<MarketTradeOrder>();
+            BuyOrders = new ObservableCollection<MarketTradeOrder>();
+            TradeHistory = new ObservableCollection<MarketTradeHistory>();
 
-            RefreshMarkets();
-        }
-               
-
-        public void RefreshMarkets()
-        {
-            TradeMarketPairs.Clear();
-
-            var markets = TradeMarkets.OrderBy(x => x.Currency);
-            foreach (var market in markets)
+            MarketTradePair marketPair = null;
+            if(market != null)
             {
-                var pair = $"{market.Instrument}/{market.Currency}";
-                var tradePair = new MarketTradePair
+                marketPair = new MarketTradePair
                 {
-                    Pair = pair,
+                    Pair = market.Pair,
                     Image = market.Image,
-                    Style = Application.Current.Resources["SmallDefaultText"] as Style
                 };
-                TradeMarketPairs.Add(tradePair);
             }
-          
-            var firstPair = TradeMarketPairs.FirstOrDefault();
-            if (firstPair != null)
+            IsMarketsVisible = marketPair == null;
+            RefreshMarkets(marketPair);
+        }
+
+        public ObservableCollection<MarketTradeHistory> TradeHistory { get; set; }
+
+        public ObservableCollection<MarketTradeOrder> SellOrders { get; set; }
+        public ObservableCollection<MarketTradeOrder> BuyOrders { get; set; }
+
+        private Market _market;
+        public Market TradeMarket
+        {
+            get => _market;
+            set
             {
-                TradingMarketPair = firstPair;
-              //  RefreshMarket(markets.FirstOrDefault());
+
+                SetProperty(ref _market, value, nameof(TradeMarket));
+
+            }
+        }
+
+        private string _sellString;
+        public string SellString
+        {
+            get => _sellString;
+            set => SetProperty(ref _sellString, value);
+        }
+        private string _buyString;
+        public string BuyString
+        {
+            get => _buyString;
+            set => SetProperty(ref _buyString, value);
+        }
+
+        private string _historyString;
+        public string HistoryString
+        {
+            get => _historyString;
+            set => SetProperty(ref _historyString, value);
+        }
+      
+        public void RefreshData()
+        {
+            //Device.BeginInvokeOnMainThread(async () =>
+            //{
+                 Task.Run(async () =>
+                {
+                    IsBusy = true;
+
+                    AppService.Instance.SetLoaderMessage("Loading Trades");
+
+                    var appData = AppData.Current;
+
+                    var market = TradeMarket;
+
+                    var newMarket = await appData.GetMarket(market.Instrument, market.Currency);
+
+                    appData.UpdateMarket(newMarket);
+
+                    TradeMarket = appData.Markets.FirstOrDefault(x => x.Instrument == market.Instrument && x.Currency == market.Currency);
+
+
+
+                    var orders = await appData.GetMarketTradeOrders(market);
+
+
+                    BuyOrders.Clear();
+                    foreach (var order in orders.Buy)
+                    {
+                        order.Currency = market.Instrument;
+                        BuyOrders.Add(order);
+                    }
+
+
+                    BuyString = $"(Top {BuyOrders.Count})";
+
+                    SellOrders.Clear();
+                    foreach (var order in orders.Sell)
+                    {
+                        order.Currency = market.Instrument;
+                        SellOrders.Add(order);
+                    }
+
+                    SellString = $"(Top {SellOrders.Count})";
+
+                    TradeHistory.Clear();
+
+                    var history = await appData.GetMarketTradeHistory(market);
+                    foreach (var trade in history)
+                    {
+                        trade.Currency = market.Instrument;
+                        TradeHistory.Add(trade);
+                    }
+
+                    HistoryString = $"(Top {TradeHistory.Count})";
+                    IsBusy = false;
+                });
+            //});
+        }
+
+        public void RefreshMarkets(MarketTradePair marketPair = null)
+        {
+          
+                TradeMarketPairs.Clear();
+
+                var markets = TradeMarkets.OrderBy(x => x.Currency);
+                foreach (var market in markets)
+                {
+                    var pair = $"{market.Instrument}/{market.Currency}";
+                    var tradePair = new MarketTradePair
+                    {
+                        Pair = pair,
+                        Image = market.Image,
+                        Style = Application.Current.Resources["SmallDefaultText"] as Style
+                    };
+                    TradeMarketPairs.Add(tradePair);
+                }
+
+            //if (marketPair == null )
+            //{
+            //    var firstPair = TradeMarketPairs.FirstOrDefault();
+            //    if (firstPair != null)
+            //    {
+            //        TradingMarketPair = firstPair;
+            //        //  RefreshMarket(markets.FirstOrDefault());
+            //    }
+            //}
+            //else
+            if(marketPair != null)
+            {
+                TradingMarketPair = marketPair;
+            }
+           
+        }
+
+        public void InitMarket()
+        {
+            if (TradingMarketPair == null)
+            {
+                var firstPair = TradeMarketPairs?.FirstOrDefault();
+                if (firstPair != null)
+                {
+                    TradingMarketPair = firstPair;
+                    //  RefreshMarket(markets.FirstOrDefault());
+                }
             }
         }
 
@@ -123,7 +249,8 @@ namespace BtcMarkets.Wallet.ViewModels
                 {
                     Device.BeginInvokeOnMainThread(() =>
                     {
-                        RefreshData();
+                        RefreshMarkets();
+                      //  OnPropertyChanged(nameof(TradeMarket));
                     });
 
                 });
@@ -141,8 +268,25 @@ namespace BtcMarkets.Wallet.ViewModels
                         var pair = arg as MarketTradePair;
                         if(pair != null)
                         {
-                            TradingMarketPair = pair;
+                            // TradingMarketPair = pair;
+                            RefreshMarkets(pair);
                         }
+                    });
+
+                });
+            }
+        }
+
+
+        public ICommand MarketChangedCommand
+        {
+            get
+            {
+                return new Command(() =>
+                {
+                    Device.BeginInvokeOnMainThread(() =>
+                    {
+                        RefreshMarketPair(TradingMarketPair);
                     });
 
                 });

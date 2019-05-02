@@ -1,0 +1,118 @@
+<html>
+<head>
+    <style>
+        html {
+            width: 100%;
+            height: 100%;
+        }
+
+        body {
+            width: 97%;
+            height: 95%;
+            font-size:small;
+        }
+
+        #chart {
+            width: 100%;
+            height: 100%;
+            font-size:small;
+        }
+
+        .apexcharts-inner {
+            padding-left: 0px;
+        }
+    </style>
+    <script src="apexcharts.js"></script>
+</head>
+<body>
+    <div id="chart">
+
+    </div>
+    <script>
+      
+        var chart;
+        function render(options) {
+            return new Promise(function (resolve, reject) {
+                try {
+                    chart = new ApexCharts(document.querySelector('#chart'), options);
+                    chart.render();
+                    resolve();
+                  
+                }
+                catch (ex) {
+                    reject(ex);
+                }
+                
+            });
+            
+           
+        }
+        async function update(options) {
+            try {
+              
+                if (chart == null || chart == 'undefined') {
+                    var data = JSON.parse(JSON.stringify(options));
+                    for (var d in data.series) {
+                        data.series[d].data = [];
+
+                    }
+               
+                    await render(data);
+
+                }
+             
+                chart.updateOptions(options);
+                
+               // adjustWidths();
+
+                
+                
+            }
+            catch (ex) {
+                return "error"; 
+            }
+            return "success";
+        }//end
+
+        function adjustWidths() {
+            var yaxis = document.getElementsByClassName('apexcharts-yaxis');
+            if (yaxis != null && yaxis != 'undefined' && yaxis.length > 0) {
+                var el = yaxis[0];
+
+                el.setAttribute('transform', 'translate(23.78)');
+
+                var inner = document.getElementsByClassName('apexcharts-inner');
+                if (inner != null && inner != 'undefined' && inner.length > 0) {
+                    var iel = inner[0];
+
+                    iel.setAttribute('transform', 'translate(50.78 30)');
+                }
+            }
+        }
+        function reset() {
+            try {
+                if (chart != null && chart != 'undefined') {
+                    chart.destroy();
+                    chart = null;
+                }
+            }
+            catch (ex) {
+
+            }
+        }
+
+        function checkLoaded() {
+            if (chart == null || chart == 'undefined') {
+                return "nochart";
+            }
+            else {
+                
+            }
+
+            
+        }
+
+        
+    </script>
+</body>
+</html>

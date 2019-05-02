@@ -15,6 +15,7 @@ namespace BtcMarkets.Wallet.ViewModels
         {
             Title = "Favourites";
             Markets = new ObservableCollection<Market>();
+            IsSearchBarVisible = false;
             Subscribe();
         }
 
@@ -34,8 +35,13 @@ namespace BtcMarkets.Wallet.ViewModels
             var markets = AppData.Current.Favourites;
             foreach(var market in markets)
             {
+                if(!market.Starred)
+                {
+                    market.Starred = true;
+                }
                 Markets.Add(market);
             }
+            base.LoadMarkets();
         }
 
         public void Subscribe()

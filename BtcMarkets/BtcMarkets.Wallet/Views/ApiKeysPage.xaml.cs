@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BtcMarkets.Wallet.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,6 +16,10 @@ namespace BtcMarkets.Wallet.Views
         public ApiKeysPage()
         {
             InitializeComponent();
+
+            BindingContext = ViewModel = new ApiKeysViewModel();
         }
+
+        public ApiKeysViewModel ViewModel { get; private set; }
     }
 }

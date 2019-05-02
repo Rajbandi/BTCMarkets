@@ -12,7 +12,23 @@ namespace BtcMarkets.Wallet.ViewModels
 {
     public class MarketsViewModel : BaseViewModel
     {
-       
+
+        private string _holdings;
+        public string TotalHoldings
+        {
+            get => _holdings;
+            set
+            {
+                SetProperty(ref _holdings, value);
+            }
+        }
+
+        private bool _isSearchBarVisible;
+        public bool IsSearchBarVisible {
+            get => _isSearchBarVisible;
+            set => SetProperty(ref _isSearchBarVisible, value);
+        }
+
         public ObservableCollection<Market> Markets { get; protected set; }
 
         public Market SelectedMarket { get; set; }
@@ -21,14 +37,18 @@ namespace BtcMarkets.Wallet.ViewModels
         {
 
             Markets = new ObservableCollection<Market>();
-          //  var appData = AppData.Current;
+            //  var appData = AppData.Current;
 
             //appData.MarketsUpdated += AppData_MarketsUpdated;
             //appData.MarketUpdated += AppData_MarketUpdated;
-          
 
-            UpdateMarkets();
-           
+
+
+            Task.Run(async () =>
+            {
+                await UpdateMarkets();
+            });
+
         }
 
         private void AppData_MarketUpdated(object sender, MarketEventArgs e)
@@ -37,34 +57,42 @@ namespace BtcMarkets.Wallet.ViewModels
         
         }
 
+        
         private void AppData_MarketsUpdated(object sender, EventArgs e)
         {
-            UpdateMarkets();
-          
+            Task.Run(async () =>
+            {
+                await UpdateMarkets();
+            });
         }
 
         protected virtual void LoadMarkets()
         {
-
+            OnPropertyChanged(nameof(Markets));
         }
-        public void UpdateMarkets()
+    
+        public async Task UpdateMarkets()
         {
-           
-            Device.BeginInvokeOnMainThread(async () =>
+
+            await Task.Run(() =>
             {
-                IsBusy = true;
-                await Task.Delay(50);
-
-                var data = AppData.Current;
-                foreach (var market in data.Markets)
+                Device.BeginInvokeOnMainThread(() =>
                 {
-                    market.Starred = data.Favourites.Any(x => x.Instrument == market.Instrument && x.Currency == market.Currency);
-                }
-                LoadMarkets();
-                OnPropertyChanged("Markets");
-                IsBusy = false;
+                    IsBusy = true;
+                   // await Task.Delay(50);
 
+                    var data = AppData.Current;
+                    foreach (var market in data.Markets)
+                    {
+                        market.Starred = data.Favourites.Any(x => x.Instrument == market.Instrument && x.Currency == market.Currency);
+                    }
+                    LoadMarkets();
+                    DisplayHoldings();
+                    IsBusy = false;
+                    IsRefreshing = false;
+                });
             });
+           
         }
         public void UpdateMarket(Market market)
         {
@@ -83,8 +111,27 @@ namespace BtcMarkets.Wallet.ViewModels
 
         }
 
-        private bool isRefreshing;
+   
+        protected bool _btcHoldings;
+        public void DisplayHoldings()
+        {
+            var appData = AppData.Current;
+            if (_btcHoldings)
+            {
+                TotalHoldings = $"{Constants.BtcSymbol}{appData.TotalHoldingsInBtc:0.00000000}";
+            }
+            else
+            {
+                TotalHoldings = $"{Constants.AudSymbol}{appData.TotalHoldingsInAud:0.00}";
+            }
+        }
 
+        public virtual void SearchMarkets(string coin)
+        {
+
+        }
+       
+        private bool isRefreshing;
         public bool IsRefreshing
         {
             get { return isRefreshing; }
@@ -98,14 +145,8 @@ namespace BtcMarkets.Wallet.ViewModels
         public async Task RefreshMarkets()
         {
             var appData = AppData.Current;
-
-          
             await appData.RefreshMarkets();
-            
-           
-
         }
-
 
         public ICommand MarketDetailsCommand
         {
@@ -156,6 +197,22 @@ namespace BtcMarkets.Wallet.ViewModels
                 });
             }
         }
+
+        public void Refresh(bool pullToRefresh = false)
+        {
+            Device.BeginInvokeOnMainThread(async () =>
+            {
+                if(!pullToRefresh)
+                    IsBusy = true;
+               
+                await RefreshMarkets();
+                await UpdateMarkets();
+                if (!pullToRefresh)
+                    IsBusy = false;
+             
+            });
+
+        }
         public ICommand RefreshCommand
         {
             get
@@ -163,14 +220,57 @@ namespace BtcMarkets.Wallet.ViewModels
                
                 return new Command( () =>
                 {
+                    Refresh(true);
+                   
+                });
+            }
+        }
 
-                    Device.BeginInvokeOnMainThread(async () =>
-                   {
-                       IsRefreshing = true;
-                       await RefreshMarkets();
-                       IsRefreshing = false;
-                   });
+        public ICommand RefreshDataCommand
+        {
+            get
+            {
 
+                return new Command(() =>
+                {
+                    Refresh();
+
+                });
+            }
+        }
+
+        public ICommand ChangeHoldingsCommand
+        {
+            get
+            {
+                return new Command(() =>
+                {
+                    _btcHoldings = !_btcHoldings;
+                    DisplayHoldings();
+                });
+            }
+        }
+
+        public ICommand SearchCommand
+        {
+            get
+            {
+
+                return new Command((arg) =>
+                {
+                    var a = arg;
+
+                });
+            }
+        }
+
+        public ICommand ShowSearchCommand
+        {
+            get
+            {
+                return new Command((arg) =>
+                {
+                    IsSearchBarVisible = !IsSearchBarVisible;
                 });
             }
         }

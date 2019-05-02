@@ -13,19 +13,19 @@
     </OnPlatform>
 
     <ControlTemplate x:Key="ActivityIndicatorTemplate">
-        <AbsoluteLayout VerticalOptions="Fill" BackgroundColor="{DynamicResource DefaultBackgroundColor}">
-            <ContentPresenter  AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0,0,1,1" >
+        <AbsoluteLayout VerticalOptions="Fill" >
+            <ContentPresenter  >
             </ContentPresenter>
             <BoxView AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0,0,1,1"  BackgroundColor="Transparent" InputTransparent="false"  IsVisible="{TemplateBinding BindingContext.IsBusy}" 
 />
 
             <Frame HasShadow="false" AbsoluteLayout.LayoutFlags="PositionProportional" AbsoluteLayout.LayoutBounds=".5,.5,-1,-1"    IsVisible="{TemplateBinding BindingContext.IsBusy}" 
-                   BackgroundColor="{DynamicResource ReverseBackgroundColor}" >
+                   BackgroundColor="{DynamicResource LoaderBackgroundColor}" >
                
 
                 <Frame.Padding>
                     <OnPlatform x:TypeArguments="Thickness">
-                        <On Platform="Android" Value="1" />
+                        <On Platform="Android" Value="5" />
                         <On Platform="iOS" Value="10" />
                     </OnPlatform>
                 </Frame.Padding>
@@ -33,12 +33,13 @@
                 <Frame.CornerRadius>
                     <OnPlatform x:TypeArguments="x:Single">
                         <On Platform="iOS" Value="20"/>
-                        <On Platform="Android" Value="25"/>
+                        <On Platform="Android" Value="30"/>
                     </OnPlatform>
                 </Frame.CornerRadius>
-                <ActivityIndicator IsVisible="{TemplateBinding BindingContext.IsBusy}" 
+                <ActivityIndicator IsVisible="{TemplateBinding BindingContext.IsBusy}" WidthRequest="25" HeightRequest="25" 
                                IsRunning="{TemplateBinding BindingContext.IsBusy}"
-                                   Color="{DynamicResource ReverseTextColor}"
+                                   Color="{DynamicResource LoaderColor}"
+                                   BackgroundColor="{DynamicResource LoaderBackgroundColor}"
                                 />
             </Frame>
            
@@ -53,7 +54,7 @@
     <converters:FontIconToImageConverter x:Key="FontIconImage"/>
     <converters:ToggleImageConverter x:Key="ToggleImage"/>
     <converters:ToggleTextIconConverter x:Key="ToggleTextIcon"/>
-    <converters:TradeSelectedStyleConverter x:Key="SelectedStyle"/>
+    <converters:SelectedStyleConverter x:Key="SelectedStyle"/>
 
     <Style x:Key="Seperator1" TargetType="BoxView">
         <Setter Property="HeightRequest" Value="1"></Setter>
@@ -62,12 +63,19 @@
     </Style>
 
     <Style x:Key="HighlightPanel" TargetType="Frame">
-        <Setter Property="BackgroundColor" Value="{DynamicResource HighlightBackgroundColor}"/>
+        <Setter Property="BackgroundColor" Value="{DynamicResource HighlightTransparentColor}"/>
         <Setter Property="HeightRequest" Value="45"/>
         <Setter Property="HorizontalOptions" Value="FillAndExpand"/>
         <Setter Property="CornerRadius" Value="10"/>
+        <Setter Property="HasShadow" Value="False"/>
     </Style>
-
+    <Style x:Key="HighlightPrimaryPanel" TargetType="Frame">
+        <Setter Property="BackgroundColor" Value="{DynamicResource PrimaryColor}"/>
+        <Setter Property="HeightRequest" Value="45"/>
+        <Setter Property="HorizontalOptions" Value="FillAndExpand"/>
+        <Setter Property="CornerRadius" Value="10"/>
+        <Setter Property="HasShadow" Value="False"/>
+    </Style>
     <!-- Default text styles-->
     <Style x:Key="DefaultText" TargetType="Label">
         <Setter Property="TextColor" Value="{DynamicResource DefaultTextColor}"></Setter>
@@ -85,6 +93,23 @@
         <Setter Property="FontSize" Value="Large"/>
     </Style>
 
+    <Style x:Key="DefaultEntry" TargetType="Entry">
+        
+        <Setter Property="TextColor" Value="{DynamicResource DefaultTextColor}"></Setter>
+        <Setter Property="PlaceholderColor" Value="{DynamicResource DefaultTextColor}"></Setter>
+    </Style>
+    <Style x:Key="MicroDefaultEntry" TargetType="Entry" BasedOn="{StaticResource DefaultEntry}">
+        <Setter Property="FontSize" Value="Micro"/>
+    </Style>
+    <Style x:Key="SmallDefaultEntry" TargetType="Entry" BasedOn="{StaticResource DefaultEntry}">
+        <Setter Property="FontSize" Value="Small"/>
+    </Style>
+    <Style x:Key="MediumDefaultEntry" TargetType="Entry" BasedOn="{StaticResource DefaultEntry}">
+        <Setter Property="FontSize" Value="Medium"/>
+    </Style>
+    <Style x:Key="LargeDefaultEntry" TargetType="Entry" BasedOn="{StaticResource DefaultEntry}">
+        <Setter Property="FontSize" Value="Large"/>
+    </Style>
 
 
     <Style x:Key="DefaultAccentText" TargetType="Label">
@@ -95,12 +120,15 @@
         <Setter Property="FontSize" Value="Micro"/>
 
     </Style>
-    
+    <Style x:Key="MediumDefaultAccentText" TargetType="Label" BasedOn="{StaticResource DefaultAccentText}">
+        <Setter Property="FontSize" Value="Medium"/>
+
+    </Style>
+
     <!-- Market list view styles -->
 
     <Style x:Key="ListHeader" TargetType="Grid" >
-        <Setter Property="BackgroundColor" Value="{DynamicResource AccentColor}" />
-        <Setter Property="HeightRequest" Value="30"/>
+        <Setter Property="BackgroundColor" Value="{DynamicResource HighlightTransparentColor}" />
         <Setter Property="Padding" Value="5"/>
         <Setter Property="HorizontalOptions" Value="FillAndExpand"/>
         <Setter Property="VerticalOptions" Value="FillAndExpand"/>
@@ -189,7 +217,7 @@
         <Setter Property="BackgroundColor" Value="{DynamicResource DefaultBackgroundColor}" />
         <Setter Property="HorizontalOptions" Value="FillAndExpand"/>
         <Setter Property="VerticalOptions" Value="FillAndExpand"/>
-        <Setter Property="Padding" Value="5,0,0,0"/>
+        <Setter Property="Padding" Value="5"/>
         <Setter Property="Margin" Value="0"></Setter>
     </Style>
 
@@ -198,7 +226,7 @@
         <Setter Property="BorderColor" Value="{DynamicResource ReverseBackgroundColor}" />
         <Setter Property="HorizontalOptions" Value="FillAndExpand"/>
         <Setter Property="VerticalOptions" Value="FillAndExpand"/>
-        <Setter Property="Padding" Value="1"/>
+        <Setter Property="Padding" Value="1,0,1,1"/>
         <Setter Property="HasShadow" Value="False"/>
     </Style>
     <Style x:Key="TradesListPanel" TargetType="StackLayout">
@@ -209,19 +237,25 @@
     </Style>
     <Style x:Key="TradesList" TargetType="ListView">
         <Setter Property="BackgroundColor" Value="{DynamicResource DefaultBackgroundColor}" />
+        <Setter Property="SeparatorColor" Value="{DynamicResource SeparatorColor}" />
         <Setter Property="HorizontalOptions" Value="FillAndExpand"/>
         <Setter Property="VerticalOptions" Value="FillAndExpand"/>
         <Setter Property="HasUnevenRows" Value="True"/>
         <Setter Property="SelectionMode" Value="None"/>
     </Style>
-
+    <Style x:Key="CollectionList" TargetType="CollectionView">
+        <Setter Property="BackgroundColor" Value="{DynamicResource DefaultBackgroundColor}" />
+        <Setter Property="HorizontalOptions" Value="FillAndExpand"/>
+        <Setter Property="VerticalOptions" Value="FillAndExpand"/>
+        <Setter Property="SelectionMode" Value="None"/>
+    </Style>
     <Style x:Key="TradesMarketPair" TargetType="Picker">
         <Setter Property="BackgroundColor" Value="{DynamicResource DefaultBackgroundColor}" />
         <Setter Property="HorizontalOptions" Value="FillAndExpand"/>
         <Setter Property="VerticalOptions" Value="FillAndExpand"/>
     </Style>
     <Style x:Key="TradeListHeader" TargetType="Grid" >
-        <Setter Property="BackgroundColor" Value="{DynamicResource AccentColor}" />
+        <Setter Property="BackgroundColor" Value="{DynamicResource HighlightTransparentColor}" />
         <Setter Property="HeightRequest" Value="15"/>
         <Setter Property="Padding" Value="5"/>
         <Setter Property="HorizontalOptions" Value="FillAndExpand"/>
@@ -355,8 +389,9 @@
     </Style>
 
 
-    <Style x:Key="DefaultButtonStyle" TargetType="Button">
+    <Style x:Key="DefaultButton" TargetType="Button">
         <Setter Property="BackgroundColor" Value="{DynamicResource NavigationPrimary}" />
+        <Setter Property="TextColor" Value="{DynamicResource LightWhiteColor1}"/>
         <!--<Setter Property="Padding">
         <Thickness
         Left="{DynamicResource Default2Margin}"
@@ -364,8 +399,16 @@
         </Setter>
         <Setter Property="TextColor" Value="{DynamicResource AccentColor}" />-->
     </Style>
+    <Style x:Key="DefaultButtonFrame" TargetType="Frame">
+    
+    <Setter Property="BackgroundColor" Value="{DynamicResource NavigationPrimary}" />
+        <Setter Property="CornerRadius" Value="6"/>
+        <Setter Property="BorderColor" Value="{DynamicResource ReverseBackgroundColor}"/>
+        <Setter Property="Padding" Value="2"></Setter>
+        <Setter Property="HasShadow" Value="False"></Setter>
+    </Style>
 
-    <Style x:Key="DefaultShadowfullButtonStyle" BasedOn="{StaticResource DefaultButtonStyle}" TargetType="Button">
+    <Style x:Key="DefaultShadowfullButton" BasedOn="{StaticResource DefaultButton}" TargetType="Button">
         <Setter Property="CornerRadius">24</Setter>
         <Setter Property="HeightRequest">64</Setter>
         <Setter Property="android:Button.UseDefaultShadow">true</Setter>
@@ -401,11 +444,63 @@
         <Setter Property="BackgroundColor" Value="{DynamicResource PageBackgroundColor}"/>
     </Style>
 
-    <Style x:Key="DefaultGrid" TargetType="Grid">
+    <Style x:Key="PageScroll" TargetType="ScrollView">
+        <Setter Property="BackgroundColor" Value="{DynamicResource PageBackgroundColor}"/>
+        <Setter Property="HorizontalOptions" Value="FillAndExpand"/>
+        <Setter Property="VerticalOptions" Value="FillAndExpand"/>
+        <Setter Property="Padding" Value="10,0,10,0"/>
+    </Style>
+    <Style x:Key="PageScrollGrid" TargetType="Grid">
         <Setter Property="BackgroundColor" Value="{DynamicResource DefaultBackgroundColor}"></Setter>
-        <Setter Property="RowSpacing" Value="0"/>
+        <Setter Property="RowSpacing" Value="10"/>
         <Setter Property="HorizontalOptions" Value="FillAndExpand"/>
         <Setter Property="VerticalOptions" Value="FillAndExpand"/>
     </Style>
+    
+    <Style x:Key="DefaultFrame" TargetType="Frame">
+        <Setter Property="BackgroundColor" Value="{DynamicResource DefaultBackgroundColor}"></Setter>
+        <Setter Property="BorderColor" Value="{DynamicResource ReverseBackgroundColor}"/>
+        <Setter Property="HorizontalOptions" Value="FillAndExpand"/>
+        <Setter Property="VerticalOptions" Value="FillAndExpand"/>
+        <Setter Property="Padding" Value="1"/>
+        <Setter Property="CornerRadius" Value="5"/>
+        <Setter Property="HasShadow" Value="False"/>
+    </Style>
+    
+    <Style x:Key="DefaultGrid" TargetType="Grid">
+        <Setter Property="BackgroundColor" Value="{DynamicResource DefaultBackgroundColor}"></Setter>
+        <Setter Property="RowSpacing" Value="10"/>
+        <Setter Property="HorizontalOptions" Value="FillAndExpand"/>
+        <Setter Property="VerticalOptions" Value="FillAndExpand"/>
+    </Style>
+    <Style x:Key="DefaultStackLayout" TargetType="StackLayout">
+        <Setter Property="BackgroundColor" Value="{DynamicResource DefaultBackgroundColor}"></Setter>
+        <Setter Property="HorizontalOptions" Value="FillAndExpand"/>
+        <Setter Property="VerticalOptions" Value="FillAndExpand"/>
+    </Style>
+    <Style x:Key="SearchCoin" TargetType="SearchBar">
+        <Setter Property="Placeholder" Value="Search Coin here"/>
+        <Setter Property="TextColor" Value="{DynamicResource DefaultTextColor}"/>
+        <Setter Property="PlaceholderColor" Value="{DynamicResource DefaultTextColor}"/>
+        <Setter Property="CancelButtonColor" Value="{DynamicResource DefaultTextColor}"/>
+        <Setter Property="BackgroundColor" Value="{DynamicResource HighlightTransparentColor}"/>
+    </Style>
 
+    <Style x:Key="DefaultStackLayoutHighlight" TargetType="StackLayout">
+        <Setter Property="BackgroundColor" Value="{DynamicResource ReverseBackgroundColor}"></Setter>
+        <Setter Property="HorizontalOptions" Value="FillAndExpand"/>
+        <Setter Property="VerticalOptions" Value="FillAndExpand"/>
+    </Style>
+    <Style x:Key="DefaultImage" TargetType="Image">
+        <Setter Property="HeightRequest" Value="20"></Setter>
+        <Setter Property="WidthRequest" Value="20"></Setter>
+
+    </Style>
+    <Style x:Key="MediumDefaultImage" TargetType="Image">
+        <Setter Property="HeightRequest" Value="30"></Setter>
+        <Setter Property="WidthRequest" Value="30"></Setter>
+
+    </Style>
+
+    
 </ResourceDictionary>

@@ -3,9 +3,17 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:views="clr-namespace:BtcMarkets.Wallet.Views"
              Title="{Binding Title}"
-              ControlTemplate="{DynamicResource ActivityIndicatorTemplate}"
+             xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core" 
+    ios:Page.UseSafeArea="true" 
              Style="{StaticResource DefaultPage}"
+             x:Name="FavPage"
              x:Class="BtcMarkets.Wallet.Views.FavMarketsPage">
+    <Shell.TitleView>
+        <views:AccountHoldingsView BindingContext="{Binding BindingContext,Source={x:Reference FavPage}}" >
+
+        </views:AccountHoldingsView>
+    </Shell.TitleView>
+
     <ContentPage.Content>
 
         <views:MarketsView Markets="{Binding FavMarkets}" BackgroundColor="Transparent"> 
