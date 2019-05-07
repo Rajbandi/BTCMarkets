@@ -40,7 +40,7 @@ namespace BtcMarkets.Wallet
                       "uwp={Your UWP App secret here};" +
                       "ios=37bdd2b9-1bb7-48f6-8a0e-d67cbd3e940a;",
                       typeof(Analytics), typeof(Crashes));
-                Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense();
+                Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("OTUzOTVAMzEzNzJlMzEyZTMwWnpHa3l5VmFPUlJuRGF6Z1QzVUtzZEtGTzhMUUN4dytQa1FzOUE4cmpYMD0=");
             }
             catch (Exception ex)
             {

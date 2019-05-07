@@ -11,12 +11,12 @@ namespace BtcMarkets.Wallet.ViewModels
 {
     public class FavMarketsViewModel : MarketsViewModel
     {
-        public FavMarketsViewModel() : base()
+        public FavMarketsViewModel() : base("Favourites")
         {
             Title = "Favourites";
-            Markets = new ObservableCollection<Market>();
+         //   Markets = new ObservableCollection<Market>();
             IsSearchBarVisible = false;
-            Subscribe();
+         //   Subscribe();
         }
 
         private void AppData_FavouritesUpdated(object sender, EventArgs e)
@@ -29,19 +29,19 @@ namespace BtcMarkets.Wallet.ViewModels
         protected override void LoadMarkets()
         {
           //  Markets = new ObservableCollection<Market>(AppData.Current.Favourites);
-          if(Markets.Any())
-                Markets.Clear();
+          //if(Markets.Any())
+          //      Markets.Clear();
 
-            var markets = AppData.Current.Favourites;
-            foreach(var market in markets)
-            {
-                if(!market.Starred)
-                {
-                    market.Starred = true;
-                }
-                Markets.Add(market);
-            }
-            base.LoadMarkets();
+          //  var markets = AppData.Current.Favourites;
+          //  foreach(var market in markets)
+          //  {
+          //      if(!market.Starred)
+          //      {
+          //          market.Starred = true;
+          //      }
+          //      Markets.Add(market);
+          //  }
+          //  base.LoadMarkets();
         }
 
         public void Subscribe()

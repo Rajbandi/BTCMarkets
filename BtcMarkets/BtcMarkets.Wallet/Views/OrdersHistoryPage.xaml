@@ -1,11 +1,28 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-                 x:Name="TradeOrdersPage"
-            xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core" 
-            ios:Page.UseSafeArea="true" 
+             
+            xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
+             xmlns:views="clr-namespace:BtcMarkets.Wallet.Views"
+             ios:Page.UseSafeArea="true" 
              Style="{StaticResource DefaultPage}" 
+             x:Name="OrdersHistoryListPage"
              x:Class="BtcMarkets.Wallet.Views.OrdersHistoryPage">
+    <Shell.TitleView>
+        <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand"  Spacing="10">
+            <views:AccountHoldingsView  HorizontalOptions="FillAndExpand"></views:AccountHoldingsView>
+            <StackLayout  Orientation="Horizontal" HorizontalOptions="EndAndExpand">
+                <StackLayout>
+
+                </StackLayout>
+                <Image Source="{Binding Converter={StaticResource FontIconImage},ConverterParameter=refresh}">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding BindingContext.RefreshDataCommand, Source={x:Reference OrdersHistoryListPage}}"></TapGestureRecognizer>
+                    </Image.GestureRecognizers>
+                </Image>
+            </StackLayout>
+        </StackLayout>
+    </Shell.TitleView>
     <ContentPage.Content>
         <Grid Style="{StaticResource DefaultGrid}" RowSpacing="0">
             <Grid.Margin>
@@ -23,7 +40,7 @@
             </Grid.ColumnDefinitions>
             <Frame Grid.Row="0" Grid.Column="0" HeightRequest="45" Style="{StaticResource DefaultFrame}">
                 <StackLayout >
-                    <CollectionView Margin="3" x:Name="MarketPairsGrid" ItemsSource="{Binding TradeMarketPairs}" HorizontalOptions="FillAndExpand" ItemsLayout="{Binding MarketsLayout, Source={x:Reference TradeOrdersPage}}"
+                    <CollectionView Margin="3" x:Name="MarketPairsGrid" ItemsSource="{Binding TradeMarketPairs}" HorizontalOptions="FillAndExpand" ItemsLayout="{Binding MarketsLayout, Source={x:Reference OrdersHistoryListPage}}"
                                                           SelectionMode="Single" 
                                                           SelectedItem="{Binding TradingMarketPair, Mode=TwoWay}"  SelectionChangedCommand="{Binding MarketChangedCommand}">
                         <CollectionView.Resources>

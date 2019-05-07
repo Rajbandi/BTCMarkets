@@ -65,16 +65,29 @@ namespace BtcMarkets.Wallet.Helpers
 
         public static void ShowMessage(string message, bool isLong)
         {
-            DependencyService.Get<IMessage>().ShowMessage(message, isLong);
+            //DependencyService.Get<IMessage>().ShowMessage(message, isLong);
 
         }
-        public static void ShowMessage(string message, long milliSeconds = 3500)
+        public static void ShowMessage(string message)
         {
-            DependencyService.Get<IMessage>().ShowMessage(message, milliSeconds);
-            
+            // DependencyService.Get<IMessage>().ShowMessage(message, milliSeconds);
+
+            AppService.Instance.ShowMessage(message);
         }
 
-        
+        public static double CalculateChange(double previous, double current)
+        {
+            if (previous == 0)
+                return 0;
+
+            var change = current - previous;
+            return (double)change / previous;
+        }
+
+        public static string DoubleToPercentageString(double d)
+        {
+            return (Math.Round(d, 2) * 100).ToString() + "%";
+        }
 
         public static  void ShowNotification(string title, string message)
         {

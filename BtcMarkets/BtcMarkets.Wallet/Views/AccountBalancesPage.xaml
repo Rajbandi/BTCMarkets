@@ -1,0 +1,118 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             Title="{Binding Title}"
+             Style="{StaticResource DefaultPage}" 
+             xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
+             ios:Page.UseSafeArea="true" 
+              xmlns:lib ="clr-namespace:BtcMarkets.Wallet"
+             xmlns:views="clr-namespace:BtcMarkets.Wallet.Views"
+             x:Name="AccountBalancesListPage"
+             x:Class="BtcMarkets.Wallet.Views.AccountBalancesPage">
+    <Shell.TitleView>
+        <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand"  Spacing="10">
+            <views:AccountHoldingsView  HorizontalOptions="FillAndExpand"></views:AccountHoldingsView>
+            <StackLayout  Orientation="Horizontal" HorizontalOptions="EndAndExpand">
+                <StackLayout>
+
+                </StackLayout>
+                <Image Source="{Binding Converter={StaticResource FontIconImage},ConverterParameter=refresh}">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding BindingContext.RefreshDataCommand, Source={x:Reference AccountBalancesListPage}}"></TapGestureRecognizer>
+                    </Image.GestureRecognizers>
+                </Image>
+            </StackLayout>
+        </StackLayout>
+    </Shell.TitleView>
+    <ContentPage.Content>
+        <StackLayout Spacing="5" >
+            <Grid  Style="{StaticResource ListHeader}" HeightRequest="20">
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="45*" />
+                    <ColumnDefinition Width="30*" />
+                    <ColumnDefinition Width="25*" />
+                </Grid.ColumnDefinitions>
+                <Label Grid.Column="0" Grid.Row="0"  
+                               Text="Currency" 
+                              Style="{StaticResource SmallHeaderText}"/>
+
+                <Label Grid.Column="1" Grid.Row="0"  
+                               Text="Holdings" 
+                               Style="{StaticResource SmallHeaderText}"/>
+                <Label Grid.Column="2" Grid.Row="0"  
+                               Text="Total AUD" 
+                               Style="{StaticResource SmallHeaderText}"/>
+
+            </Grid>
+
+            <ListView x:Name="balancesListView" Style="{StaticResource MarketList}" ItemsSource="{Binding Balances}"   BindingContext="{Binding Source={x:Static lib:AppData.Current},Path=AccountHoldings}" SelectionMode="None" SeparatorColor="{StaticResource SeparatorColor}" 
+                     HasUnevenRows="True"     >
+                <ListView.ItemTemplate  >
+                    <DataTemplate>
+                        <ViewCell>
+                            <Grid  Style="{StaticResource MarketListTemplate}">
+
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="45*" />
+                                    <ColumnDefinition Width="30*" />
+                                    <ColumnDefinition Width="25*" />
+                                </Grid.ColumnDefinitions>
+
+                                <StackLayout Grid.Column="0" Grid.Row="0" Orientation="Horizontal"  HorizontalOptions="FillAndExpand" >
+                                    <Frame Style="{StaticResource MarketListFrame}">
+                                        <Image Source="{Binding Image,Converter={StaticResource Base64ToImage}}" WidthRequest="24" HeightRequest="24">
+
+                                            <Image.VerticalOptions>
+                                                <OnPlatform x:TypeArguments="LayoutOptions">
+                                                    <On Platform="Android" Value="StartAndExpand"/>
+                                                    <On Platform="iOS" Value="StartAndExpand"/>
+                                                </OnPlatform>
+                                            </Image.VerticalOptions>
+                                        </Image>
+                                    </Frame>
+                                    <StackLayout Spacing="0" Padding="0" HorizontalOptions="FillAndExpand">
+                                        <Label Text="{Binding Currency}"  Style="{StaticResource MarketListInstrumentCode}" HorizontalOptions="FillAndExpand"/>
+                                        <Label  Style="{StaticResource MicroDefaultText}" HorizontalOptions="FillAndExpand">
+                                            <Label.FormattedText>
+                                                <FormattedString>
+                                                    <Span Text="("></Span>
+                                                    <Span Text="{Binding Name}" Style="{StaticResource MarketListInstrumentName}"></Span>
+                                                    <Span Text=")"></Span>
+                                                </FormattedString>
+                                            </Label.FormattedText>
+                                        </Label>
+                                    </StackLayout>
+                                </StackLayout>
+
+                                <Label Grid.Column="1" Grid.Row="0"  >
+                                    <Label.FormattedText>
+                                        <FormattedString>
+                                            <Span Text="{Binding CurrencySymbol} " Style="{StaticResource MarketListPriceSymbol}"></Span>
+                                            <Span Text="{Binding BalanceString}" Style="{StaticResource MarketListHoldingsValue}"></Span>
+                                        </FormattedString>
+                                    </Label.FormattedText>
+                                </Label>
+                                <Label Grid.Column="2" Grid.Row="0"  >
+                                    <Label.FormattedText>
+                                        <FormattedString>
+                                            <Span Text="$" Style="{StaticResource MarketListPriceSymbol}"></Span>
+                                            <Span Text="{Binding TotalAudString}" Style="{StaticResource MarketListHoldingsValue}"></Span>
+                                        </FormattedString>
+                                    </Label.FormattedText>
+                                </Label>
+                            </Grid>
+                        </ViewCell>
+                    </DataTemplate>
+
+                </ListView.ItemTemplate>
+            </ListView>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

@@ -17,6 +17,7 @@ namespace BtcMarkets.Wallet.Droid.Renderers
 
         }
 
+        
         protected override void OnElementPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             try

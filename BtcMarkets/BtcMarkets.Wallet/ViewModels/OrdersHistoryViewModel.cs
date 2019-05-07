@@ -179,8 +179,8 @@ namespace BtcMarkets.Wallet.ViewModels
                             OrderHistory.Clear();
                         }
 
-                        if (!isLoaderVisible)
-                           AppHelper.SetLoaderMessage("Loading Orders History");
+                        //if (!isLoaderVisible)
+                        //   AppHelper.SetLoaderMessage("Loading Orders History");
 
                         var appData = AppData.Current;
 
@@ -207,7 +207,7 @@ namespace BtcMarkets.Wallet.ViewModels
             });
         }
 
-        public ICommand RefreshCommand
+        public ICommand RefreshDataCommand
         {
             get
             {

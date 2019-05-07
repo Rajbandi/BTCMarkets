@@ -72,9 +72,7 @@ namespace BtcMarkets.Wallet.ViewModels
             get => _market;
             set
             {
-
                 SetProperty(ref _market, value, nameof(TradeMarket));
-
             }
         }
 
@@ -175,16 +173,7 @@ namespace BtcMarkets.Wallet.ViewModels
                     TradeMarketPairs.Add(tradePair);
                 }
 
-            //if (marketPair == null )
-            //{
-            //    var firstPair = TradeMarketPairs.FirstOrDefault();
-            //    if (firstPair != null)
-            //    {
-            //        TradingMarketPair = firstPair;
-            //        //  RefreshMarket(markets.FirstOrDefault());
-            //    }
-            //}
-            //else
+         
             if(marketPair != null)
             {
                 TradingMarketPair = marketPair;
@@ -241,7 +230,7 @@ namespace BtcMarkets.Wallet.ViewModels
             }
         }
 
-        public ICommand RefreshCommand
+        public ICommand RefreshDataCommand
         {
             get
             {
@@ -249,7 +238,7 @@ namespace BtcMarkets.Wallet.ViewModels
                 {
                     Device.BeginInvokeOnMainThread(() =>
                     {
-                        RefreshMarkets();
+                        RefreshData();
                       //  OnPropertyChanged(nameof(TradeMarket));
                     });
 

@@ -11,7 +11,7 @@ namespace BtcMarkets.Wallet.Models
     [Serializable]
     public class AppSettings
     {
-
+        public bool SocketOn { get; set; } = true; 
        public List<MarketFavourite> Favourites { get; private set; }
 
         public CoinConfig Config{ get; set; }

@@ -10,7 +10,7 @@ using BtcMarkets.Wallet.Services;
 
 namespace BtcMarkets.Wallet.ViewModels
 {
-    public class BaseViewModel : INotifyPropertyChanged
+    public class BaseViewModel : BaseBindableObject
     {
 
         public BaseViewModel()
@@ -63,29 +63,30 @@ namespace BtcMarkets.Wallet.ViewModels
             set { SetProperty(ref subtitle, value); }
         }
 
-        protected bool SetProperty<T>(ref T backingStore, T value,
-            [CallerMemberName]string propertyName = "",
-            Action onChanged = null)
-        {
-            if (EqualityComparer<T>.Default.Equals(backingStore, value))
-                return false;
+        //protected bool SetProperty<T>(ref T backingStore, T value,
+        //    [CallerMemberName]string propertyName = "",
+        //    Action onChanged = null)
+        //{
+        //    if (EqualityComparer<T>.Default.Equals(backingStore, value))
+        //        return false;
 
-            backingStore = value;
-            onChanged?.Invoke();
-            OnPropertyChanged(propertyName);
-            return true;
-        }
+        //    backingStore = value;
+        //    onChanged?.Invoke();
+        //    OnPropertyChanged(propertyName);
+        //    return true;
+        //}
 
-        #region INotifyPropertyChanged
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged([CallerMemberName] string propertyName = "")
-        {
-            var changed = PropertyChanged;
-            if (changed == null)
-                return;
 
-            changed.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-        #endregion
+        //#region INotifyPropertyChanged
+        //public event PropertyChangedEventHandler PropertyChanged;
+        //protected void OnPropertyChanged([CallerMemberName] string propertyName = "")
+        //{
+        //    var changed = PropertyChanged;
+        //    if (changed == null)
+        //        return;
+
+        //    changed.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        //}
+        //#endregion
     }
 }

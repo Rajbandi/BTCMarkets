@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,6 +13,14 @@ namespace BtcMarkets.Wallet.ViewModels
 {
     public class MarketsViewModel : BaseViewModel
     {
+
+        public static readonly BindableProperty MarketsProperty = BindableProperty.Create("Markets", typeof(IList<Market>), typeof(MarketsViewModel), null, BindingMode.OneWay);
+        public IList<Market> Markets
+        {
+            get => (IList<Market>)GetValue(MarketsProperty);
+            set => SetValue(MarketsProperty, value);
+        }
+
 
         private string _holdings;
         public string TotalHoldings
@@ -29,14 +38,16 @@ namespace BtcMarkets.Wallet.ViewModels
             set => SetProperty(ref _isSearchBarVisible, value);
         }
 
-        public ObservableCollection<Market> Markets { get; protected set; }
+       // public ObservableCollection<Market> Markets { get; protected set; }
 
         public Market SelectedMarket { get; set; }
 
-        public MarketsViewModel()
+        public MarketsViewModel(string type)
         {
-
-            Markets = new ObservableCollection<Market>();
+            this.BindingContext = AppData.Current;
+            this.SetBinding(MarketsProperty, type);
+            
+            //Markets = new ObservableCollection<Market>();
             //  var appData = AppData.Current;
 
             //appData.MarketsUpdated += AppData_MarketsUpdated;

@@ -11,6 +11,15 @@ using Quobject.SocketIoClientDotNet.Client;
 
 namespace BtcMarkets.Core.Sockets
 {
+    public class SocketOptions
+    {
+        public string Url { get; set; }
+
+        public string Key { get; set; }
+
+        public string Secret { get; set; }
+
+    }
     public class SocketClient
     {
         private Socket _socket;
@@ -24,10 +33,57 @@ namespace BtcMarkets.Core.Sockets
         public const string OrderChannel = "Orderbook_";
         public const string MarketTradeChannel = "TRADE_";
 
-        public event EventHandler<TickerEventArgs> TickerChanged;
-        public event EventHandler<OrderBookEventArgs> OrderBookChanged;
-        public event EventHandler<MarketTradeEventArgs> MarketTradeChanged;
+        private EventHandler<TickerEventArgs> _tickerChanged;
+        public event EventHandler<TickerEventArgs> TickerChanged
+        {
+            add
+            {
+                if (_tickerChanged == null || !_tickerChanged.GetInvocationList().Contains(value))
+                {
+                    _tickerChanged += value;
+                }
+            }
+            remove
+            {
+                if (_tickerChanged != null && _tickerChanged.GetInvocationList().Contains(value))
+                    _tickerChanged -= value;
+            }
+        }
 
+        private EventHandler<OrderBookEventArgs> _orderBookChanged;
+        public event EventHandler<OrderBookEventArgs> OrderBookChanged
+        {
+            add
+            {
+                if (_orderBookChanged == null || !_orderBookChanged.GetInvocationList().Contains(value))
+                {
+                    _orderBookChanged += value;
+                }
+            }
+            remove
+            {
+                if (_orderBookChanged != null && _orderBookChanged.GetInvocationList().Contains(value))
+                    _orderBookChanged -= value;
+            }
+        }
+
+        private EventHandler<MarketTradeEventArgs> _marketTradeChanged;
+        public event EventHandler<MarketTradeEventArgs> MarketTradeChanged
+        {
+            add
+            {
+                if (_marketTradeChanged == null || !_marketTradeChanged.GetInvocationList().Contains(value))
+                {
+                    _marketTradeChanged += value;
+                }
+            }
+            remove
+            {
+                if(_marketTradeChanged != null && _marketTradeChanged.GetInvocationList().Contains(value))
+                    _marketTradeChanged -= value;
+            }
+        }
+        
         public event EventHandler<SocketEventArgs> Connected;
         public event EventHandler<SocketEventArgs> Disconnected;
 
@@ -35,10 +91,10 @@ namespace BtcMarkets.Core.Sockets
 
         public bool IsOpen { get; private set; }
 
-        public SocketClient()
+        public SocketClient(SocketOptions socketOptions)
         {
             var transport = "websocket";
-            var url = "https://socket.btcmarkets.net";
+            var url = socketOptions.Url;
             var options = new IO.Options
             {
                 Secure = true,
@@ -92,7 +148,7 @@ namespace BtcMarkets.Core.Sockets
                 {
                     tickerArgs.Error = $"{ex.Message} {ex.StackTrace}";
                 }
-                TickerChanged?.Invoke(this, tickerArgs);
+                _tickerChanged?.Invoke(this, tickerArgs);
             });
 
             _socket.On(OrderBookEvent, (data) =>
@@ -108,7 +164,7 @@ namespace BtcMarkets.Core.Sockets
                 {
                     orderArgs.Error = $"{ex.Message} {ex.StackTrace}";
                 }
-                OrderBookChanged?.Invoke(this, orderArgs);
+                _orderBookChanged?.Invoke(this, orderArgs);
             });
 
             _socket.On(MarketTradeEvent, (data) =>
@@ -124,7 +180,7 @@ namespace BtcMarkets.Core.Sockets
                 {
                     marketArgs.Error = $"{ex.Message} {ex.StackTrace}";
                 }
-                MarketTradeChanged?.Invoke(this, marketArgs);
+                _marketTradeChanged?.Invoke(this, marketArgs);
             });
         }
 

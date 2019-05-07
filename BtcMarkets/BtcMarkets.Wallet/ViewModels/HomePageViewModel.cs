@@ -1,7 +1,4 @@
-﻿using BtcMarkets.Wallet.Helpers;
-using BtcMarkets.Wallet.Models;
-using System.Collections.ObjectModel;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
@@ -14,10 +11,6 @@ namespace BtcMarkets.Wallet.ViewModels
         {
 
             var appData = AppData.Current;
-
-            Holdings = new ObservableCollection<AccountBalance>();
-
-            BtcAudCoin = _btcMarket;
             IsRefreshing = false;
             if (appData.Markets == null || !appData.Markets.Any())
             {
@@ -50,43 +43,6 @@ namespace BtcMarkets.Wallet.ViewModels
             private set => SetProperty(ref _accountErrorMessage, value);
         }
 
-        private Market _btcMarket => AppData.Current.Markets.FirstOrDefault(x => x.Instrument == Constants.Btc && x.Currency == Constants.Aud) ?? new Models.Market();
-
-        private Market _btcAudCoin;
-        public Market BtcAudCoin
-        {
-            get => _btcAudCoin;
-            private set => SetProperty(ref _btcAudCoin, value);
-        }
-
-        public ObservableCollection<AccountBalance> Holdings { get; private set; }
-        public ObservableCollection<MarketNewsItem> MarketNews { get; private set; }
-
-        private string _holdings;
-
-        public string TotalHoldings
-        {
-            get => _holdings;
-            set => SetProperty(ref _holdings, value);
-        }
-        
-        private void LoadMarketNews()
-        {
-            var appData = AppData.Current;
-            var marketNews = appData?.Settings?.Config?.MarketNews;
-            if (marketNews != null)
-            {
-                MarketNews = new ObservableCollection<MarketNewsItem>(marketNews);
-            }
-            else
-            {
-                MarketNews = new ObservableCollection<MarketNewsItem>();
-            }
-
-            OnPropertyChanged("MarketNews");
-        }
-
-
         public void RefreshMarkets(bool isPull = false)
         {
             Device.BeginInvokeOnMainThread(async () =>
@@ -99,10 +55,8 @@ namespace BtcMarkets.Wallet.ViewModels
                 await Task.Delay(100);
                 var appData = AppData.Current;
                 await appData.RefreshMarkets();
-                BtcAudCoin = _btcMarket;
-                LoadMarketNews();
 
-                DisplayHoldings();
+              //  UpdateHoldings();
 
                 //   if (!isPull)
                 IsBusy = false;
@@ -110,41 +64,6 @@ namespace BtcMarkets.Wallet.ViewModels
                 IsRefreshing = false;
 
             });
-        }
-
-        private bool _btcHoldings;
-        public void DisplayHoldings(bool refresh = true)
-        {
-            var appData = AppData.Current;
-            if (_btcHoldings)
-            {
-                TotalHoldings = $"BTC {Constants.BtcSymbol}{appData.TotalHoldingsInBtc:0.00000000}";
-            }
-            else
-            {
-                TotalHoldings = $"AUD {Constants.AudSymbol}{appData.TotalHoldingsInAud:0.00}";
-            }
-
-            if (refresh)
-            {
-                Holdings.Clear();
-                var balances = appData.Balances.Where(x => x.Balance > 0).OrderBy(x => x.Currency);
-                var audBalance = balances.FirstOrDefault(x => x.Currency == Constants.Aud);
-                if (audBalance != null)
-                {
-                    Holdings.Add(audBalance);
-                }
-                var btcBalance = balances.FirstOrDefault(x => x.Currency == Constants.Btc);
-                if (btcBalance != null)
-                {
-                    Holdings.Add(btcBalance);
-                }
-                foreach (var balance in balances.Where(x => x.Currency != Constants.Aud && x.Currency != Constants.Btc))
-                {
-                    Holdings.Add(balance);
-                }
-            }
-
         }
 
         private bool isRefreshing;
@@ -167,29 +86,6 @@ namespace BtcMarkets.Wallet.ViewModels
                {
                    RefreshMarkets(true);
                });
-            }
-        }
-
-
-        public ICommand ChangeHoldingsCommand
-        {
-            get
-            {
-                return new Command(() =>
-                {
-                    _btcHoldings = !_btcHoldings;
-                    DisplayHoldings(false);
-                });
-            }
-        }
-        public ICommand RefreshBalancesCommand
-        {
-            get
-            {
-                return new Command(() =>
-                {
-                    DisplayHoldings();
-                });
             }
         }
     }

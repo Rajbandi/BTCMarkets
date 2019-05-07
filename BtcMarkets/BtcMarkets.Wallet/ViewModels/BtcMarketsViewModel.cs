@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
@@ -11,7 +12,7 @@ namespace BtcMarkets.Wallet.ViewModels
 {
     public class BtcMarketsViewModel : MarketsViewModel
     {
-        public BtcMarketsViewModel() :base()
+        public BtcMarketsViewModel() :base("BtcMarkets")
         {
             Title = "BTC Markets";
             _btcHoldings = true;
@@ -19,40 +20,42 @@ namespace BtcMarkets.Wallet.ViewModels
            // Subscribe();
         }
 
+        public IList<Market> BtcMarkets => Markets;
+
         protected override void LoadMarkets()
         {
-            if (Markets.Any())
-                Markets.Clear();
+            //if (Markets.Any())
+            //    Markets.Clear();
 
-            foreach (var market in AppData.Current.BtcMarkets)
-            {
-                Markets.Add(market);
-            }
+            //foreach (var market in AppData.Current.BtcMarkets)
+            //{
+            //    Markets.Add(market);
+            //}
 
-            base.LoadMarkets();
+            //base.LoadMarkets();
 
             //Markets = new ObservableCollection<Market>(AppData.Current.BtcMarkets);
         }
 
         public override void SearchMarkets(string coin)
         {
-            if (string.IsNullOrWhiteSpace(coin))
-            {
-                LoadMarkets();
-            }
-            else
-            {
-                if (Markets.Any())
-                    Markets.Clear();
-                var txt = coin.ToLower();
-                var markets = AppData.Current.AudMarkets.Where(x => x.Instrument.ToLower().Contains(txt) || x.Name.ToLower().Contains(txt));
-                foreach (var market in markets)
-                {
-                    Markets.Add(market);
-                }
+            //if (string.IsNullOrWhiteSpace(coin))
+            //{
+            //    LoadMarkets();
+            //}
+            //else
+            //{
+            //    if (Markets.Any())
+            //        Markets.Clear();
+            //    var txt = coin.ToLower();
+            //    var markets = AppData.Current.AudMarkets.Where(x => x.Instrument.ToLower().Contains(txt) || x.Name.ToLower().Contains(txt));
+            //    foreach (var market in markets)
+            //    {
+            //        Markets.Add(market);
+            //    }
 
-            }
-            OnPropertyChanged(nameof(Markets));
+            //}
+            //OnPropertyChanged(nameof(Markets));
         }
     }
 }

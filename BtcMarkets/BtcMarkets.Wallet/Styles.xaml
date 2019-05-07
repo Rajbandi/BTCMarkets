@@ -55,7 +55,9 @@
     <converters:ToggleImageConverter x:Key="ToggleImage"/>
     <converters:ToggleTextIconConverter x:Key="ToggleTextIcon"/>
     <converters:SelectedStyleConverter x:Key="SelectedStyle"/>
-
+    <converters:InverseBoolConverter x:Key="InverseBool"/>
+    <converters:IfMatchValueConverter x:Key="IfMatchValue"/>
+    <converters:ToggleTextStyleConverter x:Key="ToggleTextStyle"/>
     <Style x:Key="Seperator1" TargetType="BoxView">
         <Setter Property="HeightRequest" Value="1"></Setter>
         <Setter Property="BackgroundColor" Value="{DynamicResource SeparatorColor}"></Setter>
@@ -226,7 +228,7 @@
         <Setter Property="BorderColor" Value="{DynamicResource ReverseBackgroundColor}" />
         <Setter Property="HorizontalOptions" Value="FillAndExpand"/>
         <Setter Property="VerticalOptions" Value="FillAndExpand"/>
-        <Setter Property="Padding" Value="1,0,1,1"/>
+        <Setter Property="Padding" Value="1"/>
         <Setter Property="HasShadow" Value="False"/>
     </Style>
     <Style x:Key="TradesListPanel" TargetType="StackLayout">
@@ -387,7 +389,12 @@
     <Style x:Key="MediumIconTextAccent" TargetType="Label" BasedOn="{StaticResource MediumIconText}">
         <Setter Property="TextColor" Value="{DynamicResource AccentColor}"/>
     </Style>
-
+    <Style x:Key="MediumIconTextSuccess" TargetType="Label" BasedOn="{StaticResource MediumIconText}">
+        <Setter Property="TextColor" Value="Green"/>
+    </Style>
+    <Style x:Key="MediumIconTextError" TargetType="Label" BasedOn="{StaticResource MediumIconText}">
+        <Setter Property="TextColor" Value="Red"/>
+    </Style>
 
     <Style x:Key="DefaultButton" TargetType="Button">
         <Setter Property="BackgroundColor" Value="{DynamicResource NavigationPrimary}" />

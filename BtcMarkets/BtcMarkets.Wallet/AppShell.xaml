@@ -8,6 +8,7 @@
        FlyoutBehavior="Flyout"
        Title="BtcMarkets.Wallet"
        x:Name="MainPageRef"
+           xmlns:lib ="clr-namespace:BtcMarkets.Wallet"
         xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core" 
     ios:Page.UseSafeArea="true" 
        x:Class="BtcMarkets.Wallet.AppShell" Navigating="Shell_Navigating" Navigated="MainPageRef_Navigated"  
@@ -65,28 +66,33 @@
     <!-- Your Pages -->
     <ShellItem Route="Pages">
 
-        <ShellSection Title="Home" Icon="{Binding Converter={StaticResource FontIconImage}, ConverterParameter=home}" Route="Home"  >
+        <!--<ShellSection Title="Home" Icon="{Binding Converter={StaticResource FontIconImage}, ConverterParameter=home}" Route="Home"  >
             <ShellContent ContentTemplate="{DataTemplate local:HomePage}" />
-        </ShellSection>
+        </ShellSection>-->
         <ShellSection Title="Markets" Icon="{Binding Converter={StaticResource FontIconImage},ConverterParameter=timeline}" Route="Markets" >
             
-            <ShellContent  ContentTemplate="{DataTemplate local:AudMarketsPage}" Title="AUD Markets"  Route="Aud"  />
-            <ShellContent ContentTemplate="{DataTemplate local:BtcMarketsPage}" Title="BTC Markets" Route="Btc" />
-            <ShellContent ContentTemplate="{DataTemplate local:FavMarketsPage}" Title="Favourites" Route="Fav" />
+            <ShellContent  ContentTemplate="{DataTemplate local:MarketsPage}" Title="Markets"  Route="List"  />
+            <!--<ShellContent ContentTemplate="{DataTemplate local:BtcMarketsPage}" Title="BTC Markets" Route="Btc" />
+            <ShellContent ContentTemplate="{DataTemplate local:FavMarketsPage}" Title="Favourites" Route="Fav" />-->
         </ShellSection>
 
         <ShellSection Title="Trades"  Icon="{Binding Converter={StaticResource FontIconImage},ConverterParameter=swap_vert}"  Route="Trades" >
             <ShellContent ContentTemplate="{DataTemplate local:MarketTradesPage}" Title="Market Trades" Route="Trades"/>
-            <ShellContent ContentTemplate="{DataTemplate local:OrdersHistoryPage}" Title="Orders History" Route="OrdersHistory"/>
+        </ShellSection>
+
+        <ShellSection Title="Account"  Icon="{Binding Converter={StaticResource FontIconImage},ConverterParameter=account_box}"  Route="Account" IsEnabled="{Binding Source={x:Static lib:AppData.Current},Path=IsAccountValid}" >
             <ShellContent ContentTemplate="{DataTemplate local:OpenOrdersPage}" Title="Open Orders" Route="OpenOrders"/>
-           
+            <ShellContent ContentTemplate="{DataTemplate local:AccountBalancesPage}" Title="Balances" Route="AccountBalances"/>
+            <ShellContent ContentTemplate="{DataTemplate local:OrdersHistoryPage}" Title="Orders History" Route="OrdersHistory"/>
+            
         </ShellSection>
-      
-        <ShellSection Title="Account"  Icon="{Binding Converter={StaticResource FontIconImage},ConverterParameter=account_box}"  Route="Account" >
-            <ShellContent ContentTemplate="{DataTemplate local:ApiKeysPage}" Title="Api Keys" Route="ApiKeys"/>
+        
+        <ShellSection Title="Settings" Icon="{Binding Converter={StaticResource FontIconImage}, ConverterParameter=settings}" Route="Settings"  >
+            <!--<ShellContent ContentTemplate="{DataTemplate local:ApiKeysPage}" Title="Api Keys" Route="ApiKeys"/>-->
             <ShellContent ContentTemplate="{DataTemplate local:SettingsPage}" Title="Settings" Route="Settings"/>
-            <ShellContent ContentTemplate="{DataTemplate local:AboutPage}}" Title="About" Route="About"/>
         </ShellSection>
+
+        
         <ShellSection Title="News" Icon="{Binding Converter={StaticResource FontIconImage},ConverterParameter=view_list}" Route="News">
             <ShellContent ContentTemplate="{DataTemplate local:NewsPage}" />
         </ShellSection>
@@ -107,7 +113,10 @@
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
                 <!--<Image x:Name="HeaderImage" Grid.Row="0" Grid.Column="0" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" Source="{Binding BindingContext.Logo, Source={x:Reference MainPageRef}, Converter={StaticResource Base64ToImage}}"></Image>-->
-                <Label Grid.Row="1" Grid.Column="0" Text="BTC Markets" FontAttributes="Bold" FontSize="Large" TextColor="White" HorizontalTextAlignment="Center" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand" VerticalTextAlignment="Center"> </Label>
+                <Label Grid.Row="0" Grid.Column="0" Text="BTC Markets" FontAttributes="Bold" FontSize="Large" TextColor="White" HorizontalTextAlignment="Center" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand" VerticalTextAlignment="Center"> </Label>
+                <StackLayout Grid.Row="1" Grid.Column="0">
+                    <local:AccountHoldingsView  HorizontalOptions="FillAndExpand"></local:AccountHoldingsView>
+                </StackLayout>
             </Grid>
         </DataTemplate>
     </Shell.FlyoutHeaderTemplate>

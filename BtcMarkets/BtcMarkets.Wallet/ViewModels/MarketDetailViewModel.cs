@@ -91,12 +91,19 @@ namespace BtcMarkets.Wallet.ViewModels
     public class MarketDetailViewModel : BaseViewModel
     {
 
+        private Market _viewMarket;
+        public Market ViewMarket
+        {
+            get;
+            private set;
+        }
+
 
         private Market _market;
         public Market Market
         {
-            get => _market;
-            private set => SetProperty(ref _market, value, nameof(Market));
+            get => AppData.Current.Markets.FirstOrDefault(x=>x.Instrument == ViewMarket.Instrument && x.Currency == ViewMarket.Currency);
+           
         }
 
         private string _low;
@@ -205,8 +212,8 @@ namespace BtcMarkets.Wallet.ViewModels
             }
             if (market != null)
             {
-                Market = market;
-                Title = $"{market.Name} ({market.Pair})";
+                ViewMarket = market;
+                Title = $"{market.Name}";
             }
             // ChartData = new List<HighLowItem>();
 
@@ -276,36 +283,43 @@ namespace BtcMarkets.Wallet.ViewModels
                 Device.BeginInvokeOnMainThread(async () =>
             {
                 IsBusy = true;
-
-                var data = await AppData.Current.GetMarketHistory(Market, period);
-                var dt = data.OrderBy(x => x.Date).ToList();
-            
-                var chartData = new List<CandleStickEntry>();
-                foreach (var entry in dt)
+                try
                 {
-                    chartData.Add(new CandleStickEntry(entry.Date, entry.Open, entry.High, entry.Low, entry.Close));
+                    var data = await AppData.Current.GetMarketHistory(Market, period);
+                    var dt = data.OrderBy(x => x.Date).ToList();
+
+                    var chartData = new List<CandleStickEntry>();
+                    foreach (var entry in dt)
+                    {
+                        chartData.Add(new CandleStickEntry(entry.Date, entry.Open, entry.High, entry.Low, entry.Close));
+                    }
+
+                    ChartData = chartData;
+
+                    var areaChartData = chartData.Select(x => new DateValueEntry(x.Date, x.Close)).ToList();
+
+                    AreaChartData = areaChartData;
+
+                    var low = chartData.Min(x => x.Low);
+                    var high = chartData.Max(x => x.High);
+
+                    Low = $"{low:0.00}";
+                    High = $"{high:0.00}";
+
+                    AreaChartPriceMinimum = low;
+                    AreaChartPriceMaximum = high;
+
+                    AreaChartDateMinimum = chartData.Min(x => x.Date);
+                    AreaChartDateMaximum = chartData.Max(x => x.Date);
+
+
+                    await Task.Delay(100);
                 }
-
-                ChartData = chartData; 
-
-                var areaChartData = chartData.Select(x => new DateValueEntry(x.Date, x.Close)).ToList();
-
-                AreaChartData = areaChartData;
-
-                var low = chartData.Min(x => x.Low);
-                var high = chartData.Max(x => x.High);
-
-                Low = $"{low:0.00}";
-                High = $"{high:0.00}";
-
-                AreaChartPriceMinimum = low;
-                AreaChartPriceMaximum = high;
-
-                AreaChartDateMinimum = chartData.Min(x => x.Date);
-                AreaChartDateMaximum = chartData.Max(x => x.Date);
-
-
-                await Task.Delay(100);
+                catch(Exception ex)
+                {
+                    AppHelper.TrackError(ex);
+                    AppHelper.ShowError();
+                }
 
                 IsBusy = false;
             });
@@ -329,6 +343,8 @@ namespace BtcMarkets.Wallet.ViewModels
                 var periodValue = ChartPeriod.GetPeriodValue(period);
 
                 await LoadReport(periodValue);
+
+                OnPropertyChanged(nameof(Market));
             }
         }
         public ICommand PeriodCommand

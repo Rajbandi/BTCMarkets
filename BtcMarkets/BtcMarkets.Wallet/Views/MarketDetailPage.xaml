@@ -1,12 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:controls="clr-namespace:BtcMarkets.Wallet.Controls"
              xmlns:chart="clr-namespace:Syncfusion.SfChart.XForms;assembly=Syncfusion.SfChart.XForms"
-             xmlns:oxy="clr-namespace:OxyPlot.Xamarin.Forms;assembly=OxyPlot.Xamarin.Forms"
+             xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
+             ios:Page.UseSafeArea="true" 
              Title="{Binding Title}" 
              Style="{StaticResource DefaultPage}"
-             
              x:Name="MarketDetails"
              x:Class="BtcMarkets.Wallet.Views.MarketDetailPage">
     <Shell.TitleView>
@@ -27,12 +26,8 @@
     </Shell.TitleView>
     <ContentPage.Content>
         <ScrollView Style="{StaticResource PageScroll}">
-            <ScrollView.Margin>
-                <OnPlatform x:TypeArguments="Thickness">
-                    <On Platform="iOS" Value="0,60,0,0" />
-                </OnPlatform>
-            </ScrollView.Margin>
-            <Grid Style="{StaticResource PageScrollGrid}">
+           
+            <Grid Style="{StaticResource PageScrollGrid}" Padding="0,10,0,0">
 
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"></RowDefinition>
@@ -105,7 +100,7 @@
                     </StackLayout>
                     <StackLayout Grid.Row="2" Grid.Column="2">
                         <Frame Style="{StaticResource DefaultFrame}" HeightRequest="25" BorderColor="{DynamicResource ReversebackgroundColor}" Padding="3" BackgroundColor="{DynamicResource PrimaryColor}">
-                            <Button x:Name="BtnTrades" Text="Market Trades" Style="{StaticResource DefaultButton}" Clicked="BtnTrades_Clicked"></Button>
+                            <Button x:Name="BtnTrades" Text="Trades" Style="{StaticResource DefaultButton}" Clicked="BtnTrades_Clicked"></Button>
                         </Frame>
                     </StackLayout>
 

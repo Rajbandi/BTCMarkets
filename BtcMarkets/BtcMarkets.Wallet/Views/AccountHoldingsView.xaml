@@ -1,40 +1,41 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Name="marketView"
+               xmlns:lib ="clr-namespace:BtcMarkets.Wallet"
+             x:Name="AccountValueView"
              x:Class="BtcMarkets.Wallet.Views.AccountHoldingsView">
   <ContentView.Content>
 
-        <StackLayout Orientation="Horizontal"  BindingContext="{Binding BindingContext,Source={x:Reference marketView}}" Padding="5,0,5,5">
+        <StackLayout Orientation="Horizontal"  BindingContext="{Binding Source={x:Static lib:AppData.Current},Path=AccountHoldings}" Padding="5,0,5,5">
                 <StackLayout  HorizontalOptions="FillAndExpand" >
                     <StackLayout.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding ChangeHoldingsCommand}"></TapGestureRecognizer>
                     </StackLayout.GestureRecognizers>
-                <Label Text="Total Account Value"  HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center"  FontAttributes="Bold">
+                <Label Text="Total Account Value"  HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center"  >
                     <Label.Style>
                         <OnPlatform x:TypeArguments="Style">
                             <On Platform="iOS" Value="{StaticResource SmallDefaultText}" />
+                            <On Platform="Android" Value="{StaticResource SmallDefaultText}" />
+                        </OnPlatform>
+                    </Label.Style>
+                </Label>
+                <Label  Text="{Binding HoldingsValue}" HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" >
+                    <Label.Style>
+                        <OnPlatform x:TypeArguments="Style">
+                            <On Platform="iOS" Value="{StaticResource MediumDefaultText}" />
                             <On Platform="Android" Value="{StaticResource MediumDefaultText}" />
                         </OnPlatform>
                     </Label.Style>
                 </Label>
-                <Label  Text="{Binding TotalHoldings}" HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" FontAttributes="Bold" >
-                    <Label.Style>
-                        <OnPlatform x:TypeArguments="Style">
-                            <On Platform="iOS" Value="{StaticResource MediumDefaultText}" />
-                            <On Platform="Android" Value="{StaticResource LargeDefaultText}" />
-                        </OnPlatform>
-                    </Label.Style>
-                </Label>
                 </StackLayout>
-                <StackLayout  Orientation="Horizontal">
+                <!--<StackLayout  Orientation="Horizontal">
                     <Image Source="{Binding Converter={StaticResource FontIconImage},ConverterParameter=settings}"></Image>
                     <Image Source="{Binding Converter={StaticResource FontIconImage},ConverterParameter=refresh}">
                         <Image.GestureRecognizers>
                             <TapGestureRecognizer Command="{Binding BindingContext.RefreshDataCommand, Source={x:Reference marketView}}"></TapGestureRecognizer>
                         </Image.GestureRecognizers>
                     </Image>
-                </StackLayout>
+                </StackLayout>-->
             </StackLayout>
        
     </ContentView.Content>

@@ -1,9 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:controls="clr-namespace:Refractored.XamForms.PullToRefresh;assembly=Refractored.XamForms.PullToRefresh"
+            
              xmlns:converters="clr-namespace:BtcMarkets.Wallet.Converters"
              xmlns:effects="clr-namespace:BtcMarkets.Wallet.Effects"
+             xmlns:lib ="clr-namespace:BtcMarkets.Wallet"
+             xmlns:controls="clr-namespace:BtcMarkets.Wallet.Controls"
              Title="{Binding Title}"
              Style="{DynamicResource DefaultPage}"
              x:Name="HomePg"
@@ -67,15 +69,15 @@
 
                 <Frame CornerRadius="5" Style="{StaticResource HighlightPrimaryPanel}">
 
-                    <StackLayout HorizontalOptions="FillAndExpand" >
+                    <StackLayout HorizontalOptions="FillAndExpand" BindingContext="{Binding Source={x:Static lib:AppData.Current},Path=AccountHoldings}">
 
                         <StackLayout.GestureRecognizers>
                             <TapGestureRecognizer Command="{Binding ChangeHoldingsCommand}"></TapGestureRecognizer>
                         </StackLayout.GestureRecognizers>
 
-                        <Label Text="Total Holdings" Style="{StaticResource SmallDefaultText}"></Label>
-                        <Label Text="{Binding TotalHoldings}" Style="{StaticResource LargeDefaultText}"></Label>
-
+                        <Label Text="Total Account Value" Style="{StaticResource SmallDefaultText}" ></Label>
+                        <Label  Text="{Binding HoldingsValue}" Style="{StaticResource LargeDefaultText}"></Label>
+                        <!--<Label IsVisible="{Binding HoldingsMode,Converter={StaticResource IfMatchValue},ConverterParameter=BTC}" Text="{Binding AccountHoldings.AccountValueInBtcString}" Style="{StaticResource LargeDefaultText}"></Label>-->
 
                     </StackLayout>
                 </Frame>
@@ -84,19 +86,19 @@
             </StackLayout>
             <StackLayout >
 
-                <Frame CornerRadius="5" Style="{StaticResource HighlightPanel}">
+                <Frame CornerRadius="5" Style="{StaticResource HighlightPanel}" >
 
-                    <StackLayout HorizontalOptions="FillAndExpand" >
+                    <StackLayout HorizontalOptions="FillAndExpand" BindingContext="{Binding Source={x:Static lib:AppData.Current},Path=AccountHoldings.BtcAudMarket}">
 
-                        <Label Text="Bitcoin" Style="{StaticResource SmallDefaultText}"></Label>
-                        <Label  Style="{StaticResource LargeDefaultText}">
-                            <Label.FormattedText>
+                        <Label Text="Bitcoin" Style="{StaticResource LargeDefaultText}"></Label>
+                        <!--<controls:MarketValue  ValueStyle="{StaticResource LargeDefaultText}" Value="{Binding LastPriceString}" >
+                            --><!--<Label.FormattedText>
                                 <FormattedString>
                                     <Span Text="AUD "></Span>
-                                    <Span Text="{Binding BtcAudCoin.LastPriceWithSymbol}"></Span>
+                                    <Span Text="{Binding }"></Span>
                                 </FormattedString>
-                            </Label.FormattedText>
-                        </Label>
+                            </Label.FormattedText>--><!--
+                        </controls:MarketValue>-->
                     </StackLayout>
 
                 </Frame>
@@ -141,7 +143,7 @@
 
                     <!--IsPullToRefreshEnabled="True" RefreshCommand="{Binding RefreshCommand}"  IsRefreshing="{Binding IsRefreshing}" SeparatorColor="{StaticResource SeparatorColor}" 
                      HasUnevenRows="True"-->
-                    <CollectionView x:Name="marketsListView" Style="{StaticResource MarketList}" ItemsSource="{Binding Holdings}"   SelectionMode="Single"    >
+                    <CollectionView x:Name="marketsListView" Style="{StaticResource MarketList}" ItemsSource="{Binding Balances}"   BindingContext="{Binding Source={x:Static lib:AppData.Current},Path=AccountHoldings}" SelectionMode="Single"    >
 
                         <CollectionView.EmptyView>
                             <StackLayout Spacing="20" HorizontalOptions="FillAndExpand" BindingContext="{Binding BindingContext, Source={x:Reference marketsListView}}">

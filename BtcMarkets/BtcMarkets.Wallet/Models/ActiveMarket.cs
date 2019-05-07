@@ -6,6 +6,7 @@ namespace BtcMarkets.Wallet.Models
 {
     public class ActiveMarket
     {
+        public string Id => $"{Instrument}-{Currency}";
         public string Name { get; set; }
 
         public string Instrument { get; set; }

@@ -90,7 +90,7 @@ namespace BtcMarkets.Wallet.Models
             set ;
         }
 
-        public string PriceString => AppHelper.FormatNumber(Price);
+        public string PriceString => AppHelper.FormatNumber(Price, Currency);
 
         public string VolumeString => AppHelper.FormatNumber(Volume, Instrument);
 

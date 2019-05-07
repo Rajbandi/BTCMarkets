@@ -93,7 +93,7 @@ namespace BtcMarkets.Wallet.Views
 
                 if (market != null)
                 {
-
+                    ViewModel.IsBusy = true;
                     AppData.Current.Market = market;
                     var detailsPage = new MarketDetailPage();
                     detailsPage.InputTransparent = false;
@@ -104,6 +104,11 @@ namespace BtcMarkets.Wallet.Views
 
                 }
             }
+        }
+
+        private void Grid_BindingContextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }
