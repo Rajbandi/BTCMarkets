@@ -2,41 +2,119 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              Style="{StaticResource DefaultPage}"
-              xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core" 
-            ios:Page.UseSafeArea="true" 
-             x:Class="BtcMarkets.Wallet.Views.SettingsPage">
-   
+              xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
+             xmlns:views="clr-namespace:BtcMarkets.Wallet.Views"
+             ios:Page.UseSafeArea="true" 
+             x:Name="SettingsListPage"
+             x:Class="BtcMarkets.Wallet.Views.SettingsPage"
+             >
+    <Shell.TitleView>
+        <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand"  Spacing="10">
+            <views:AccountHoldingsView  HorizontalOptions="FillAndExpand"></views:AccountHoldingsView>
+            <!--<StackLayout  Orientation="Horizontal" HorizontalOptions="EndAndExpand">
+                <Image Source="{Binding Converter={StaticResource FontIconImage},ConverterParameter=save}" WidthRequest="30" HeightRequest="30">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding BindingContext.SaveCommand, Source={x:Reference SettingsListPage}}"></TapGestureRecognizer>
+                    </Image.GestureRecognizers>
+                </Image>
+            </StackLayout>-->
+        </StackLayout>
+    </Shell.TitleView>
     <ContentPage.Content>
-        <Grid>
+        <Grid Style="{StaticResource DefaultGrid}" >
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="100" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            
-            <TableView Grid.Row="0" Grid.Column="0" Intent="Settings">
-                <TableRoot>
-                    <TableSection Title="General">
-                        <SwitchCell Text="Live Updates"   />
-                        <ViewCell>
-                            <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand" >
-                                <Label Text="Theme" HorizontalOptions="StartAndExpand" VerticalOptions="CenterAndExpand" Margin="5,0,0,0">
-                                </Label>
-                                <Picker WidthRequest="75" HorizontalOptions="EndAndExpand" VerticalOptions="StartAndExpand" SelectedIndex="0">
-                                    <Picker.Items>
-                                        <x:String>Dark</x:String>
-                                        <x:String>Light</x:String>
-                                    </Picker.Items>
-                                </Picker>
-                            </StackLayout>
+            <ScrollView Grid.Row="0" Grid.Column="0">
+            <TableView  Intent="Settings" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" HasUnevenRows="true" 
+                       BackgroundColor="{DynamicResource DefaultBackgroundColor}" >
+                <TableRoot TextColor="{Binding SectionColor}" >
+                    <TableSection Title="Api Credentials"  TextColor="{Binding SectionColor}"  >
+                      
+                        <ViewCell >
+                            <!--<Frame Style="{StaticResource DefaultFrame}" Margin="10" HeightRequest="150">-->
+                                <StackLayout HorizontalOptions="FillAndExpand"  Padding="10">
+                                    <Label Text="Provide api credentials manually or use [  ] to capture through QR code" Style="{StaticResource SmallDefaultText}">
+                                    </Label>
+                                    <Grid VerticalOptions="FillAndExpand" >
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"></RowDefinition>
+                                            <RowDefinition Height="Auto"></RowDefinition>
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="15*"></ColumnDefinition>
+                                            <ColumnDefinition Width="75*"></ColumnDefinition>
+                                            <ColumnDefinition Width="10*"></ColumnDefinition>
+                                        </Grid.ColumnDefinitions>
+
+                                        <Label Grid.Row="0" Grid.Column="0" Text="Api Key" Style="{StaticResource SmallDefaultAccentText}" VerticalOptions="CenterAndExpand"/>
+                                        <Entry Grid.Row="0" Grid.Column="1" Placeholder="Api Key here"  PlaceholderColor="{DynamicResource DefaultHintColor}" VerticalOptions="CenterAndExpand" Style="{StaticResource SmallDefaultEntry}" 
+                                               Text="{Binding ApiKey, Mode=TwoWay}" />
+                                        <Image  Grid.Row="0" Grid.Column="2" Source="{Binding Converter={StaticResource FontIconImage},ConverterParameter=fullscreen}">
+                                            <Image.GestureRecognizers>
+                                                <TapGestureRecognizer Tapped="ApiKeyQr_Tapped" />
+                                            </Image.GestureRecognizers>
+                                        </Image>
+
+                                        <Label Grid.Row="1" Grid.Column="0" Text="Secret" Style="{StaticResource SmallDefaultAccentText}" VerticalOptions="CenterAndExpand"/>
+                                        <Entry Grid.Row="1" Grid.Column="1" Placeholder="Secret here" PlaceholderColor="{DynamicResource DefaultHintColor}" VerticalOptions="CenterAndExpand"  Style="{StaticResource SmallDefaultEntry}" 
+                                               Text="{Binding Secret, Mode=TwoWay}"/>
+
+                                        <Image Grid.Row="1" Grid.Column="2" Source="{Binding Converter={StaticResource FontIconImage},ConverterParameter=fullscreen}">
+                                            <Image.GestureRecognizers>
+                                                <TapGestureRecognizer Tapped="SecretQr_Tapped" />
+                                            </Image.GestureRecognizers>
+                                        </Image>
+                                    </Grid>
+                                </StackLayout>
+                            <!--</Frame>-->
                         </ViewCell>
                     </TableSection>
+                    <TableSection Title="General" TextColor="{Binding SectionColor}" >
+                      
+                        <ViewCell >
+                            <!--<Frame Style="{StaticResource DefaultFrame}" Margin="10">-->
+                                <StackLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"  Padding="10">
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"></RowDefinition>
+                                            <RowDefinition Height="Auto"></RowDefinition>
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="40*"></ColumnDefinition>
+                                            <ColumnDefinition Width="60*"></ColumnDefinition>
+                                        </Grid.ColumnDefinitions>
+                                        <Label Grid.Row="0" Grid.Column="0" Text="Live Updates" VerticalOptions="CenterAndExpand" VerticalTextAlignment="Center" Style="{StaticResource SmallDefaultAccentText}"></Label>
+                                        <Switch Grid.Row="0" Grid.Column="1" HorizontalOptions="EndAndExpand" VerticalOptions="CenterAndExpand" IsToggled="{Binding LiveUpdates, Mode=TwoWay}" OnColor="{DynamicResource ReverseBackgroundColor}" ></Switch>
+                                        <Label  Grid.Row="1" Grid.Column="0" Text="Theme" HorizontalOptions="StartAndExpand" VerticalOptions="CenterAndExpand" Style="{StaticResource SmallDefaultAccentText}">
+                                        </Label>
+                                        <Picker Grid.Row="1" Grid.Column="1" WidthRequest="75" HorizontalOptions="EndAndExpand" VerticalOptions="StartAndExpand"
+                                                SelectedItem="{Binding Theme, Mode=TwoWay}"
+                                                Style="{StaticResource SmallDefaultPicker}" >
+                                            <Picker.Items>
+                                                <x:String>Dark</x:String>
+                                                <x:String>Light</x:String>
+                                            </Picker.Items>
+                                        </Picker>
+
+                                    </Grid>
+                                </StackLayout>
+                            <!--</Frame>-->
+                        </ViewCell>
+                    </TableSection>
+                  
                 </TableRoot>
             </TableView>
-
+            </ScrollView>
+            <StackLayout Grid.Row="1" Grid.Column="0" HorizontalOptions="CenterAndExpand" VerticalOptions="EndAndExpand">
+                <Frame Style="{StaticResource DefaultFrame}" HeightRequest="50" Margin="10,0,10,0" BorderColor="{DynamicResource ReversebackgroundColor}" Padding="0" BackgroundColor="{DynamicResource PrimaryColor}">
+                    <Button x:Name="BtnSave" Text="Save" Style="{StaticResource DefaultButton}" Command="{Binding SaveCommand}" ></Button>
+                </Frame>
+            </StackLayout>
 
         </Grid>
     </ContentPage.Content>

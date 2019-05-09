@@ -31,6 +31,8 @@ namespace BtcMarkets.Wallet.Droid
             ToastNotification.Init(this);
             UserDialogs.Init(this);
 
+            ZXing.Net.Mobile.Forms.Android.Platform.Init();
+
             global::Xamarin.Forms.Forms.SetFlags("Shell_Experimental", "Visual_Experimental", "CollectionView_Experimental", "FastRenderers_Experimental");
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             CrossCurrentActivity.Current.Init(this, savedInstanceState);
@@ -41,6 +43,8 @@ namespace BtcMarkets.Wallet.Droid
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Android.Content.PM.Permission[] grantResults)
         {
             Xamarin.Essentials.Platform.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+
+            ZXing.Net.Mobile.Android.PermissionsHandler.OnRequestPermissionsResult(requestCode, permissions, grantResults);
 
             base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
         }

@@ -118,7 +118,7 @@ namespace BtcMarkets.Wallet.ViewModels
                                     _btcGroups
                                 };
 
-                await Task.Delay(200);
+                await Task.Delay(400);
                 IsBusy = false;
             });
         }

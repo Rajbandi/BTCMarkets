@@ -41,7 +41,7 @@ namespace BtcMarkets.Core.Api
 
         public ApiSettings Settings => _settings;
 
-        public async Task<AccountBalanceResponse> GetAccountBalance()
+        public async Task<AccountBalanceResponse> GetAccountBalance(IBtcMarketsApi api = null)
         {
             var responseObj = new AccountBalanceResponse
             {
@@ -50,7 +50,11 @@ namespace BtcMarkets.Core.Api
 
             try
             {
-                HttpResponseMessage response = await Api.GetAccountBalanceRaw();
+                if(api == null)
+                {
+                    api = Api;
+                }
+                HttpResponseMessage response = await api.GetAccountBalanceRaw();
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -131,6 +135,23 @@ namespace BtcMarkets.Core.Api
             return responseObj;
         }
 
+        public async Task<bool> CheckApiCredentials(string apiKey, string secret)
+        {
+            var settings = new ApiSettings();
+            settings.BaseUrl = _settings.BaseUrl;
+            settings.ApiKey = apiKey;
+            settings.Secret = secret;
+
+            var authHandler = new AuthenticationHandler(settings);
+            var client = new HttpClient(authHandler)
+            {
+                BaseAddress = new Uri(settings.BaseUrl)
+            };
+            var api = RestService.For<IBtcMarketsApi>(client);
+            var response = await GetAccountBalance(api);
+            var isValid = response.Success.HasValue ? response.Success.Value : false;
+            return isValid;
+        }
 
         private IBtcMarketsApi _api;
         public IBtcMarketsApi Api

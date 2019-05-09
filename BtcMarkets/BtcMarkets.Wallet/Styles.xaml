@@ -95,6 +95,15 @@
         <Setter Property="FontSize" Value="Large"/>
     </Style>
 
+    <Style x:Key="DefaultPicker" TargetType="Picker">
+
+        <Setter Property="TextColor" Value="{DynamicResource DefaultTextColor}"></Setter>
+        <Setter Property="TitleColor" Value="{DynamicResource DefaultTextColor}"></Setter>
+    </Style>
+    <Style x:Key="SmallDefaultPicker" TargetType="Picker"  BasedOn="{StaticResource DefaultPicker}">
+        <Setter Property="FontSize" Value="Small"/>
+    </Style>
+
     <Style x:Key="DefaultEntry" TargetType="Entry">
         
         <Setter Property="TextColor" Value="{DynamicResource DefaultTextColor}"></Setter>
@@ -120,6 +129,10 @@
     </Style>
     <Style x:Key="MicroDefaultAccentText" TargetType="Label" BasedOn="{StaticResource DefaultAccentText}">
         <Setter Property="FontSize" Value="Micro"/>
+
+    </Style>
+    <Style x:Key="SmallDefaultAccentText" TargetType="Label" BasedOn="{StaticResource DefaultAccentText}">
+        <Setter Property="FontSize" Value="Small"/>
 
     </Style>
     <Style x:Key="MediumDefaultAccentText" TargetType="Label" BasedOn="{StaticResource DefaultAccentText}">
@@ -408,13 +421,15 @@
     </Style>
     <Style x:Key="DefaultButtonFrame" TargetType="Frame">
     
-    <Setter Property="BackgroundColor" Value="{DynamicResource NavigationPrimary}" />
+         <Setter Property="BackgroundColor" Value="{DynamicResource PrimaryColor}" />
         <Setter Property="CornerRadius" Value="6"/>
         <Setter Property="BorderColor" Value="{DynamicResource ReverseBackgroundColor}"/>
         <Setter Property="Padding" Value="2"></Setter>
         <Setter Property="HasShadow" Value="False"></Setter>
     </Style>
-
+    <Style x:Key="DefaultAccentButton" TargetType="Button" BasedOn="{StaticResource DefaultButton}">
+        <Setter Property="BackgroundColor" Value="{DynamicResource AccentColor}" />
+    </Style>
     <Style x:Key="DefaultShadowfullButton" BasedOn="{StaticResource DefaultButton}" TargetType="Button">
         <Setter Property="CornerRadius">24</Setter>
         <Setter Property="HeightRequest">64</Setter>

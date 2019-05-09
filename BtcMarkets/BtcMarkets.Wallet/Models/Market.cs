@@ -58,7 +58,11 @@ namespace BtcMarkets.Wallet.Models
         public double Bid
         {
             get => _bid;
-            set => SetProperty(ref _bid, value, nameof(Bid));
+            set
+            {
+                SetProperty(ref _bid, value, nameof(Bid));
+                OnPropertyChanged(nameof(BidString));
+            }
         }
 
         public string BidString => AppHelper.FormatNumber(Bid, Currency);
@@ -68,7 +72,11 @@ namespace BtcMarkets.Wallet.Models
         public double Ask
         {
             get => _ask;
-            set => SetProperty(ref _ask, value, nameof(Ask));
+            set
+            {
+                SetProperty(ref _ask, value, nameof(Ask));
+                OnPropertyChanged(nameof(AskString));
+            }
         }
 
         public string AskString => AppHelper.FormatNumber(Ask, Currency);
@@ -113,16 +121,24 @@ namespace BtcMarkets.Wallet.Models
         public double Volume
         {
             get => _volume;
-            set => SetProperty(ref _volume, value, nameof(Volume));
+            set
+            {
+                SetProperty(ref _volume, value, nameof(Volume));
+                OnPropertyChanged(nameof(VolumeString));
+            }
         }
 
-        public string VolumeString => AppHelper.FormatNumber(Volume, Instrument);
+        public string VolumeString => AppHelper.FormatNumber(Volume);
 
         private double _holdings;
         public double Holdings
         {
             get => _holdings;
-            set => SetProperty(ref _holdings, value, nameof(Holdings));
+            set
+            {
+                SetProperty(ref _holdings, value, nameof(Holdings));
+                OnPropertyChanged(nameof(HoldingsString));
+            }
         }
 
         public string HoldingsString

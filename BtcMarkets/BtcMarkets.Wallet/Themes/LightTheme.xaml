@@ -31,7 +31,7 @@
     <Color x:Key="ReverseTextColor">#F2F4F4</Color>
     <Color x:Key="DefaultTextColor">#99A3A4</Color>
     <Color x:Key="DefaultHeaderColor">#ffffff</Color>
-    
+    <Color x:Key="DefaultHintColor">#DCDCDC</Color>
     <Color x:Key="SeparatorColor">#EAEDED</Color>
     <Color x:Key="HighlightBackgroundColor">#ffAA55</Color>
     <Color x:Key="HighlightTextColor">#F2F4F4</Color>
