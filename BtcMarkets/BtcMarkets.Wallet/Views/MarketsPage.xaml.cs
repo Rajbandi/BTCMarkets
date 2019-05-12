@@ -1,4 +1,5 @@
 ﻿
+using BtcMarkets.Wallet.Helpers;
 using BtcMarkets.Wallet.Models;
 using BtcMarkets.Wallet.ViewModels;
 using System;
@@ -10,15 +11,24 @@ namespace BtcMarkets.Wallet.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class MarketsPage : ContentPage
     {
+       
         public MarketsPage()
         {
             InitializeComponent();
 
             BindingContext = ViewModel = new MarketsPageViewModel();
+          
         }
 
         public MarketsPageViewModel ViewModel { get; private set; }
 
+        
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+         
+          
+        }
         protected override void OnSizeAllocated(double width, double height)
         {
             try

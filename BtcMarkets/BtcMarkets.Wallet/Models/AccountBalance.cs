@@ -1,7 +1,10 @@
-﻿using System;
+﻿using BtcMarkets.Wallet.Helpers;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Runtime.Serialization;
 using System.Text;
+using Xamarin.Forms;
 
 namespace BtcMarkets.Wallet.Models
 {
@@ -88,9 +91,20 @@ namespace BtcMarkets.Wallet.Models
         public string Image
         {
             get => _image;
-            set => SetProperty(ref _image, value, nameof(Image));
+            set
+            {
+                SetProperty(ref _image, value, nameof(Image));
+               
+            }
         }
 
+        public ImageSource ImageSource
+        {
+            get
+            {
+                return AppHelper.GetMarketImage(Currency);
+            }
+        }
         private double _totalAud;
         [DataMember(Name = "totalaud")]
         public double TotalAud

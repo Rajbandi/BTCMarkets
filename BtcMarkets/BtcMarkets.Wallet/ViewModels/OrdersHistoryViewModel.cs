@@ -86,6 +86,7 @@ namespace BtcMarkets.Wallet.ViewModels
                 var pair = $"{market.Instrument}/{market.Currency}";
                 var tradePair = new MarketTradePair
                 {
+                    Instrument = market.Instrument,
                     Pair = pair,
                     Image = market.Image,
                     Style = Application.Current.Resources["SmallDefaultText"] as Style
@@ -162,6 +163,11 @@ namespace BtcMarkets.Wallet.ViewModels
 
         public void RefreshData(long? since = null)
         {
+            if (!AppData.Current.CheckInternet())
+                return;
+
+            if (!AppData.Current.IsAccountSetup)
+                return;
             Device.BeginInvokeOnMainThread(async () =>
             {
                 await Task.Run(async () =>

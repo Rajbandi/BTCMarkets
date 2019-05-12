@@ -24,6 +24,7 @@ namespace BtcMarkets.Wallet.ViewModels
                 return style.ToHexWeb();
             }
         }
+
         public string SwitchColor
         {
             get
@@ -32,11 +33,19 @@ namespace BtcMarkets.Wallet.ViewModels
                 return style.ToHexWeb();
             }
         }
+
         private bool _liveUpdates;
         public bool LiveUpdates
         {
             get => _liveUpdates;
             set => SetProperty(ref _liveUpdates, value, nameof(LiveUpdates));
+        }
+
+        private bool _notifications;
+        public bool Notifications
+        {
+            get => _notifications;
+            set =>  SetProperty(ref _notifications, value, nameof(Notifications));
         }
 
         private string _theme;
@@ -50,7 +59,12 @@ namespace BtcMarkets.Wallet.ViewModels
         public string ApiKey
         {
             get => _apiKey;
-            set => SetProperty(ref _apiKey, value, nameof(ApiKey));
+            set
+            {
+                
+                SetProperty(ref _apiKey, value, nameof(ApiKey));
+                
+            }
         }
 
         private string _secret;
@@ -67,6 +81,7 @@ namespace BtcMarkets.Wallet.ViewModels
             var settings = data.Settings;
 
             LiveUpdates = settings.LiveUpdates;
+            Notifications = settings.Notifications;
             var theme = settings.Theme;
             if(string.IsNullOrWhiteSpace(theme))
             {
@@ -89,15 +104,17 @@ namespace BtcMarkets.Wallet.ViewModels
             var data = AppData.Current;
             var settings = data.Settings;
             var isValid = await VerifyApiData();
-            if(!isValid)
+            if (!isValid)
             {
                 AppHelper.ShowError("Invalid api credentials.");
             }
+            else
+            {
+                settings.LiveUpdates = LiveUpdates;
+                settings.Theme = Theme;
 
-            settings.LiveUpdates = LiveUpdates;
-            settings.Theme = Theme;
-
-            data.SaveSettings(true);
+                data.SaveSettings(true);
+            }
             IsBusy = false;
         }
 

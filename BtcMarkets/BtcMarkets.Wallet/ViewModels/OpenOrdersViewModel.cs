@@ -34,6 +34,12 @@ namespace BtcMarkets.Wallet.ViewModels
 
         public void RefreshData()
         {
+            if (!AppData.Current.CheckInternet())
+                return;
+
+            if (!AppData.Current.IsAccountSetup)
+                return;
+
             Device.BeginInvokeOnMainThread(async () =>
             {
                 await Task.Run(async () =>

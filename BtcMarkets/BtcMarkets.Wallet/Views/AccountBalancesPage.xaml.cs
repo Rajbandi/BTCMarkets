@@ -1,4 +1,5 @@
-﻿using BtcMarkets.Wallet.ViewModels;
+﻿using BtcMarkets.Wallet.Helpers;
+using BtcMarkets.Wallet.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,5 +21,11 @@ namespace BtcMarkets.Wallet.Views
         }
 
         public AccountBalancesViewModel ViewModel { get; private set; }
+
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+          
+        }
     }
 }

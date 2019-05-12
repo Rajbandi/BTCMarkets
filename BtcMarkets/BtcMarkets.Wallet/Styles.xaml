@@ -58,6 +58,7 @@
     <converters:InverseBoolConverter x:Key="InverseBool"/>
     <converters:IfMatchValueConverter x:Key="IfMatchValue"/>
     <converters:ToggleTextStyleConverter x:Key="ToggleTextStyle"/>
+    
     <Style x:Key="Seperator1" TargetType="BoxView">
         <Setter Property="HeightRequest" Value="1"></Setter>
         <Setter Property="BackgroundColor" Value="{DynamicResource SeparatorColor}"></Setter>
@@ -96,7 +97,7 @@
     </Style>
 
     <Style x:Key="DefaultPicker" TargetType="Picker">
-
+        <Setter Property="BackgroundColor" Value="{DynamicResource DefaultBackgroundColor}"></Setter>
         <Setter Property="TextColor" Value="{DynamicResource DefaultTextColor}"></Setter>
         <Setter Property="TitleColor" Value="{DynamicResource DefaultTextColor}"></Setter>
     </Style>
@@ -105,9 +106,9 @@
     </Style>
 
     <Style x:Key="DefaultEntry" TargetType="Entry">
-        
+        <Setter Property="BackgroundColor" Value="{DynamicResource DefaultBackgroundColor}"></Setter>
         <Setter Property="TextColor" Value="{DynamicResource DefaultTextColor}"></Setter>
-        <Setter Property="PlaceholderColor" Value="{DynamicResource DefaultTextColor}"></Setter>
+        <Setter Property="PlaceholderColor" Value="{DynamicResource GrayColor1}"></Setter>
     </Style>
     <Style x:Key="MicroDefaultEntry" TargetType="Entry" BasedOn="{StaticResource DefaultEntry}">
         <Setter Property="FontSize" Value="Micro"/>
@@ -122,6 +123,9 @@
         <Setter Property="FontSize" Value="Large"/>
     </Style>
 
+    <Style x:Key="DefaultSwitch" TargetType="Switch">
+        <Setter Property="BackgroundColor" Value="{DynamicResource DefaultBackgroundColor}"></Setter>
+    </Style>
 
     <Style x:Key="DefaultAccentText" TargetType="Label">
         <Setter Property="FontSize" Value="Small"/>
@@ -139,7 +143,10 @@
         <Setter Property="FontSize" Value="Medium"/>
 
     </Style>
+    <Style x:Key="LargeDefaultAccentText" TargetType="Label" BasedOn="{StaticResource DefaultAccentText}">
+        <Setter Property="FontSize" Value="Large"/>
 
+    </Style>
     <!-- Market list view styles -->
 
     <Style x:Key="ListHeader" TargetType="Grid" >
@@ -187,6 +194,11 @@
         <Setter Property="FontSize" Value="Micro"></Setter>
         <Setter Property="TextColor" Value="{DynamicResource DefaultTextColor}"/>
     </Style>
+    <Style x:Key="MarketListVolumeSymbol" TargetType="Label">
+        <Setter Property="FontSize" Value="Micro"></Setter>
+        <Setter Property="TextColor" Value="{DynamicResource AccentColor}"/>
+    </Style>
+
     <Style x:Key="MarketListHoldingsValue" TargetType="Label">
         <Setter Property="FontSize" Value="Small"></Setter>
         <Setter Property="TextColor" Value="{DynamicResource DefaultTextColor}"/>
@@ -524,5 +536,15 @@
 
     </Style>
 
+    <Style x:Key="DefaultSection" TargetType="StackLayout">
+        <!--<Setter Property="BackgroundColor" Value="{DynamicResource ReverseBackgroundColor}"></Setter>-->
+        <Setter Property="HorizontalOptions" Value="FillAndExpand"/>
+        <Setter Property="Padding" Value="10"/>
+    </Style>
+
+    <Style x:Key="DefaultFontIconSource" TargetType="FontImageSource">
+        <Setter Property="FontFamily" Value="{StaticResource MaterialDesign}"/>
+        <Setter Property="Color" Value="{DynamicResource DefaultTextColor}"/>
+    </Style>
     
 </ResourceDictionary>

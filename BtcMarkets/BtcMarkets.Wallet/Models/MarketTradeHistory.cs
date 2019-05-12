@@ -22,17 +22,24 @@ namespace BtcMarkets.Wallet.Models
         public double? Price { get; set; }
 
         [DataMember(Name = "pricestring")]
-        public string PriceString => AppHelper.FormatNumber(Price.HasValue?Price.Value:0);
+        public string PriceString => AppHelper.FormatNumber(Price.HasValue?Price.Value:0, Currency);
 
         [DataMember(Name = "volume")]
         public double? Volume { get; set; }
 
 
         [DataMember(Name = "volumestring")]
-        public string VolumeString => AppHelper.FormatNumber(Volume.HasValue?Volume.Value:0, Currency);
+        public string VolumeString => AppHelper.FormatNumber(Volume.HasValue?Volume.Value:0, Instrument);
+
+        [DataMember(Name = "instrument")]
+        public string Instrument { get; set; }
 
         [DataMember(Name = "currency")]
         public string Currency { get; set; }
+
+
+        [DataMember(Name = "currencysymbol")]
+        public string CurrencySymbol => Currency == Constants.Btc ? Constants.BtcSymbol : Constants.AudSymbol;
 
     }
 }

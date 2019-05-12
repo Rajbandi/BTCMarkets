@@ -68,7 +68,8 @@
                             <DataTemplate>
 
                                 <StackLayout Margin="5" HeightRequest="20" Orientation="Horizontal" HorizontalOptions="FillAndExpand"  BackgroundColor="{DynamicResource DefaultBackgroundColor}" >
-                                    <Image Source="{Binding Image,Converter={StaticResource Base64ToImage}}" WidthRequest="20" HeightRequest="20" />
+                                    <Image Source="{Binding ImageSource}" WidthRequest="20" HeightRequest="20" />
+                                    <!--<Image Source="{Binding Image,Converter={StaticResource Base64ToImage}}" WidthRequest="20" HeightRequest="20" />-->
                                     <Label  Text="{Binding Pair}" Style="{Binding Style}"  VerticalOptions="CenterAndExpand">
                                     </Label>
                                 </StackLayout>

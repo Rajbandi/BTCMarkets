@@ -38,7 +38,7 @@ namespace BtcMarkets.Core.Helpers
             var unixTime = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
             var secondsSinceEpoch = (long)(date.Value - unixTime).TotalMilliseconds;
             return secondsSinceEpoch;
-            
+
         }
 
         public static DateTime ToLocalTime(long utcTimestamp)
@@ -62,7 +62,7 @@ namespace BtcMarkets.Core.Helpers
 
         public static long ToLongValue(double value)
         {
-            return (long) (value * ApiConstants.CurrencyDecimal);
+            return (long)(value * ApiConstants.CurrencyDecimal);
         }
 
         public static double ToDoubleValue(long value)
@@ -112,14 +112,9 @@ namespace BtcMarkets.Core.Helpers
             return theDate.Date.AddDays(1).AddTicks(-1);
         }
 
-        public static string ToRelativeTime(long? timestamp)
+        public static string ToRelativeTime(DateTime date)
         {
-            if (!timestamp.HasValue)
-                return string.Empty;
-
-            var val = timestamp.Value;
-
-            var dt = GetDate(val);
+            var dt = date;
             var to = DateTime.UtcNow;
 
             var ts = to - dt;
@@ -156,6 +151,19 @@ namespace BtcMarkets.Core.Helpers
                 int years = Convert.ToInt32(Math.Floor((double)ts.Days / 365));
                 return years <= 1 ? "one year ago" : years + " years ago";
             }
+        }
+        public static string ToRelativeTime(long? timestamp)
+        {
+            if (!timestamp.HasValue)
+                return string.Empty;
+
+            var val = timestamp.Value;
+
+            var dt = GetDate(val);
+
+            var str = ToRelativeTime(dt);
+
+            return str;
         }
     }
 }

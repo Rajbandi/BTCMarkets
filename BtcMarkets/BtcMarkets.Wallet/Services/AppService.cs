@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Acr.UserDialogs;
+using BtcMarkets.Wallet.Helpers;
 using BtcMarkets.Wallet.Models;
 
 namespace BtcMarkets.Wallet.Services
@@ -12,9 +13,23 @@ namespace BtcMarkets.Wallet.Services
         private IProgressDialog _dialog;
 
         
-        public void ShowAlert(AlertData data)
+        public async void ShowAlert(AlertData data)
         {
-            throw new NotImplementedException();
+            if (data == null)
+                return;
+            var alertConfig = new AlertConfig
+            {
+                Message = data.Message,
+                OkText = data.OkText,
+                Title = data.Title,
+
+            };
+
+            if(data.action != null)
+            {
+                alertConfig.SetAction(data.action);
+            }
+            await UserDialogs.Instance.AlertAsync(alertConfig);
         }
 
         public void ShowLoader(MessageData data = null)
@@ -66,34 +81,46 @@ namespace BtcMarkets.Wallet.Services
 
         }
 
-        public void ShowError(string error)
+        public void ShowError(string error, string color = null)
         {
+            if (string.IsNullOrWhiteSpace(color))
+            {
+                color = "#ff0000";
+            }
             var data = new ToastData
             {
                 Message = error,
-                BackgroundColor = "#ff0000"
+                BackgroundColor = color
             };
 
             ShowToast(data);
         }
 
-        public void ShowMessage(string message)
+        public void ShowMessage(string message, string color = null)
         {
+           
             var data = new ToastData
             {
                 Message = message,
-
+                
             };
-
+            if (!string.IsNullOrWhiteSpace(color))
+            {
+                data.BackgroundColor = color;
+            }
             ShowToast(data);
         }
 
-        public void ShowSuccess(string message)
+        public void ShowSuccess(string message, string color = null)
         {
+            if(string.IsNullOrWhiteSpace(color))
+            {
+                color = "#00ff00";
+            }
             var data = new ToastData
             {
                 Message = message,
-                BackgroundColor = "#00ff00"
+                BackgroundColor = color
             };
 
             ShowToast(data);

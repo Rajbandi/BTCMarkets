@@ -16,6 +16,12 @@ namespace BtcMarkets.Wallet.ViewModels
             LoadMarketNews();
         }
 
+        private MarketNewsItem _selectedItem;
+        public MarketNewsItem SelectedNewsItem
+        {
+            get => _selectedItem;
+            set => SetProperty(ref _selectedItem, value, nameof(SelectedNewsItem));
+        }
         public ObservableCollection<MarketNewsItem> MarketNews { get; private set; }
 
         private void LoadMarketNews()
@@ -32,6 +38,19 @@ namespace BtcMarkets.Wallet.ViewModels
             }
 
             OnPropertyChanged("MarketNews");
+        }
+
+        public ICommand OpenCommand
+        {
+            get
+            {
+                return new Command(() =>
+                {
+                    var item = SelectedNewsItem;
+
+
+                });
+            }
         }
     }
 }

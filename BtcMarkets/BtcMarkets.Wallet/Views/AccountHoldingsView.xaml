@@ -2,6 +2,7 @@
 <ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                xmlns:lib ="clr-namespace:BtcMarkets.Wallet"
+             xmlns:controls="clr-namespace:BtcMarkets.Wallet.Controls"
              x:Name="AccountValueView"
              x:Class="BtcMarkets.Wallet.Views.AccountHoldingsView">
   <ContentView.Content>
@@ -19,14 +20,22 @@
                         </OnPlatform>
                     </Label.Style>
                 </Label>
-                <Label  Text="{Binding HoldingsValue}" HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" >
+                <controls:MarketValue Value="{Binding HoldingsValue}" HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center">
+                    <controls:MarketValue.ValueStyle>
+                        <OnPlatform x:TypeArguments="Style">
+                            <On Platform="iOS" Value="{StaticResource MediumDefaultText}" />
+                            <On Platform="Android" Value="{StaticResource MediumDefaultText}" />
+                        </OnPlatform>
+                    </controls:MarketValue.ValueStyle>
+                </controls:MarketValue>
+                <!--<Label  Text="{Binding HoldingsValue}" HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" >
                     <Label.Style>
                         <OnPlatform x:TypeArguments="Style">
                             <On Platform="iOS" Value="{StaticResource MediumDefaultText}" />
                             <On Platform="Android" Value="{StaticResource MediumDefaultText}" />
                         </OnPlatform>
                     </Label.Style>
-                </Label>
+                </Label>-->
                 </StackLayout>
                 <!--<StackLayout  Orientation="Horizontal">
                     <Image Source="{Binding Converter={StaticResource FontIconImage},ConverterParameter=settings}"></Image>

@@ -278,6 +278,9 @@ namespace BtcMarkets.Wallet.ViewModels
 
         public async Task LoadReport(HistoryPeriod period = HistoryPeriod.Day)
         {
+            if (!AppData.Current.CheckInternet())
+                return;
+
             await Task.Run(() =>
             {
                 Device.BeginInvokeOnMainThread(async () =>

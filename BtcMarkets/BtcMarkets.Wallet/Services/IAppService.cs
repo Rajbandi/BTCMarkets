@@ -17,11 +17,11 @@ namespace BtcMarkets.Wallet.Services
 
         void ShowToast(ToastData data);
 
-        void ShowError(string error);
+        void ShowError(string error, string color = null);
 
-        void ShowMessage(string message);
+        void ShowMessage(string message, string color = null);
 
-        void ShowSuccess(string message);
+        void ShowSuccess(string message, string color = null);
 
         void SetLoaderMessage(string message);
 

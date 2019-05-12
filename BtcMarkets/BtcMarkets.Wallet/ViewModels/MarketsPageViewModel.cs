@@ -7,6 +7,7 @@ using Xamarin.Forms;
 using System.Linq;
 using System.Windows.Input;
 using System.Threading.Tasks;
+using BtcMarkets.Wallet.Helpers;
 
 namespace BtcMarkets.Wallet.ViewModels
 {
@@ -27,12 +28,12 @@ namespace BtcMarkets.Wallet.ViewModels
             get => _isSearchBarVisible;
             set => SetProperty(ref _isSearchBarVisible, value);
         }
-
+        
         public MarketsPageViewModel()
         {
             Subscribe();
-
             RefreshMarkets();
+          
         }
         public void RefreshMarkets()
         {
@@ -44,6 +45,8 @@ namespace BtcMarkets.Wallet.ViewModels
                 if (appData.Markets == null || !appData.Markets.Any())
                 {
                     await appData.InitMarkets();
+
+               
                 }
                 else
                 {
@@ -119,6 +122,7 @@ namespace BtcMarkets.Wallet.ViewModels
                                 };
 
                 await Task.Delay(400);
+               
                 IsBusy = false;
             });
         }

@@ -15,20 +15,26 @@
     <Color x:Key="GradientColor1">#2193b0</Color>
     <Color x:Key="GradientColor2">#6dd5ed</Color>
     <!--<Color x:Key="AccentColor1">#ff9933 #ffAA55</Color>-->
-    <Color x:Key="AccentColor">#ffAA55</Color>
+    <!--<Color x:Key="AccentColor">#ffAA55</Color>-->
+    <Color x:Key="AccentColor">#C58436</Color>
     <Color x:Key="GrayColor1">#DCDCDC</Color>
     <Color x:Key="GrayColor2">#EAEDED</Color>
     <Color x:Key="LightWhiteColor1">#F4F6F6</Color>
     <Color x:Key="LightWhiteColor2">#F2F4F4</Color>
     <Color x:Key="LightWhiteColor3">#F2F3F4</Color>
     <Color x:Key="LightBlackColor1">#566573</Color>
-
+    <Color x:Key="LightBlackColor2">#1E1E1E</Color>
+    <Color x:Key="LightBlackColor3">#2D2D30</Color>
     <Color x:Key="TextColor1">#99A3A4</Color>
 
     
-    <Color x:Key="PageBackgroundColor">#566573</Color>
+    <!--<Color x:Key="PageBackgroundColor">#566573</Color>-->
+    <Color x:Key="PageBackgroundColor">#1E1E1E</Color>
+    <Color x:Key="DefaultBackgroundColor">#1E1E1E</Color>
+    <!--Color x:Key="PageBackgroundColor">#2D2D30</Color>
+    <Color x:Key="DefaultBackgroundColor">#2D2D30</Color>-->
     <Color x:Key="PageTextColor">#99A3A4</Color>
-    <Color x:Key="DefaultBackgroundColor">#566573</Color>
+    
     <Color x:Key="ReverseBackgroundColor">#F2F4F4</Color>
     <Color x:Key="ReverseTextColor">#99A3A4</Color>
     <Color x:Key="DefaultTextColor">#F2F3F4</Color>
@@ -43,5 +49,9 @@
     <Color x:Key="LoaderColor">#3C6B3C</Color>
     <Color x:Key="LoaderBackgroundColor">#F2F4F4</Color>
     <Color x:Key="HighlightTransparentColor">#E6ff9933</Color>
+
+    <Color x:Key="SuccessMessageColor">#229954</Color>
+    <Color x:Key="ErrorMessageColor">#CB4335</Color>
+    <Color x:Key="MessageColor">#2E86C1</Color>
 
 </ResourceDictionary>

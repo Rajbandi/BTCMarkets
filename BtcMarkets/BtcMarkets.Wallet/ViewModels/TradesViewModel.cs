@@ -53,6 +53,7 @@ namespace BtcMarkets.Wallet.ViewModels
             {
                 marketPair = new MarketTradePair
                 {
+                    Instrument = market.Instrument,
                     Pair = market.Pair,
                     Image = market.Image,
                 };
@@ -98,6 +99,9 @@ namespace BtcMarkets.Wallet.ViewModels
       
         public void RefreshData()
         {
+            if (!AppData.Current.CheckInternet())
+                return;
+
             //Device.BeginInvokeOnMainThread(async () =>
             //{
                  Task.Run(async () =>
@@ -124,7 +128,8 @@ namespace BtcMarkets.Wallet.ViewModels
                     BuyOrders.Clear();
                     foreach (var order in orders.Buy)
                     {
-                        order.Currency = market.Instrument;
+                        order.Instrument = market.Instrument;
+                        order.Currency = market.Currency;
                         BuyOrders.Add(order);
                     }
 
@@ -134,7 +139,8 @@ namespace BtcMarkets.Wallet.ViewModels
                     SellOrders.Clear();
                     foreach (var order in orders.Sell)
                     {
-                        order.Currency = market.Instrument;
+                        order.Instrument = market.Instrument;
+                        order.Currency = market.Currency;
                         SellOrders.Add(order);
                     }
 
@@ -145,7 +151,8 @@ namespace BtcMarkets.Wallet.ViewModels
                     var history = await appData.GetMarketTradeHistory(market);
                     foreach (var trade in history)
                     {
-                        trade.Currency = market.Instrument;
+                        trade.Instrument = market.Instrument;
+                        trade.Currency = market.Currency;
                         TradeHistory.Add(trade);
                     }
 
@@ -164,8 +171,9 @@ namespace BtcMarkets.Wallet.ViewModels
                 foreach (var market in markets)
                 {
                     var pair = $"{market.Instrument}/{market.Currency}";
-                    var tradePair = new MarketTradePair
-                    {
+                var tradePair = new MarketTradePair
+                {
+                        Instrument = market.Instrument,
                         Pair = pair,
                         Image = market.Image,
                         Style = Application.Current.Resources["SmallDefaultText"] as Style

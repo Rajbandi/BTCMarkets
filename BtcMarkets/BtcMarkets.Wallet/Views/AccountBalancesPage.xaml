@@ -67,8 +67,8 @@
 
                                 <StackLayout Grid.Column="0" Grid.Row="0" Orientation="Horizontal"  HorizontalOptions="FillAndExpand" >
                                     <Frame Style="{StaticResource MarketListFrame}">
-                                        <Image Source="{Binding Image,Converter={StaticResource Base64ToImage}}" WidthRequest="24" HeightRequest="24">
-
+                                        <!--<Image Source="{Binding Image,Converter={StaticResource Base64ToImage}}" WidthRequest="24" HeightRequest="24">-->
+                                        <Image Source="{Binding ImageSource}" WidthRequest="24" HeightRequest="24">
                                             <Image.VerticalOptions>
                                                 <OnPlatform x:TypeArguments="LayoutOptions">
                                                     <On Platform="Android" Value="StartAndExpand"/>

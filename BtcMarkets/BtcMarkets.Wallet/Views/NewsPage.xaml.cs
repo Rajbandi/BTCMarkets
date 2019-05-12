@@ -1,10 +1,7 @@
-﻿using BtcMarkets.Wallet.ViewModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿using BtcMarkets.Wallet.Helpers;
+using BtcMarkets.Wallet.Models;
+using BtcMarkets.Wallet.ViewModels;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -21,6 +18,32 @@ namespace BtcMarkets.Wallet.Views
             BindingContext = ViewModel = new NewsPageViewModel();
         }
 
-      
+     
+        private async void OpenNewsItem(string uri)
+        {
+
+            await Browser.OpenAsync(uri, new BrowserLaunchOptions
+            {
+                LaunchMode = BrowserLaunchMode.SystemPreferred,
+                TitleMode = BrowserTitleMode.Show,
+                PreferredToolbarColor = AppHelper.GetColor("PrimaryColor"),
+                PreferredControlColor = AppHelper.GetColor("AccentColor")
+            }) ;
+          
+        }
+
+        private void NewsList_ItemSelected(object sender, SelectedItemChangedEventArgs e)
+        {
+            ViewModel.IsBusy = true;
+            var item = (MarketNewsItem)e.SelectedItem;
+            if (item != null)
+            {
+                NewsList.SelectedItem = null;
+                var uri = item.Link;
+                OpenNewsItem(uri);
+               
+            }
+            ViewModel.IsBusy = false;
+        }
     }
 }

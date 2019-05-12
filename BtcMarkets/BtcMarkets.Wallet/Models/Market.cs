@@ -1,6 +1,9 @@
-﻿using System.Runtime.Serialization;
+﻿using System;
+using System.IO;
+using System.Runtime.Serialization;
 using BtcMarkets.Core.Api.Contracts;
 using BtcMarkets.Wallet.Helpers;
+using Xamarin.Forms;
 
 namespace BtcMarkets.Wallet.Models
 {
@@ -49,7 +52,38 @@ namespace BtcMarkets.Wallet.Models
         public string Image
         {
             get => _image;
-            set => SetProperty(ref _image, value, nameof(Image));
+            set
+            {
+                SetProperty(ref _image, value, nameof(Image));
+            
+            }
+        }
+
+   
+
+        public ImageSource ImageSource
+        {
+            get
+            {
+                return AppHelper.GetMarketImage(Instrument);
+                //if(_imageSource == null)
+                //{
+                //    try
+                //    {
+                //        var val = Image;
+                //        if (!string.IsNullOrWhiteSpace(val))
+                //        {
+                //            byte[] bytes = System.Convert.FromBase64String(val);
+                //            _imageSource = ImageSource.FromStream(() => new MemoryStream(bytes));
+                //        }
+                //    }
+                //    catch(Exception)
+                //    {
+
+                //    }
+                //}
+                //return _imageSource;
+            }
         }
 
         private double _bid;
@@ -92,6 +126,7 @@ namespace BtcMarkets.Wallet.Models
                 SetProperty(ref _lastPrice, value, nameof(LastPrice));
                 OnPropertyChanged(nameof(LastPriceString));
                 OnPropertyChanged(nameof(LastPriceWithSymbol));
+                OnPropertyChanged(nameof(PreviousDayPrice));
             }
         }
         public string LastPriceString
@@ -128,7 +163,7 @@ namespace BtcMarkets.Wallet.Models
             }
         }
 
-        public string VolumeString => AppHelper.FormatNumber(Volume);
+        public string VolumeString => AppHelper.FormatNumber(Volume,Currency);
 
         private double _holdings;
         public double Holdings
@@ -242,15 +277,48 @@ namespace BtcMarkets.Wallet.Models
             set => SetProperty(ref _previousPrice, value, nameof(PreviousPrice));
         }
 
+        [DataMember(Name = "PreviousDayPrice")]
+        private double _previousDayPrice;
+        public double PreviousDayPrice
+        {
+            get => _previousDayPrice;
+            set
+            {
+                SetProperty(ref _previousDayPrice, value, nameof(PreviousDayPrice));
+                DayChange = AppHelper.CalculateChange(value, LastPrice);
+            }
+        }
+
         [DataMember(Name = "Change")]
         private double _change;
         public double Change
         {
             get => _change;
-            set => SetProperty(ref _change, value, nameof(Change));
+            set
+            {
+                SetProperty(ref _change, value, nameof(Change));
+                OnPropertyChanged(nameof(ChangeString));
+            }
         }
 
+        [DataMember(Name = "DayChange")]
+        private double _dayChange;
+        public double DayChange
+        {
+            get => _dayChange;
+            set
+            {
+                SetProperty(ref _dayChange, value, nameof(DayChange));
+                OnPropertyChanged(nameof(DayChangeString));
+                OnPropertyChanged(nameof(DayChangeDirection));
+            }
+        }
+
+        public bool DayChangeDirection => DayChange >= 0;
+    
         public string ChangeString => AppHelper.DoubleToPercentageString(Change);
+
+        public string DayChangeString => (DayChange >= 0 ? "+" : "")+AppHelper.DoubleToPercentageString(DayChange);
 
         [DataMember(Name = "InstrumentSymbol")]
         public string InstrumentSymbol

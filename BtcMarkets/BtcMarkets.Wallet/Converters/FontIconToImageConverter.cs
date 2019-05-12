@@ -18,6 +18,8 @@ namespace BtcMarkets.Wallet.Converters
             try
             {
                 string icon = "";
+                Color color = Color.Default;
+                var resources = Application.Current.Resources;
                 if (value != null && value is string)
                 {
                     icon = (string)value;
@@ -25,7 +27,24 @@ namespace BtcMarkets.Wallet.Converters
                 else
                 if (parameter != null && parameter is string)
                 {
-                    icon = (string)parameter;
+                    var p = (string)parameter;
+                    var parts = p.Split("|".ToCharArray());
+                    if (parts.Length > 0)
+                    {
+                        icon = parts[0];
+                        if(parts.Length>1)
+                        {
+                            var colorCode = parts[1];
+                            if (colorCode.StartsWith("#"))
+                            {
+                                color = Color.FromHex(colorCode);
+                            }
+                            else
+                            {
+                                color = (Color)resources[parts[1]];
+                            }
+                        }
+                    }
                 }
 
                 source = new FontImageSource();
@@ -33,7 +52,12 @@ namespace BtcMarkets.Wallet.Converters
                 var font = (OnPlatform<string>)Application.Current.Resources["MaterialDesign"];
                 source.FontFamily = font;
                 source.Glyph = icon;
-
+                if(color != null && color != Color.Default )
+                {
+                    var hex = color.ToHexWeb();
+                    source.Color = color;
+                }
+                
             }
             catch (Exception ex)
             {

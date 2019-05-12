@@ -243,7 +243,7 @@ namespace BtcMarkets.Core.Sockets
         private PureWebSocket _socket;
         private PureWebSocketOptions _options;
         private SocketOptions options;
-        public bool IsOpen => _socket.State == WebSocketState.Open;
+        public bool IsOpen => _socket != null && _socket.State == WebSocketState.Open;
         public SocketV2Client(SocketOptions opt)
         {
             options = opt;
@@ -253,6 +253,12 @@ namespace BtcMarkets.Core.Sockets
                 MyReconnectStrategy = new ReconnectStrategy(2000, 4000, 20)
             };
 
+            Init();
+
+        }
+
+        public void Init()
+        {
             _socket = new PureWebSocket(options.Url, _options);
 
             _socket.OnStateChanged += _socket_OnStateChanged;
@@ -261,14 +267,27 @@ namespace BtcMarkets.Core.Sockets
             _socket.OnSendFailed += _socket_OnSendFailed;
             _socket.OnOpened += _socket_OnOpened;
             _socket.OnError += _socket_OnError;
-
         }
-
         public async Task Open()
         {
             try
             {
-                await _socket.ConnectAsync();
+                if(_socket == null)
+                {
+                    Init();
+                }
+                if (_socket != null && _socket.State != WebSocketState.Aborted || _socket.State == WebSocketState.Closed)
+                {
+                    await _socket.ConnectAsync();
+                }
+                else
+                {
+                    if (_socket.State == WebSocketState.CloseReceived || _socket.State == WebSocketState.CloseSent)
+                    {
+                        await Task.Delay(20000);
+                        await _socket.ConnectAsync();
+                    }
+                }
             }
             catch (Exception ex)
             {
@@ -277,13 +296,26 @@ namespace BtcMarkets.Core.Sockets
         }
         public void Close()
         {
-            _socket.Disconnect();
+            if (_socket != null && _socket.State == WebSocketState.Open)
+            {
+                _socket.OnStateChanged -= _socket_OnStateChanged;
+                _socket.OnMessage -= _socket_OnMessage;
+                _socket.OnClosed -= _socket_OnClosed;
+                _socket.OnSendFailed -= _socket_OnSendFailed;
+                _socket.OnOpened -= _socket_OnOpened;
+                _socket.OnError -= _socket_OnError;
+                _socket.Dispose(true);
+                _socket = null;
+            }
         }
 
         public async Task Subscribe(SubscribeMessage message)
         {
             try
             {
+                if (_socket == null)
+                    return;
+
                 SignSubcribeMessage(ref message);
                 var json = JsonConvert.SerializeObject(message);
                 await _socket.SendAsync(json);
@@ -297,6 +329,7 @@ namespace BtcMarkets.Core.Sockets
 
         private void SignSubcribeMessage(ref SubscribeMessage message)
         {
+          
             var buffer = new StringBuilder();
             var timestamp = ApiHelper.GetTimeStamp();
             var action = "/users/self/subscribe";
@@ -321,6 +354,9 @@ namespace BtcMarkets.Core.Sockets
         }
         public void HeartBeat(HeartBeatMessage message)
         {
+            if (_socket == null)
+                return;
+
             var json = JsonConvert.SerializeObject(message);
             Console.WriteLine(json);
             _socket.Send(json);

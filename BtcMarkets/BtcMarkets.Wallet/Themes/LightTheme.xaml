@@ -22,14 +22,15 @@
     <Color x:Key="LightWhiteColor2">#F2F4F4</Color>
     <Color x:Key="LightWhiteColor3">#F2F3F4</Color>
     <Color x:Key="LightBlackColor1">#566573</Color>
-
+    <Color x:Key="LightBlackColor2">#1E1E1E</Color>
+    <Color x:Key="LightBlackColor3">#2D2D30</Color>
     
     <Color x:Key="PageBackgroundColor">#F2F4F4</Color>
-    <Color x:Key="PageTextColor">#99A3A4</Color>
+    <Color x:Key="PageTextColor">#1E1E1E</Color>
     <Color x:Key="DefaultBackgroundColor">#F2F4F4</Color>
-    <Color x:Key="ReverseBackgroundColor">#566573</Color>
+    <Color x:Key="ReverseBackgroundColor">#1E1E1E</Color>
     <Color x:Key="ReverseTextColor">#F2F4F4</Color>
-    <Color x:Key="DefaultTextColor">#99A3A4</Color>
+    <Color x:Key="DefaultTextColor">#1E1E1E</Color>
     <Color x:Key="DefaultHeaderColor">#ffffff</Color>
     <Color x:Key="DefaultHintColor">#DCDCDC</Color>
     <Color x:Key="SeparatorColor">#EAEDED</Color>
@@ -41,6 +42,9 @@
     <Color x:Key="HighlightTransparentColor">#E6ff9933</Color>
 
 
+    <Color x:Key="SuccessMessageColor">#229954</Color>
+    <Color x:Key="ErrorMessageColor">#CB4335</Color>
+    <Color x:Key="MessageColor">#2E86C1</Color>
 
 
 </ResourceDictionary>

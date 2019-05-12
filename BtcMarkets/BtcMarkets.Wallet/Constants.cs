@@ -26,5 +26,10 @@ namespace BtcMarkets.Wallet
         public const int DAY = 24 * HOUR;
         public const int MONTH = 30 * DAY;
 
+        public const string ThemeDark = "Dark";
+
+        public const string ThemeLight = "Light";
+
+      
     }
 }

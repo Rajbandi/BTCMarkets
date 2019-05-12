@@ -44,60 +44,18 @@ namespace BtcMarkets.Wallet
         private void Shell_Navigating(object sender, ShellNavigatingEventArgs e)
         {
             var current = e.Current;
-            if (current != null && current.Location.PathAndQuery.ToLower().Contains("/markets/"))
+            if (current != null && !current.Location.PathAndQuery.ToLower().Contains("/account"))
             {
+                var path = e.Target.Location.PathAndQuery.ToLower();
+                if(path.Contains("/account"))
+                {
+                    if (!AppData.Current.IsAccountSetup)
+                    {
+                        AppHelper.ShowAlert("Account features requires valid api crendentials. Use settings to setup.");
 
+                    }
+                }
             }
-
-            // var data = AppData.Current;
-            //    var current = e.Current;
-            //    if (current != null && current.Location.PathAndQuery.ToLower().Contains("/markets/"))
-            //    {
-            //        return;
-            //    }
-            //    var path = e.Target.Location.PathAndQuery.ToLower();
-
-            //    if (e.CanCancel && isFirstTime && path.Contains("/markets/"))
-            //    {
-
-            //        isFirstTime = false;
-
-            //        try
-            //        {
-            //            if (!data.Favourites.Any())
-            //            {
-            //                if (path.Contains("/markets/fav"))
-            //                {
-            //                    e.Cancel();
-            //                    var location = e.Target.Location.OriginalString.Replace("/Fav/", "/Aud/");
-            //                    var state = new ShellNavigationState(location);
-            //                    GoToAsync(state);
-            //                }
-            //            }
-            //            else
-            //            {
-            //                if (!path.Contains("/markets/fav"))
-            //                {
-            //                    e.Cancel();
-
-            //                    var pathString = e.Target.Location.OriginalString;
-            //                    if (pathString.EndsWith("/"))
-            //                    {
-            //                        pathString = pathString.Substring(0, pathString.LastIndexOf('/'));
-            //                    }
-
-            //                    var location = pathString.Substring(0, pathString.LastIndexOf('/')) + "/Fav/";
-
-            //                    var state = new ShellNavigationState(location);
-            //                    GoToAsync(state);
-            //                }
-            //            }
-            //        }
-            //        catch(Exception ex)
-            //        {
-
-            //        }
-            //    }
 
         }
 

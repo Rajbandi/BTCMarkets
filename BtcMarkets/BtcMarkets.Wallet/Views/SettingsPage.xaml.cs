@@ -101,6 +101,22 @@ namespace BtcMarkets.Wallet.Views
             }
         }
 
-      
+        private void ThemePicker_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            
+
+            var theme = ViewModel.Theme;
+            AppData.Current.ChangeTheme(theme);
+        }
+
+        private void LiveUpdatesSwitch_Toggled(object sender, ToggledEventArgs e)
+        {
+            AppData.Current.OpenCloseSocketsV2(ViewModel.LiveUpdates);
+        }
+
+        private void NotificationsSwitch_Toggled(object sender, ToggledEventArgs e)
+        {
+            
+        }
     }
 }

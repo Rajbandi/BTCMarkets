@@ -60,21 +60,37 @@ namespace BtcMarkets.Wallet.Helpers
                 error = "Something went wrong.";
             }
 
-            AppService.Instance.ShowError(error);
+            var color = GetWebColor("ErrorMessageColor");
+
+            AppService.Instance.ShowError(error, color);
         }
 
-        public static void ShowMessage(string message, bool isLong)
+        public static void ShowSuccess(string message = "")
         {
-            //DependencyService.Get<IMessage>().ShowMessage(message, isLong);
+            if (string.IsNullOrWhiteSpace(message))
+            {
+                message = "Success";
+            }
 
+            var color = GetWebColor("SuccessMessageColor");
+
+            AppService.Instance.ShowError(message, color);
         }
+
         public static void ShowMessage(string message)
         {
-            // DependencyService.Get<IMessage>().ShowMessage(message, milliSeconds);
-
-            AppService.Instance.ShowMessage(message);
+          
+            var color = GetWebColor("MessageColor");
+            AppService.Instance.ShowMessage(message, color);
         }
 
+        public static void ShowAlert(string message)
+        {
+            AppService.Instance.ShowAlert(new Models.AlertData
+            {
+                Message = message
+            });
+        }
         public static double CalculateChange(double previous, double current)
         {
             if (previous == 0)
@@ -86,7 +102,7 @@ namespace BtcMarkets.Wallet.Helpers
 
         public static string DoubleToPercentageString(double d)
         {
-            return (Math.Round(d, 2) * 100).ToString() + "%";
+            return (Math.Round(d, 2) * 100).ToString("0.00") + "%";
         }
 
         public static  void ShowNotification(string title, string message)
@@ -123,9 +139,67 @@ namespace BtcMarkets.Wallet.Helpers
                 str = $"{value:0.00000000}";
             }
             else
+                if (currency == Constants.Aud)
                 str = $"{value:0.00}";
+            else
+                str = $"{value:0.00000}";
 
             return str;
+        }
+
+        public static string FormatNumberWithSymbol(double value, string currency = "")
+        {
+            string str;
+            if (currency == Constants.Btc)
+            {
+                str = $"{Constants.BtcSymbol}{value:0.00000000}";
+            }
+            else
+                str = $"{Constants.AudSymbol}{value:0.00}";
+
+            return str;
+        }
+        public static ImageSource GetMarketImage(string code)
+        {
+            ImageSource source = null;
+
+            var data = AppData.Current;
+            var images = data.MarketImages;
+            if (!string.IsNullOrWhiteSpace(code))
+            {
+                if (images != null && images.ContainsKey(code))
+                {
+                    ImageSource image;
+                    images.TryGetValue(code, out image);
+                    source = image;
+                }
+            }
+
+            return source;
+        }
+        public static Color GetColor(string style)
+        {
+            Color color = Color.Default;
+
+            try
+            {
+                var styleColor = (Color)Application.Current.Resources[style];
+                if (styleColor != null)
+                {
+                    color = styleColor;
+                }
+
+            }
+            catch (Exception)
+            {
+
+            }
+
+            return color;
+        }
+        public static string GetWebColor(string style)
+        {
+            return GetColor(style).ToHexWeb() ?? "";
         }
 
     }

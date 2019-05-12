@@ -31,7 +31,10 @@ namespace BtcMarkets.Wallet.Models
         public bool Reset { get; set; }
 
         [DataMember(Name = "socketon")]
-        public bool LiveUpdates { get; set; } = true; 
+        public bool LiveUpdates { get; set; } = true;
+
+        [DataMember(Name = "notifications")]
+        public bool Notifications { get; set; } = true;
 
         [DataMember(Name = "favourites")]
         public List<MarketFavourite> Favourites { get; private set; }
@@ -48,6 +51,7 @@ namespace BtcMarkets.Wallet.Models
         {
             Favourites = new List<MarketFavourite>();
             LiveUpdates = true;
+            Notifications = true;
             Theme = "Dark";
             ApiCredentials = new ApiCredentials();
         }

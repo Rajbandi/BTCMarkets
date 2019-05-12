@@ -82,7 +82,8 @@ namespace BtcMarkets.Wallet.ViewModels
                     BuyOrders.Clear();
                     foreach (var order in orders.Buy)
                     {
-                        order.Currency = market.Instrument;
+                        order.Instrument = market.Instrument;
+                        order.Currency = market.Currency;
                         BuyOrders.Add(order);
                     }
 
@@ -92,7 +93,8 @@ namespace BtcMarkets.Wallet.ViewModels
                     SellOrders.Clear();
                     foreach (var order in orders.Sell)
                     {
-                        order.Currency = market.Instrument;
+                        order.Instrument = market.Instrument;
+                        order.Currency = market.Currency;
                         SellOrders.Add(order);
                     }
 
@@ -103,7 +105,8 @@ namespace BtcMarkets.Wallet.ViewModels
                     var history = await appData.GetMarketTradeHistory(market);
                     foreach(var trade in history)
                     {
-                        trade.Currency = market.Instrument;
+                        trade.Instrument = market.Instrument;
+                        trade.Currency = market.Currency;
                         TradeHistory.Add(trade);
                     }
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Sockets;
@@ -14,6 +15,7 @@ using BtcMarkets.Wallet.Models;
 using BtcMarkets.Wallet.Services;
 using Newtonsoft.Json;
 using Xamarin.Essentials;
+using Xamarin.Forms;
 
 namespace BtcMarkets.Wallet
 {
@@ -225,7 +227,7 @@ namespace BtcMarkets.Wallet
         public bool IsInternetConnected => Connectivity.NetworkAccess == NetworkAccess.Internet;
         protected AppData()
         {
-          
+
 
             CheckInternet();
             Connectivity.ConnectivityChanged += Connectivity_ConnectivityChanged;
@@ -233,7 +235,7 @@ namespace BtcMarkets.Wallet
             Markets = new List<Market>();
             Balances = new List<AccountBalance>();
 
-           
+
             InitData();
 
         }
@@ -241,19 +243,19 @@ namespace BtcMarkets.Wallet
         public async void InitData()
         {
             await LoadAppSettings();
-          
+
 
         }
         public async Task InitMarkets()
         {
-         
+
             await RefreshMarkets();
-           
+
         }
 
         public void CheckFavourites()
         {
-            foreach(var market in Markets)
+            foreach (var market in Markets)
             {
                 market.Starred = Favourites.Any(x => x.Instrument == market.Instrument && x.Currency == market.Currency);
             }
@@ -293,26 +295,36 @@ namespace BtcMarkets.Wallet
 
         }
 
-        private async Task InitSocketsV2()
+        public async Task InitSocketsV2(bool subscribe = true)
         {
             try
             {
-
-                SockV2Client = new SocketV2Client(new SocketOptions
+                if (!CheckSockets())
                 {
-                    Url = Client.Settings.SocketV2Url
-                });
+                    return;
+                }
+                if (SockV2Client == null)
+                {
+                    SockV2Client = new SocketV2Client(new SocketOptions
+                    {
+                        Url = Client.Settings.SocketV2Url
+                    });
 
-                SockV2Client.Opened += SockV2Client_Opened;
-                SockV2Client.Closed += SockV2Client_Closed;
-                SockV2Client.FundTransferred += SockV2Client_FundTransferred;
-                SockV2Client.MarketTradeChanged += SockV2Client_MarketTradeChanged;
-                SockV2Client.SendFailed += SockV2Client_SendFailed;
-                SockV2Client.StateChanged += SockV2Client_StateChanged;
-                SockV2Client.TickerChanged += SockV2Client_TickerChanged;
-                SockV2Client.OrderBookChanged += SockV2Client_OrderBookChanged;
 
-                await SockV2Client.Open();
+                    SockV2Client.Opened += SockV2Client_Opened;
+                    SockV2Client.Closed += SockV2Client_Closed;
+                    SockV2Client.FundTransferred += SockV2Client_FundTransferred;
+                    SockV2Client.MarketTradeChanged += SockV2Client_MarketTradeChanged;
+                    SockV2Client.SendFailed += SockV2Client_SendFailed;
+                    SockV2Client.StateChanged += SockV2Client_StateChanged;
+                    SockV2Client.TickerChanged += SockV2Client_TickerChanged;
+                    SockV2Client.OrderBookChanged += SockV2Client_OrderBookChanged;
+                }
+                if (!SockV2Client.IsOpen)
+                {
+                    await SockV2Client.Open();
+                    await SubscibedTicker();
+                }
             }
             catch (Exception ex)
             {
@@ -321,19 +333,63 @@ namespace BtcMarkets.Wallet
             }
         }
 
-        private void CloseSocketsV2()
+        public void CloseSocketsV2()
         {
             try
             {
-                if(SockV2Client != null && SockV2Client.IsOpen)
+                if (SockV2Client != null && SockV2Client.IsOpen)
                 {
                     SockV2Client.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                AppHelper.TrackError(ex);
+            }
+        }
+
+        public async void OpenCloseSocketsV2(bool value)
+        {
+            string message = "";
+            try
+            {
+               
+                if (value)
+                {
+                    if (SockV2Client != null && SockV2Client.IsOpen)
+                        return;
+
+                    await InitSocketsV2();
+                    
+                    message = "Live updates enabled.";
+                }
+                else
+                {
+                    CloseSocketsV2();
+                    message = "Live updates disabled.";
                 }
             }
             catch(Exception ex)
             {
                 AppHelper.TrackError(ex);
+                AppHelper.ShowError("Something went wrong.");
+
             }
+            if(!string.IsNullOrWhiteSpace(message))
+            {
+                AppHelper.ShowMessage(message);
+            }
+        }
+
+        public void ChangeTheme(string theme)
+        {
+            var app = (App)Application.Current;
+            if (theme == Constants.ThemeLight)
+            {
+                app.ChangeTheme(ThemeList.LightTheme);
+            }
+            else
+                app.ChangeTheme(ThemeList.DarkTheme);
         }
         private async Task SubscibedTicker()
         {
@@ -362,7 +418,7 @@ namespace BtcMarkets.Wallet
                 AppHelper.ShowError("Live ticker not available");
             }
         }
-      
+
         private void SockV2Client_OrderBookChanged(object sender, OrderBookDataV2 e)
         {
 
@@ -684,13 +740,13 @@ namespace BtcMarkets.Wallet
                 if (SockV2Client == null || !SockV2Client.IsOpen)
                 {
                     await InitSocketsV2();
-                    await SubscibedTicker();
+                    //await SubscibedTicker();
                 }
             }
             else
             {
                 CloseSocketsV2();
-            }            
+            }
         }
         public bool CheckSockets()
         {
@@ -714,51 +770,74 @@ namespace BtcMarkets.Wallet
 
             return IsInternetConnected && canReach;
         }
+        public bool CheckSocketsV2()
+        {
+            bool canReach = true;
+
+            if (!IsInternetConnected)
+            {
+                AppHelper.ShowError("Check your internet connection");
+                canReach = false;
+            }
+
+            if (IsInternetConnected)
+            {
+                canReach = CheckReachbility(Client.Settings.SocketV2Url);
+                if (!canReach)
+                {
+                    AppHelper.ShowError("Couldn't reach live server. Check your connection");
+                }
+            }
+
+            return IsInternetConnected && canReach;
+        }
         public async Task LoadAppSettings()
         {
-            await Task.Run( async () =>
-            {
-                isBusy = true;
-                var save = false; 
-                LoadSettings();
+            await Task.Run(async () =>
+           {
+               isBusy = true;
+               var save = false;
+               LoadSettings();
 
-                if (Settings == null)
-                {
-                    Settings = new AppSettings();
-                    save = true;
-                }
-                if (Settings.Config == null)
-                {
-                 
+               if (Settings == null)
+               {
+                   Settings = new AppSettings();
+                   save = true;
+               }
+               if (Settings.Config == null)
+               {
+
                    Settings.Config = ResourceHelper.GetCoinConfig();
-                }
+               }
 
-                var remoteConfig = await GetRemoteConfig();
-                if(remoteConfig != null )
-                {
-                    var localConfig = Settings.Config;
-                    if (remoteConfig.Version != localConfig.Version || remoteConfig.Lastmodified > localConfig.Lastmodified)
-                    {
-                        Settings.Config = remoteConfig;
-                        save = true;
-                    }
-                }
+               var remoteConfig = await GetRemoteConfig();
+               if (remoteConfig != null)
+               {
+                   var localConfig = Settings.Config;
+                   if (remoteConfig.Version != localConfig.Version || remoteConfig.Lastmodified > localConfig.Lastmodified)
+                   {
+                       Settings.Config = remoteConfig;
+                       save = true;
+                   }
+               }
 
-                if(save)
-                {
-                    SaveSettings();
-                }
+               if (save)
+               {
+                   SaveSettings();
+               }
 
-                var crendentials = Settings.ApiCredentials;
-                if (crendentials != null)
-                {
-                    Client.Settings.ApiKey = crendentials.ApiKey;
-                    Client.Settings.Secret = crendentials.Secret;
-                }
+               var crendentials = Settings.ApiCredentials;
+               if (crendentials != null)
+               {
+                   Client.Settings.ApiKey = crendentials.ApiKey;
+                   Client.Settings.Secret = crendentials.Secret;
+               }
 
-                IsAccountValid = IsAccountSetup;
-                isBusy = false;
-            });
+               IsAccountValid = IsAccountSetup;
+
+               LoadMarketImages();
+               isBusy = false;
+           });
         }
 
         private string _configUrl = "http://btcmarketsapp.s3-website-ap-southeast-2.amazonaws.com/settings.json";
@@ -776,11 +855,11 @@ namespace BtcMarkets.Wallet
                     config = JsonConvert.DeserializeObject<CoinConfig>(json);
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 AppHelper.TrackError(ex);
             }
-          
+
             return config;
         }
 
@@ -1055,19 +1134,52 @@ namespace BtcMarkets.Wallet
 
             CheckFavourites();
 
-            await LoadAccountBalances();
-
             OnPropertyChanged(nameof(Markets));
-
             OnMarketsUpdated(new EventArgs());
-            UpdateHoldings();
-            UpdateAccountBalances();
 
             await CheckAndInitSockets();
-         
-            
+
+            LoadBalances();
+
         }
 
+        public void LoadBalances()
+        {
+            Task.Run(async () =>
+            {
+                await Task.Delay(2000);
+                await LoadAccountBalances();
+                await LoadPreviousDayPrices();
+                UpdateHoldings();
+                UpdateAccountBalances();
+                OnPropertyChanged(nameof(Markets));
+
+                OnMarketsUpdated(new EventArgs());
+            });
+        }
+        public async Task LoadPreviousDayPrices()
+        {
+            try
+            {
+                if(Markets != null)
+                {
+                    foreach(var market in Markets)
+                    {
+                        var history = await GetMarketDayHistory(market);
+                        if(history != null)
+                        {
+                            var previousPrice = history.Open;
+                            market.PreviousDayPrice = previousPrice;
+                        }
+                    }
+                }
+            }
+            catch(Exception ex)
+            {
+                AppHelper.TrackError(ex);
+                AppHelper.ShowError("24H history prices not available");
+            }
+        }
         public async void CheckAndLoadActiveMarkets()
         {
 
@@ -1249,10 +1361,12 @@ namespace BtcMarkets.Wallet
                 var sells = new List<MarketTradeOrder>();
                 foreach (var value in orderBook.Asks)
                 {
+                    double total = value[0] * value[1];
                     sells.Add(new MarketTradeOrder
                     {
                         Price = value[0],
-                        Volume = value[1]
+                        Volume = value[1],
+                        Total = total
                     });
                 }
                 orders.Sell = sells;
@@ -1260,10 +1374,12 @@ namespace BtcMarkets.Wallet
                 var buys = new List<MarketTradeOrder>();
                 foreach (var value in orderBook.Bids)
                 {
+                    double total = value[0] * value[1];
                     buys.Add(new MarketTradeOrder
                     {
                         Price = value[0],
-                        Volume = value[1]
+                        Volume = value[1],
+                        Total = total
                     });
                 }
                 orders.Buy = buys;
@@ -1416,6 +1532,52 @@ namespace BtcMarkets.Wallet
 
 
             return orders;
+        }
+
+        public async Task<MarketHistory> GetMarketDayHistory(Market market)
+        {
+            MarketHistory history = null;
+
+            if (!CheckInternet())
+            {
+                return history;
+            }
+            try
+            {
+                DateTime startDate = DateTime.Now.AddDays(-1);
+                var timestamp = ApiHelper.GetTimeStampLong(startDate);
+                var queryParams = new Core.Api.Contracts.MarketParams
+                {
+                    Since = timestamp,
+                    Forward = true
+                };
+                var marketHistory = await Api.GetMarketHistory(market.Instrument, market.Currency, "day", queryParams);
+
+                if (marketHistory != null)
+                {
+                    var ticks = marketHistory.Ticks;
+                    if (ticks != null && ticks.Any())
+                    {
+                        var tick = ticks[0];
+                        history = new MarketHistory
+                        {
+                            Instrument = market.Instrument,
+                            Currency = market.Currency,
+                            Date = ApiHelper.ToLocalTime(tick.Timestamp),
+                            Timestamp = tick.Timestamp,
+                            Open = ApiHelper.ToDoubleValue(tick.Open),
+                            Close = ApiHelper.ToDoubleValue(tick.Close),
+                            High = ApiHelper.ToDoubleValue(tick.High),
+                            Low = ApiHelper.ToDoubleValue(tick.Low)
+                        };
+                    }
+                }
+            }
+            catch(Exception ex)
+            {
+                AppHelper.TrackError(ex);
+            }
+            return history;
         }
 
         public async Task<List<MarketHistory>> GetMarketHistory(Market market, HistoryPeriod period = HistoryPeriod.Day)
@@ -1571,15 +1733,47 @@ namespace BtcMarkets.Wallet
                     }
                 }
 
-                if(show)
+                if (show)
                     AppHelper.ShowMessage("Settings saved successfully.");
 
             }
             catch (Exception ex)
             {
                 AppHelper.TrackError(ex);
-                if(show)
+                if (show)
                     AppHelper.ShowError("Something went wrong. Can't save settings");
+            }
+        }
+
+        private Dictionary<string, ImageSource> _marketImages;
+
+        public Dictionary<string, ImageSource> MarketImages { get; set; }
+
+        private void LoadMarketImages()
+        {
+            if (MarketImages == null)
+            {
+                MarketImages = new Dictionary<string, ImageSource>();
+            }
+            var config = Settings?.Config;
+            if (config != null)
+            {
+                foreach (var market in config.Coinmarkets)
+                {
+                    var image = market.Image;
+                    var code = market.Symbol;
+
+                    if (!string.IsNullOrWhiteSpace(image))
+                    {
+                        if (!MarketImages.ContainsKey(code))
+                        {
+
+                            byte[] bytes = System.Convert.FromBase64String(image);
+                            var source = ImageSource.FromStream(() => new MemoryStream(bytes));
+                            MarketImages.Add(code, source);
+                        }
+                    }
+                }
             }
         }
 

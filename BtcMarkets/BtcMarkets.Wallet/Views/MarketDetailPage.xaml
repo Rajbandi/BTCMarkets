@@ -3,18 +3,19 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:chart="clr-namespace:Syncfusion.SfChart.XForms;assembly=Syncfusion.SfChart.XForms"
              xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
+             xmlns:controls="clr-namespace:BtcMarkets.Wallet.Controls"
              ios:Page.UseSafeArea="true" 
              Title="{Binding Title}" 
              Style="{StaticResource DefaultPage}"
              x:Name="MarketDetails"
              x:Class="BtcMarkets.Wallet.Views.MarketDetailPage">
     <Shell.TitleView>
-        <StackLayout Orientation="Horizontal"  BindingContext="{Binding BindingContext,Source={x:Reference MarketDetails}}">
+        <StackLayout Orientation="Horizontal"  BindingContext="{Binding BindingContext,Source={x:Reference MarketDetails}}" Padding="0,0,10,0">
             <StackLayout  HorizontalOptions="FillAndExpand">
                 <Label  Text="{Binding Title}" Style="{StaticResource LargeDefaultText}" HorizontalOptions="StartAndExpand"  VerticalOptions="CenterAndExpand" VerticalTextAlignment="Center">
                 </Label>
             </StackLayout>
-            <StackLayout  Orientation="Horizontal">
+            <StackLayout  Orientation="Horizontal" >
                 <!--<Image Source="{Binding Converter={StaticResource FontIconImage},ConverterParameter=settings}"></Image>-->
                 <Image Source="{Binding Converter={StaticResource FontIconImage},ConverterParameter=refresh}">
                     <Image.GestureRecognizers>
@@ -51,27 +52,67 @@
                         <ColumnDefinition Width="33*"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
 
-                    <StackLayout Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3"  Orientation="Horizontal" HorizontalOptions="FillAndExpand" Spacing="25">
+                    <!--<StackLayout Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3"  Orientation="Horizontal" HorizontalOptions="FillAndExpand" Spacing="15">
                         <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand" >
                             <Image Source="{Binding Market.Image,Converter={StaticResource Base64ToImage}}" WidthRequest="20" HeightRequest="20" />
                             <Label Text="{Binding Market.Pair}" Style="{StaticResource LargeDefaultText}" HorizontalOptions="FillAndExpand" />
                         </StackLayout>
-                        <Label Text="{Binding Market.LastPriceWithSymbol}" Style="{StaticResource LargeDefaultText}" HorizontalOptions="FillAndExpand" />
-                    </StackLayout>
+                        --><!--<Label Text="{Binding Market.LastPriceWithSymbol}" Style="{StaticResource LargeDefaultText}" HorizontalOptions="FillAndExpand" />--><!--
+                        <controls:MarketValue Value="{Binding Market.LastPriceString}" ValueStyle="{StaticResource LargeDefaultText}" Symbol="{Binding Market.CurrencySymbol}" SymbolStyle="{StaticResource LargeDefaultAccentText}"  />
+                        <Label>
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="24HR " Style="{StaticResource SmallDefaultAccentText}"/>
+                                    <Span Text="{Binding Market.DayChangeString}" Style="{StaticResource SmallDefaultText}"/>
+                                </FormattedString>
+                            </Label.FormattedText>
 
+                        </Label>
+                    </StackLayout>-->
+                    <!--<Grid Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" HeightRequest="100">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="35*"></ColumnDefinition>
+                            <ColumnDefinition Width="40*"></ColumnDefinition>
+                            <ColumnDefinition Width="25*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>-->
+                    <StackLayout Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Orientation="Horizontal" Spacing="15" HorizontalOptions="FillAndExpand">
+                        <StackLayout Grid.Row="0" Grid.Column="0" Orientation="Horizontal" HorizontalOptions="FillAndExpand" >
+                            <!--<Image Source="{Binding Market.Image,Converter={StaticResource Base64ToImage}}" WidthRequest="20" HeightRequest="20" />-->
+                            <Image Source="{Binding Market.ImageSource}" WidthRequest="20" HeightRequest="20" VerticalOptions="StartAndExpand"/>
+                            <Label Text="{Binding Market.Pair}" Style="{StaticResource LargeDefaultText}" HorizontalOptions="FillAndExpand" />
+                        </StackLayout>
+                        <controls:MarketValue Grid.Row="0" Grid.Column="1" Value="{Binding Market.LastPriceString}" ValueStyle="{StaticResource LargeDefaultText}" Symbol="{Binding Market.CurrencySymbol}" SymbolStyle="{StaticResource LargeDefaultAccentText}"  />
+
+                        <Label Grid.Row="0" Grid.Column="2" VerticalOptions="CenterAndExpand">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="24HR " Style="{StaticResource SmallDefaultAccentText}"/>
+                                    <Span Text="{Binding Market.DayChangeString}" Style="{StaticResource SmallDefaultText}"/>
+                                </FormattedString>
+                            </Label.FormattedText>
+
+                        </Label>
+                    </StackLayout>
+                    <!--</Grid>-->
 
 
                     <StackLayout Grid.Row="1" Grid.Column="0">
                         <Label Style="{StaticResource AccentFieldLabel}" Text="Bid" />
-                        <Label Style="{StaticResource SmallDefaultText}"  Text="{Binding Market.BidString}" />
+                        <!--<Label Style="{StaticResource SmallDefaultText}"  Text="{Binding Market.BidString}" />-->
+                        <controls:MarketValue Value="{Binding Market.BidString}" ValueStyle="{StaticResource SmallDefaultText}" Symbol="{Binding Market.CurrencySymbol}" SymbolStyle="{StaticResource SmallDefaultAccentText}"  />
                     </StackLayout>
                     <StackLayout Grid.Row="1" Grid.Column="1">
                         <Label Style="{StaticResource AccentFieldLabel}" Text="Ask" />
-                        <Label Style="{StaticResource SmallDefaultText}"  Text="{Binding Market.AskString}" />
+                        <!--<Label Style="{StaticResource SmallDefaultText}"  Text="{Binding Market.AskString}" />-->
+                        <controls:MarketValue Value="{Binding Market.AskString}" ValueStyle="{StaticResource SmallDefaultText}" Symbol="{Binding Market.CurrencySymbol}" SymbolStyle="{StaticResource SmallDefaultAccentText}"  />
                     </StackLayout>
                     <StackLayout Grid.Row="1" Grid.Column="2">
                         <Label Style="{StaticResource AccentFieldLabel}" Text="Vol(24H)" />
-                        <Label Style="{StaticResource SmallDefaultText}"  Text="{Binding Market.VolumeString}" />
+                        <!--<Label Style="{StaticResource SmallDefaultText}"  Text="{Binding Market.VolumeString}" />-->
+                        <controls:MarketValue Value="{Binding Market.VolumeString}" ValueStyle="{StaticResource SmallDefaultText}"  />
                     </StackLayout>
                     <StackLayout Grid.Row="2" Grid.Column="0">
                         <Label Style="{StaticResource AccentFieldLabel}" >
@@ -84,7 +125,15 @@
                             </Label.FormattedText>
                         </Label>
 
-                        <Label Style="{StaticResource SmallDefaultText}"  Text="{Binding Low}" />
+                        <!--<Label Style="{StaticResource SmallDefaultText}"  Text="{Binding Low}" />-->
+                        <Label>
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="{Binding Market.CurrencySymbol}" Style="{StaticResource SmallDefaultAccentText}"/>
+                                    <Span Text="{Binding Low}" Style="{StaticResource SmallDefaultText}"/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
                     </StackLayout>
                     <StackLayout Grid.Row="2" Grid.Column="1">
                         <Label Style="{StaticResource AccentFieldLabel}">
@@ -96,7 +145,15 @@
                                 </FormattedString>
                             </Label.FormattedText>
                         </Label>
-                        <Label Style="{StaticResource SmallDefaultText}"  Text="{Binding High}" />
+                        <!--<Label Style="{StaticResource SmallDefaultText}"  Text="{Binding High}" />-->
+                        <Label>
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="{Binding Market.CurrencySymbol}" Style="{StaticResource SmallDefaultAccentText}"/>
+                                    <Span Text="{Binding High}" Style="{StaticResource SmallDefaultText}"/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
                     </StackLayout>
                     <StackLayout Grid.Row="2" Grid.Column="2">
                         <Frame Style="{StaticResource DefaultFrame}" HeightRequest="25" BorderColor="{DynamicResource ReversebackgroundColor}" Padding="3" BackgroundColor="{DynamicResource PrimaryColor}">

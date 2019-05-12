@@ -2,40 +2,42 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
               Title="{Binding Title}"
-           
+            xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
+             ios:Page.UseSafeArea="true" 
              Style="{StaticResource DefaultPage}"
              
              x:Class="BtcMarkets.Wallet.Views.NewsPage">
     <ContentPage.Content>
 
-        <Grid Style="{StaticResource DefaultGrid}">
+        <Grid Style="{StaticResource DefaultGrid}" >
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <CollectionView Grid.Row="0" Grid.Column="0" ItemsSource="{Binding MarketNews}"  HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
-                <CollectionView.ItemTemplate >
+            <ListView x:Name="NewsList" Grid.Row="0" Grid.Column="0" ItemsSource="{Binding MarketNews}"  HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"  
+                      BackgroundColor="{DynamicResource DefaultBackgroundColor}" SelectionMode="Single" ItemSelected="NewsList_ItemSelected" SeparatorColor="{DynamicResource SeparatorColor}" HasUnevenRows="True">
+                <ListView.ItemTemplate >
                     <DataTemplate>
-                        <StackLayout>
-                            <Label Text="{Binding Title}" FontAttributes="Bold">
+                        <ViewCell>
+                        <StackLayout Padding="10"   BackgroundColor="{DynamicResource DefaultBackgroundColor}">
+                            <Label Text="{Binding Title}" Style="{StaticResource SmallDefaultText}">
                             </Label>
-                            <Label>
-                                <Label.FormattedText>
+                            <Label Style="{StaticResource MicroDefaultAccentText}">
+                                <Label.FormattedText >
                                     <FormattedString>
                                         <Span Text="Published on "></Span>
-                                        <Span Text="{Binding DatePublished}"></Span>
+                                        <Span Text="{Binding DateString}"></Span>
                                     </FormattedString>
                                 </Label.FormattedText>
                             </Label>
                         </StackLayout>
+                        </ViewCell>
                     </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
+                </ListView.ItemTemplate>
+            </ListView>
 
         </Grid>
 
