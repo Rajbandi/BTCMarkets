@@ -66,6 +66,12 @@ namespace BtcMarkets.Core.Api
         Task<HttpResponseMessage> GetTradingFeeRaw(string instrument, string currency);
         #endregion
 
+        #region Funds related
+
+        [Get("/fundtransfer/history")]
+        Task<FundTransferResponse> GetFundTransferHistory(MarketParams query = null);
+        #endregion
+
         #region  Order Related
 
         [Post("/order/create")]

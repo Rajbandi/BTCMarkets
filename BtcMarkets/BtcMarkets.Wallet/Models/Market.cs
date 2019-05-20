@@ -141,7 +141,7 @@ namespace BtcMarkets.Wallet.Models
         {
             get
             {
-                var str = $"{CurrencySymbol}{LastPrice:0.00}";
+                var str = $"{CurrencySymbol}{LastPrice:#,##0}";
                 if (Currency == Constants.Btc)
                 {
                     str = $"{CurrencySymbol}{LastPrice:F8}";
@@ -182,7 +182,7 @@ namespace BtcMarkets.Wallet.Models
             {
                 if (Instrument == Constants.Aud)
                 {
-                    return $"{Holdings:0.00}";
+                    return $"{Holdings:#,##0}";
                 }
                 else
                     return $"{Holdings:0.00000000}";

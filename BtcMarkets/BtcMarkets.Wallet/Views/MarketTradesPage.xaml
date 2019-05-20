@@ -10,7 +10,7 @@
              x:Name="TradeOrdersPage" 
              x:Class="BtcMarkets.Wallet.Views.MarketTradesPage">
     <Shell.TitleView>
-        <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand"  Spacing="10">
+        <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand"  Spacing="10" Padding="0,0,10,0">
             <views:AccountHoldingsView  HorizontalOptions="FillAndExpand"></views:AccountHoldingsView>
             <StackLayout  Orientation="Horizontal" HorizontalOptions="EndAndExpand">
                 <StackLayout>
@@ -31,6 +31,7 @@
             <Grid Style="{StaticResource PageScrollGrid}">
 
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
@@ -272,6 +273,24 @@
                     </Frame>
                 </StackLayout>
                 <StackLayout Grid.Row="3" Grid.Column="0" HorizontalOptions="FillAndExpand">
+                    <Grid HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="0.5*"/>
+                            <ColumnDefinition Width="0.5*"/>
+                        </Grid.ColumnDefinitions>
+                        <StackLayout Grid.Row="0" Grid.Column="0">
+                            
+                        </StackLayout>
+                        <StackLayout Grid.Row="0" Grid.Column="1">
+                            
+                        </StackLayout>
+                        
+                    </Grid>
+                </StackLayout>
+                <StackLayout Grid.Row="4" Grid.Column="0" HorizontalOptions="FillAndExpand">
                     <Label >
                         <Label.FormattedText>
                             <FormattedString>
@@ -337,7 +356,7 @@
                         </StackLayout>
                     </Frame>
                 </StackLayout>
-                <StackLayout Grid.Row="4" Grid.Column="0" HorizontalOptions="FillAndExpand">
+                <StackLayout Grid.Row="5" Grid.Column="0" HorizontalOptions="FillAndExpand">
                     <Label Style="{StaticResource SmallDefaultText}">
                         <Label.FormattedText>
                             <FormattedString>

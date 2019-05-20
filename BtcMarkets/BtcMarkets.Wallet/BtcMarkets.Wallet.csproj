@@ -78,6 +78,9 @@
     <Compile Update="Views\FavMarketsPage.xaml.cs">
       <DependentUpon>FavMarketsPage.xaml</DependentUpon>
     </Compile>
+    <Compile Update="Views\FundTransferHistoryPage.xaml.cs">
+      <DependentUpon>FundTransferHistoryPage.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
@@ -134,9 +137,6 @@
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\FavMarketsPage.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Views\FundsHistoryPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\HomePage.xaml">

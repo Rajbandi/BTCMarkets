@@ -1437,11 +1437,10 @@ namespace BtcMarkets.Wallet
             {
                 return orders;
             }
+            if (!IsAccountSetup)
+                return orders;
             try
             {
-
-                var response = await Api.GetOpenOrdersV2Raw();
-
                 var openOrders = await Api.GetOpenOrdersV2();
 
                 if (openOrders.Success)
@@ -1476,6 +1475,55 @@ namespace BtcMarkets.Wallet
             return orders;
         }
 
+        public async Task<List<FundTransferData>> GetFundTransferHistory(long? timestamp = null)
+        {
+            var funds = new List<FundTransferData>();
+            if (!CheckInternet())
+            {
+                return funds;
+            }
+            if (!IsAccountSetup)
+                return funds;
+            try
+            {
+                var fundHistory = await Api.GetFundTransferHistory();
+
+                if (fundHistory.Success)
+                {
+                    foreach (var value in fundHistory.FundTransfers)
+                    {
+                        var fund = new FundTransferData
+                        {
+                            Id = value.FundTransferId,
+                            Amount = ApiHelper.ToDoubleValue(value.Amount.HasValue ? value.Amount.Value: 0),
+                            Fee = ApiHelper.ToDoubleValue(value.Fee.HasValue ? value.Fee.Value : 0),
+                            Currency = value.Currency,
+                            Status = value.Status,
+                            Description = value.Description,
+                            Timestamp = value.CreationTime,
+                            LastUpdate = value.LastUpdate
+                        };
+
+                        var detail = value.CryptoPaymentDetail;
+                        if(detail != null)
+                        {
+                            fund.TxId = detail.TxId;
+                            fund.Address = detail.Address;
+                        }
+                        funds.Add(fund);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                AppHelper.ShowError("Something went wrong while retrieving fund history");
+                AppHelper.TrackError(ex);
+            }
+
+
+            return funds;
+        }
+
         public async Task<List<MarketOrderData>> GetOrderHistory(string instrument = Constants.Btc, string currency = Constants.Aud, long? since = null)
         {
             var orders = new List<MarketOrderData>();
@@ -1484,6 +1532,9 @@ namespace BtcMarkets.Wallet
             {
                 return orders;
             }
+            if (!IsAccountSetup)
+                return orders;
+
             try
             {
 

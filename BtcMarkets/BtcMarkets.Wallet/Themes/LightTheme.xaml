@@ -45,6 +45,6 @@
     <Color x:Key="SuccessMessageColor">#229954</Color>
     <Color x:Key="ErrorMessageColor">#CB4335</Color>
     <Color x:Key="MessageColor">#2E86C1</Color>
-
+    <Color x:Key="ErrorColor1">#BF360C</Color>
 
 </ResourceDictionary>

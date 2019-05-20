@@ -38,19 +38,19 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <Grid  Grid.Row="0" Grid.Column="0"  Style="{StaticResource ListHeader}">
+            <Grid  Grid.Row="0" Grid.Column="0"  Style="{StaticResource ListHeader}" HorizontalOptions="FillAndExpand">
 
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="0.35*" />
-                    <ColumnDefinition Width="0.30*" />
-                    <ColumnDefinition Width="0.30*" />
-                    <ColumnDefinition Width="0.05*" />
+                    <ColumnDefinition Width="35*" />
+                    <ColumnDefinition Width="35*" />
+                    <ColumnDefinition Width="35*" />
+                    <!--<ColumnDefinition Width="0.05*" />-->
                 </Grid.ColumnDefinitions>
                 <Label Grid.Column="0" Grid.Row="0"  
                                Text="Coin" 
@@ -59,21 +59,20 @@
                 <Label Grid.Column="1" Grid.Row="0"  
                                Text="Price" 
                               Style="{StaticResource SmallHeaderText}"/>
-                <Label Grid.Column="2" Grid.Row="0"  
-                               Text="Holdings" 
-                               Style="{StaticResource SmallHeaderText}"/>
-                <Image Grid.Column="3" Grid.Row="0" Source="{Binding Converter={StaticResource FontIconImage},ConverterParameter=search}" HeightRequest="20" WidthRequest="20">
-                    <Image.GestureRecognizers>
-                        <TapGestureRecognizer Command="{Binding BindingContext.ShowSearchCommand, Source={x:Reference MarketsListPage}}"></TapGestureRecognizer>
-                    </Image.GestureRecognizers>
-                </Image>
-
-                <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="4" IsVisible="{Binding IsSearchBarVisible}" RowSpacing="0" Padding="0" Margin="0">
+                <StackLayout Grid.Column="2" Grid.Row="0"   Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+                    <Label  Text="Holdings" Style="{StaticResource SmallHeaderText}"/>
+                    <Image HorizontalOptions="EndAndExpand" VerticalOptions="CenterAndExpand" Source="{Binding Converter={StaticResource FontIconImage},ConverterParameter=search}" HeightRequest="25" WidthRequest="25">
+                        <Image.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding BindingContext.ShowSearchCommand, Source={x:Reference MarketsListPage}}"></TapGestureRecognizer>
+                        </Image.GestureRecognizers>
+                    </Image>
+                </StackLayout>
+                <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" IsVisible="{Binding IsSearchBarVisible}" RowSpacing="0" Padding="0" Margin="0">
                     <SearchBar x:Name="SearchCoin"  Margin="0" IsVisible="{Binding IsSearchBarVisible}" Style="{StaticResource SearchCoin}" TextChanged="SearchCoin_TextChanged" SearchButtonPressed="SearchCoin_SearchButtonPressed"/>
                 </Grid>
             </Grid>
-         
-            <StackLayout Grid.Row="2" Grid.Column="0" Spacing="0" >
+
+            <StackLayout Grid.Row="1" Grid.Column="0" Spacing="0" >
 
                 <ListView  x:Name="marketsListView" Style="{StaticResource MarketList}" ItemsSource="{Binding GroupedMarkets}"  SeparatorColor="{StaticResource SeparatorColor}" 
                      HasUnevenRows="True"   IsGroupingEnabled="True"  ItemSelected="MarketsListView_ItemSelected" SelectionMode="Single"  
@@ -113,26 +112,20 @@
                                     <controls:CustomGrid.RowDefinitions>
                                         <RowDefinition Height="Auto" />
                                         <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
                                     </controls:CustomGrid.RowDefinitions>
                                     <controls:CustomGrid.ColumnDefinitions>
                                         <ColumnDefinition Width="0.35*" />
-                                        <ColumnDefinition Width="0.30*" />
-                                        <ColumnDefinition Width="0.30*" />
-                                        <ColumnDefinition Width="0.05*" />
+                                        <ColumnDefinition Width="0.35*" />
+                                        <ColumnDefinition Width="0.35*" />
+                                        <!--<ColumnDefinition Width="0.05*" />-->
                                     </controls:CustomGrid.ColumnDefinitions>
 
                                     <StackLayout Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" >
-                                        <controls:CustomGrid VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" >
-                                            <controls:CustomGrid.RowDefinitions>
-                                                <RowDefinition Height="Auto"></RowDefinition>
-                                                <RowDefinition Height="Auto"></RowDefinition>
-                                            </controls:CustomGrid.RowDefinitions>
-                                            <controls:CustomGrid.ColumnDefinitions>
-                                                <ColumnDefinition Width="24*"></ColumnDefinition>
-                                                <ColumnDefinition Width="70*"></ColumnDefinition>
-                                            </controls:CustomGrid.ColumnDefinitions>
 
-                                            <Frame Grid.Row="0" Grid.Column="0" Style="{StaticResource MarketListFrame}" HeightRequest="24">
+
+                                        <StackLayout  HorizontalOptions="FillAndExpand" Orientation="Horizontal" VerticalOptions="StartAndExpand">
+                                            <Frame Style="{StaticResource MarketListFrame}" HeightRequest="24">
                                                 <Image Source="{Binding ImageSource}" WidthRequest="24" HeightRequest="24">
                                                     <Image.VerticalOptions>
                                                         <OnPlatform x:TypeArguments="LayoutOptions">
@@ -141,42 +134,12 @@
                                                         </OnPlatform>
                                                     </Image.VerticalOptions>
                                                 </Image>
-
-                                                <!--<Image Source="{Binding Image,Converter={StaticResource Base64ToImage}}" WidthRequest="24" HeightRequest="24">
-                                                    <Image.VerticalOptions>
-                                                        <OnPlatform x:TypeArguments="LayoutOptions">
-                                                            <On Platform="Android" Value="StartAndExpand"/>
-                                                            <On Platform="iOS" Value="StartAndExpand"/>
-                                                        </OnPlatform>
-                                                    </Image.VerticalOptions>
-                                                </Image>-->
                                             </Frame>
-                                            <StackLayout  Grid.Row="0" Grid.Column="1"  Spacing="0" Padding="0" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
-                                                <Label Text="{Binding Instrument}"  Style="{StaticResource MarketListInstrumentCode}" HorizontalOptions="FillAndExpand"/>
-                                                <Label  Style="{StaticResource MicroDefaultText}" HorizontalOptions="FillAndExpand">
-                                                    <Label.FormattedText>
-                                                        <FormattedString>
-                                                            <Span Text="("></Span>
-                                                            <Span Text="{Binding Name}" Style="{StaticResource MarketListInstrumentName}"></Span>
-                                                            <Span Text=")"></Span>
-                                                        </FormattedString>
-                                                    </Label.FormattedText>
-                                                </Label>
-
+                                            <StackLayout  VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+                                                <Label Text="{Binding Instrument}"  Style="{StaticResource MediumDefaultAccentText}" HorizontalOptions="FillAndExpand" VerticalOptions="StartAndExpand"/>
                                             </StackLayout>
-                                            <StackLayout Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Padding="0">
-                                            <Label>
-                                                <Label.FormattedText>
-                                                    <FormattedString>
-                                                        <Span Text="24HR " Style="{StaticResource MicroDefaultAccentText}"/>
-                                                        <Span Text="{Binding DayChangeString}" Style="{StaticResource MicroDefaultText}"/>
-                                                    </FormattedString>
-                                                </Label.FormattedText>
+                                        </StackLayout>
 
-                                            </Label>
-                                            </StackLayout>
-                                        </controls:CustomGrid>
-                                      
                                     </StackLayout>
 
                                     <StackLayout Grid.Column="1" Grid.Row="0" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
@@ -188,38 +151,60 @@
                                                 </FormattedString>
                                             </Label.FormattedText>
                                         </Label>-->
-                                        <controls:MarketValue Value="{Binding LastPriceString}" ValueStyle="{StaticResource MarketListPriceValue}" Symbol="{Binding CurrencySymbol}" SymbolStyle="{StaticResource MarketListPriceSymbol}"  />
+                                        <controls:MarketValue Value="{Binding LastPriceString}" ValueStyle="{StaticResource MediumDefaultText}" Symbol="{Binding CurrencySymbol}" SymbolStyle="{StaticResource MediumDefaultAccentText}"  FontAttributes="Bold" VerticalOptions="StartAndExpand" />
                                     </StackLayout>
 
-                                    <StackLayout Grid.Column="2" Grid.Row="0" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" >
+                                    <StackLayout Grid.Column="2" Grid.Row="0" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand"  >
                                         <Label >
                                             <Label.FormattedText>
                                                 <FormattedString>
-                                                    <Span Text="{Binding InstrumentSymbol} " Style="{StaticResource MarketListPriceSymbol}"></Span>
-                                                    <Span Text="{Binding HoldingsString}" Style="{StaticResource MarketListHoldingsValue}"></Span>
+                                                    <Span Text="{Binding InstrumentSymbol} " Style="{StaticResource SmallDefaultAccentText}"></Span>
+                                                    <Span Text="{Binding HoldingsString}" Style="{StaticResource SmallDefaultText}"></Span>
                                                 </FormattedString>
                                             </Label.FormattedText>
                                         </Label>
                                     </StackLayout>
-                                    
-                                    <controls:CustomGrid Grid.Column="3" Grid.Row="0"  Grid.RowSpan="2" >
-                                        <controls:CustomGrid.RowDefinitions>
-                                            <RowDefinition Height="Auto"></RowDefinition>
-                                            <RowDefinition Height="Auto"></RowDefinition>
-                                        </controls:CustomGrid.RowDefinitions>
-                                        <Image Grid.Row="0" Grid.Column="0" Source="{Binding ToggleStarred, Converter={StaticResource ToggleImage}}"  Style="{StaticResource MarketListFavouriteImage}">
+
+                                    <StackLayout Grid.Row="1" Grid.Column="0" HorizontalOptions="FillAndExpand" Padding="0,3,0,0">
+
+                                        <Label   Style="{StaticResource SmallDefaultText}" HorizontalOptions="FillAndExpand" VerticalOptions="StartAndExpand">
+                                            <Label.FormattedText>
+                                                <FormattedString>
+                                                    <!--<Span Text="("></Span>-->
+                                                    <Span Text="{Binding Name}" Style="{StaticResource SmallDefaultText}"></Span>
+                                                    <!--<Span Text=")"></Span>-->
+                                                </FormattedString>
+                                            </Label.FormattedText>
+                                        </Label>
+
+
+                                    </StackLayout>
+                                    <StackLayout Grid.Row="1" Grid.Column="1">
+                                        <Label VerticalOptions="StartAndExpand">
+                                            <Label.FormattedText>
+                                                <FormattedString>
+                                                    <Span Text="24HR " Style="{StaticResource MarketListPriceSymbol}"/>
+                                                    <Span Text="{Binding DayChangeString}" Style="{StaticResource MarketListPriceValue}"/>
+                                                </FormattedString>
+                                            </Label.FormattedText>
+                                        </Label>
+                                    </StackLayout>
+                                    <StackLayout Grid.Row="1" Grid.Column="2" Grid.RowSpan="2" HorizontalOptions="EndAndExpand">
+
+                                        <Image  Source="{Binding ToggleStarred, Converter={StaticResource ToggleImage}}"  Style="{StaticResource MarketListFavouriteImage}">
                                             <Image.GestureRecognizers>
                                                 <TapGestureRecognizer Command="{Binding BindingContext.FavouriteCommand, Source={x:Reference marketsListView}}" CommandParameter="{Binding .}" ></TapGestureRecognizer>
                                             </Image.GestureRecognizers>
                                         </Image>
-                                        <Image Grid.Row="1" Grid.Column="0" Source="{Binding ToggleNotification, Converter={StaticResource ToggleImage}}"  Style="{StaticResource MarketListNotificationImage}">
+                                        <Image  Source="{Binding ToggleNotification, Converter={StaticResource ToggleImage}}"  Style="{StaticResource MarketListNotificationImage}">
                                             <Image.GestureRecognizers>
                                                 <TapGestureRecognizer Command="{Binding BindingContext.NotificationCommand, Source={x:Reference marketsListView}}" CommandParameter="{Binding .}" ></TapGestureRecognizer>
                                             </Image.GestureRecognizers>
                                         </Image>
 
-                                    </controls:CustomGrid>
-                                    <StackLayout Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Orientation="Horizontal" Spacing="5" HorizontalOptions="FillAndExpand"  VerticalOptions="StartAndExpand" HeightRequest="40" >
+                                    </StackLayout>
+
+                                    <!--<StackLayout Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" Orientation="Horizontal" Spacing="5" HorizontalOptions="FillAndExpand"  VerticalOptions="StartAndExpand"  >
                                         <controls:CustomGrid HorizontalOptions="FillAndExpand"  >
                                             <controls:CustomGrid.RowDefinitions>
                                                 <RowDefinition Height="Auto"></RowDefinition>
@@ -229,31 +214,37 @@
                                                 <ColumnDefinition Width="0.33*"></ColumnDefinition>
                                                 <ColumnDefinition Width="0.33*"></ColumnDefinition>
                                                 <ColumnDefinition Width="0.33*"></ColumnDefinition>
-                                            </controls:CustomGrid.ColumnDefinitions>
-                                            
-                                            <Label  Grid.Row="0" Grid.Column="0" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand"
-                                                     Text="V(24H) "  Style="{StaticResource MarketListVolumeLabel}">
-                                            </Label>
-                                            <Label   Grid.Row="0" Grid.Column="1"  VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand"
-                                                     Text="Bid "  Style="{StaticResource MarketListVolumeLabel}">
-                                            </Label>
-                                            <Label    Grid.Row="0" Grid.Column="2" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand"
-                                                      Text="Ask "  Style="{StaticResource MarketListVolumeLabel}">
-                                            </Label>
-                                            <!--<Label  Grid.Row="1" Grid.Column="0" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand"
+                                            </controls:CustomGrid.ColumnDefinitions>-->
+
+                                    <StackLayout Grid.Row="2" Grid.Column="0" HorizontalOptions="FillAndExpand" VerticalOptions="StartAndExpand">
+                                        <Label  Grid.Row="0" Grid.Column="0" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand"  Text="V(24H) "  Style="{StaticResource MarketListVolumeLabel}">
+                                        </Label>
+                                        <controls:MarketValue Grid.Row="1" Grid.Column="0"  Value="{Binding VolumeString}" ValueStyle="{StaticResource MarketListPriceValue}"  />
+                                    </StackLayout>
+                                    <StackLayout Grid.Row="2" Grid.Column="1" HorizontalOptions="FillAndExpand" VerticalOptions="StartAndExpand">
+                                        <Label   Grid.Row="0" Grid.Column="1"  VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand"  Text="Bid "  Style="{StaticResource MarketListVolumeLabel}">
+                                        </Label>
+                                        <controls:MarketValue Grid.Row="1" Grid.Column="1"  Value="{Binding BidString}" ValueStyle="{StaticResource MarketListPriceValue}" Symbol="{Binding CurrencySymbol}" SymbolStyle="{StaticResource MarketListPriceSymbol}"  />
+                                    </StackLayout>
+                                    <StackLayout Grid.Row="2" Grid.Column="2" HorizontalOptions="FillAndExpand" VerticalOptions="StartAndExpand">
+                                        <Label    Grid.Row="0" Grid.Column="2" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand"  Text="Ask "  Style="{StaticResource MarketListVolumeLabel}">
+                                        </Label>
+                                        <controls:MarketValue Grid.Row="1" Grid.Column="2"  Value="{Binding AskString}" ValueStyle="{StaticResource MarketListPriceValue}" Symbol="{Binding CurrencySymbol}" SymbolStyle="{StaticResource MarketListPriceSymbol}"  />
+                                    </StackLayout>
+                                    <!--<Label  Grid.Row="1" Grid.Column="0" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand"
                                                      Text="{Binding VolumeString}" Style="{StaticResource MarketListVolumeValue}">
                                             </Label>-->
-                                            <controls:MarketValue Grid.Row="1" Grid.Column="0"  Value="{Binding VolumeString}" ValueStyle="{StaticResource MarketListVolumeValue}"  />
-                                            <!--<Label   Grid.Row="1" Grid.Column="1"  VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand"
+
+                                    <!--<Label   Grid.Row="1" Grid.Column="1"  VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand"
                                                       Text="{Binding BidString}" Style="{StaticResource MarketListVolumeValue}">
                                             </Label>-->
-                                            <controls:MarketValue Grid.Row="1" Grid.Column="1"  Value="{Binding BidString}" ValueStyle="{StaticResource MarketListVolumeValue}" Symbol="{Binding CurrencySymbol}" SymbolStyle="{StaticResource MarketListVolumeSymbol}"  />
-                                            <!--<Label    Grid.Row="1" Grid.Column="2" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand"
+
+                                    <!--<Label    Grid.Row="1" Grid.Column="2" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand"
                                                       Text="{Binding AskString}" Style="{StaticResource MarketListVolumeValue}">
                                             </Label>-->
-                                            <controls:MarketValue Grid.Row="1" Grid.Column="2"  Value="{Binding AskString}" ValueStyle="{StaticResource MarketListVolumeValue}" Symbol="{Binding CurrencySymbol}" SymbolStyle="{StaticResource MarketListVolumeSymbol}"  />
-                                        </controls:CustomGrid>
-                                    </StackLayout>
+
+                                    <!--</controls:CustomGrid>
+                                    </StackLayout>-->
                                 </controls:CustomGrid>
 
                             </ViewCell>
@@ -261,9 +252,9 @@
 
                     </ListView.ItemTemplate>
                 </ListView>
-                
+
             </StackLayout>
-            
+
         </Grid>
     </ContentPage.Content>
 </ContentPage>

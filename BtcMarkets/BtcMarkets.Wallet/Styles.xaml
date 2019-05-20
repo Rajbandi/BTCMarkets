@@ -173,7 +173,7 @@
     </Style>
 
     <Style x:Key="MarketListInstrumentName" TargetType="Label">
-        <Setter Property="FontSize" Value="Micro"></Setter>
+        <Setter Property="FontSize" Value="Small"></Setter>
         <Setter Property="TextColor" Value="{DynamicResource DefaultTextColor}"/>
     </Style>
 
@@ -187,15 +187,15 @@
         <Setter Property="TextColor" Value="{DynamicResource DefaultTextColor}"/>
     </Style>
     <Style x:Key="MarketListVolumeLabel" TargetType="Label">
-        <Setter Property="FontSize" Value="Micro"></Setter>
+        <Setter Property="FontSize" Value="Small"></Setter>
         <Setter Property="TextColor" Value="{DynamicResource AccentColor}"/>
     </Style>
     <Style x:Key="MarketListVolumeValue" TargetType="Label">
-        <Setter Property="FontSize" Value="Micro"></Setter>
+        <Setter Property="FontSize" Value="Small"></Setter>
         <Setter Property="TextColor" Value="{DynamicResource DefaultTextColor}"/>
     </Style>
     <Style x:Key="MarketListVolumeSymbol" TargetType="Label">
-        <Setter Property="FontSize" Value="Micro"></Setter>
+        <Setter Property="FontSize" Value="Small"></Setter>
         <Setter Property="TextColor" Value="{DynamicResource AccentColor}"/>
     </Style>
 
@@ -214,12 +214,12 @@
         <Setter Property="TextColor" Value="{DynamicResource AccentColor}"/>
     </Style>
     <Style x:Key="MarketListNotificationImage" TargetType="Image">
-        <Setter Property="HeightRequest" Value="20"></Setter>
-        <Setter Property="WidthRequest" Value="20"></Setter>
+        <Setter Property="HeightRequest" Value="25"></Setter>
+        <Setter Property="WidthRequest" Value="25"></Setter>
     </Style>
     <Style x:Key="MarketListFavouriteImage" TargetType="Image">
-        <Setter Property="HeightRequest" Value="20"></Setter>
-        <Setter Property="WidthRequest" Value="20"></Setter>
+        <Setter Property="HeightRequest" Value="25"></Setter>
+        <Setter Property="WidthRequest" Value="25"></Setter>
 
     </Style>
     <Style x:Key="MarketListFrame" TargetType="Frame">
@@ -472,6 +472,7 @@
     <Style x:Key="DefaultPage" TargetType="ContentPage">
         <Setter Property="BackgroundColor" Value="{DynamicResource PageBackgroundColor}"/>
         <Setter Property="Visual" Value="Material"/>
+        
     </Style>
 
     <Style x:Key="DefaultView" TargetType="ContentView">

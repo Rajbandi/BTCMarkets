@@ -53,6 +53,14 @@ namespace BtcMarkets.Wallet.Helpers
 
             AppService.Instance.SetLoaderMessage(message);
         }
+
+        public static bool IsLoaderVisible
+        {
+            get
+            {
+                return AppService.Instance.IsLoaderShowing; 
+            }
+        }
         public static void ShowError(string error = "")
         {
             if(string.IsNullOrWhiteSpace(error))
@@ -140,9 +148,9 @@ namespace BtcMarkets.Wallet.Helpers
             }
             else
                 if (currency == Constants.Aud)
-                str = $"{value:0.00}";
+                str = $"{value:#,##0.00}";
             else
-                str = $"{value:0.00000}";
+                str = $"{value:#,##0.00000}";
 
             return str;
         }
@@ -155,7 +163,7 @@ namespace BtcMarkets.Wallet.Helpers
                 str = $"{Constants.BtcSymbol}{value:0.00000000}";
             }
             else
-                str = $"{Constants.AudSymbol}{value:0.00}";
+                str = $"{Constants.AudSymbol}{value:#,##0.00}";
 
             return str;
         }

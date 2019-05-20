@@ -86,6 +86,7 @@
             <ShellContent ContentTemplate="{DataTemplate local:OpenOrdersPage}" Title="Open Orders" Route="OpenOrders"  Icon="{Binding Converter={StaticResource FontIconImage},ConverterParameter=format_list_numbered|AccentColor}" FlyoutIcon="{Binding Converter={StaticResource FontIconImage},ConverterParameter=account_balance_wallet|AccentColor}" />
 
             <ShellContent ContentTemplate="{DataTemplate local:OrdersHistoryPage}" Title="Orders History" Route="OrdersHistory" Icon="{Binding Converter={StaticResource FontIconImage},ConverterParameter=format_list_bulleted|AccentColor}" FlyoutIcon="{Binding Converter={StaticResource FontIconImage},ConverterParameter=format_list_bulleted|AccentColor}"  />
+            <ShellContent ContentTemplate="{DataTemplate local:FundTransferHistoryPage}" Title="Fund Transfer History" Route="FundHistory" Icon="{Binding Converter={StaticResource FontIconImage},ConverterParameter=swap_horiz|AccentColor}" FlyoutIcon="{Binding Converter={StaticResource FontIconImage},ConverterParameter=swap_horiz|AccentColor}"  />
         </ShellSection>
 
         <ShellSection Title="Settings" Icon="{Binding Converter={StaticResource FontIconImage}, ConverterParameter=settings}" Route="Settings" FlyoutIcon="{Binding Converter={StaticResource FontIconImage}, ConverterParameter=settings}" FlyoutDisplayOptions="AsMultipleItems">
@@ -104,14 +105,6 @@
 
     </FlyoutItem>
 
-    <!-- Optional Templates 
-    // These may be provided inline as below or as separate classes.
-
-    // This header appears at the top of the Flyout.
-   
-
-    -->
-
     <Shell.FlyoutHeaderTemplate >
         <DataTemplate>
 
@@ -129,7 +122,6 @@
         </DataTemplate>
     </Shell.FlyoutHeaderTemplate>
 
-    <!--// ItemTemplate is for ShellItems as displayed in a Flyout-->
     <Shell.ItemTemplate>
         <DataTemplate>
             <ContentView>
