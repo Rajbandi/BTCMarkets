@@ -20,21 +20,8 @@ namespace BtcMarkets.Wallet.Views
             InitializeComponent();
             
         }
-        public MarketsViewModel ViewModel => (MarketsViewModel)BindingContext;
 
-        public static readonly BindableProperty MarketsProperty = BindableProperty.Create(nameof(Markets), typeof(List<Market>), typeof(MarketsView), default(string), BindingMode.OneWay);
-        public List<Market> Markets
-        {
-            get
-            {
-                return (List<Market>)GetValue(MarketsProperty);
-            }
-            set
-            {
-                SetValue(MarketsProperty, value);
-            }
-        }
-
+        public BaseMarketViewModel ViewModel => (BaseMarketViewModel)this.BindingContext;
         private void MarketsListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var market = (Market)marketsListView.SelectedItem;
@@ -76,12 +63,12 @@ namespace BtcMarkets.Wallet.Views
 
         private void SearchCoin_TextChanged(object sender, TextChangedEventArgs e)
         {
-            ViewModel.SearchMarkets(e.NewTextValue);
+           // ViewModel.SearchMarkets(e.NewTextValue);
         }
 
         private void SearchCoin_SearchButtonPressed(object sender, EventArgs e)
         {
-            ViewModel.SearchMarkets(SearchCoin.Text);
+            //ViewModel.SearchMarkets(SearchCoin.Text);
         }
 
         private void MarketsListView_ItemSelected(object sender, SelectedItemChangedEventArgs e)
@@ -109,6 +96,40 @@ namespace BtcMarkets.Wallet.Views
         private void Grid_BindingContextChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void Menu_Tapped(object sender, EventArgs e)
+        {
+            var shell = (AppShell)Application.Current.MainPage;
+            if(shell != null)
+            {
+                shell.FlyoutIsPresented = !shell.FlyoutIsPresented;
+            }
+        }
+
+        private void TapGestureRecognizer_Tapped(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void MarketsListView_ItemTapped(object sender, ItemTappedEventArgs e)
+        {
+            var market = (Market)e.Item;
+            if (market != null)
+            {
+                if (market != null)
+                {
+                    ViewModel.IsBusy = true;
+                    AppData.Current.Market = market;
+                    var detailsPage = new MarketDetailPage();
+                    detailsPage.InputTransparent = false;
+                    detailsPage.BackgroundColor = Color.White;
+                    Navigation.PushAsync(detailsPage);
+                    marketsListView.SelectedItem = null;
+
+
+                }
+            }
         }
     }
 }

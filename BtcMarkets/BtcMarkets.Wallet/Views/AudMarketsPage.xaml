@@ -3,22 +3,26 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
               xmlns:views="clr-namespace:BtcMarkets.Wallet.Views"
              xmlns:effects="clr-namespace:BtcMarkets.Wallet.Effects"
+             xmlns:lib ="clr-namespace:BtcMarkets.Wallet"
+              xmlns:controls="clr-namespace:BtcMarkets.Wallet.Controls"
              Title="{Binding Title}"
              xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core" 
              ios:Page.UseSafeArea="true" 
              Style="{StaticResource DefaultPage}"
+               
              x:Name="AudPage" 
-             x:Class="BtcMarkets.Wallet.Views.AudMarketsPage">
+             x:Class="BtcMarkets.Wallet.Views.AudMarketsPage"  >
 
-    <Shell.TitleView>
+    <!--<Shell.TitleView>
         <views:AccountHoldingsView BindingContext="{Binding BindingContext,Source={x:Reference AudPage}}" >
 
         </views:AccountHoldingsView>
-    </Shell.TitleView>
+    </Shell.TitleView>-->
 
     <ContentPage.Content>
-        <views:MarketsView Grid.Row="1" Grid.Column="0" Markets="{Binding AudMarkets}">
-          
+        <views:MarketsView BindingContext="{Binding BindingContext, Source={x:Reference AudPage}}">
+
         </views:MarketsView>
+
     </ContentPage.Content>
 </ContentPage>

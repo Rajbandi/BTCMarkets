@@ -26,6 +26,7 @@
     <Color x:Key="LightBlackColor2">#1E1E1E</Color>
     <Color x:Key="LightBlackColor3">#2D2D30</Color>
     <Color x:Key="TextColor1">#99A3A4</Color>
+    <Color x:Key="DimTextColor1">#979A9A</Color>
     <Color x:Key="ErrorColor1">#BF360C</Color>
     
     <!--<Color x:Key="PageBackgroundColor">#566573</Color>-->

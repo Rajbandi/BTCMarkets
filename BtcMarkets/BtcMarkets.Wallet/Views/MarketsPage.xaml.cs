@@ -16,11 +16,11 @@ namespace BtcMarkets.Wallet.Views
         {
             InitializeComponent();
 
-            BindingContext = ViewModel = new MarketsPageViewModel();
+            //BindingContext = ViewModel = BaseMarketViewModel.Current;
           
         }
 
-        public MarketsPageViewModel ViewModel { get; private set; }
+        public BaseMarketViewModel ViewModel { get; private set; }
 
         
         protected override void OnAppearing()

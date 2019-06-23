@@ -25,7 +25,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>portable</DebugType>
-    <Optimize>false</Optimize>
+    <Optimize>true</Optimize>
     <OutputPath>bin\Debug</OutputPath>
     <DefineConstants>DEBUG</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
@@ -40,6 +40,8 @@
     <AndroidSupportedAbis>armeabi-v7a;x86</AndroidSupportedAbis>
     <EnableProguard>false</EnableProguard>
     <AndroidCreatePackagePerAbi>false</AndroidCreatePackagePerAbi>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <MandroidI18n />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -63,6 +65,9 @@
   <ItemGroup>
     <PackageReference Include="Acr.UserDialogs">
       <Version>7.0.4</Version>
+    </PackageReference>
+    <PackageReference Include="Microcharts">
+      <Version>0.8.5-pre</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.AppCenter.Analytics">
       <Version>1.14.0</Version>

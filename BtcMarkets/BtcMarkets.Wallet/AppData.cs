@@ -1660,11 +1660,11 @@ namespace BtcMarkets.Wallet
                     break;
                 case HistoryPeriod.Week:
                     startDate = DateTime.Now.AddDays(-7).Date;
-                    frequency = "day";
+                    frequency = "hour";
                     break;
                 case HistoryPeriod.FortNight:
                     startDate = DateTime.Now.AddDays(-15).Date;
-                    frequency = "day";
+                    frequency = "hour";
                     break;
                 case HistoryPeriod.Month:
 

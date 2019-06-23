@@ -10,49 +10,53 @@ using Xamarin.Forms.Internals;
 
 namespace BtcMarkets.Wallet.ViewModels
 {
-    public class AudMarketsViewModel : MarketsViewModel
+    public class AudMarketsViewModel : BaseMarketViewModel
     {
        
         public AudMarketsViewModel() : base("AudMarkets")
         {
-            Title = "AUD Markets";
-            IsSearchBarVisible = false;
-
+           
+           
         }
-        public IList<Market> AudMarkets => Markets;
-        protected override void LoadMarkets()
+
+        public override ObservableCollection<Market> GetMarkets()
         {
-            //Markets = new ObservableCollection<Market>(AppData.Current.AudMarkets);
-            //if (Markets.Any())
-            //    Markets.Clear();
-
-            //foreach (var market in AppData.Current.AudMarkets)
-            //{
-            //    Markets.Add(market);
-            //}
-            //base.LoadMarkets();
+            return new ObservableCollection<Market>(AppData.Current.AudMarkets);
         }
 
-        public override void SearchMarkets(string coin)
-        {
-            //if(string.IsNullOrWhiteSpace(coin))
-            //{
-            //    LoadMarkets();
-            //}
-            //else
-            //{
-            //    if (Markets.Any())
-            //        Markets.Clear();
-            //    var txt = coin.ToLower();
-            //    var markets = AppData.Current.AudMarkets.Where(x => x.Instrument.ToLower().Contains(txt) || x.Name.ToLower().Contains(txt));
-            //    foreach (var market in markets)
-            //    {
-            //        Markets.Add(market);
-            //    }
+        //    protected override void LoadMarkets()
+        //    {
+        //        //Markets = new ObservableCollection<Market>(AppData.Current.AudMarkets);
+        //        //if (Markets.Any())
+        //        //    Markets.Clear();
 
-            //}
-            //OnPropertyChanged(nameof(Markets));
-        }
+        //        //foreach (var market in AppData.Current.AudMarkets)
+        //        //{
+        //        //    Markets.Add(market);
+        //        //}
+        //        //base.LoadMarkets();
+        //    }
+
+        //    public override void SearchMarkets(string coin)
+        //    {
+        //        //if(string.IsNullOrWhiteSpace(coin))
+        //        //{
+        //        //    LoadMarkets();
+        //        //}
+        //        //else
+        //        //{
+        //        //    if (Markets.Any())
+        //        //        Markets.Clear();
+        //        //    var txt = coin.ToLower();
+        //        //    var markets = AppData.Current.AudMarkets.Where(x => x.Instrument.ToLower().Contains(txt) || x.Name.ToLower().Contains(txt));
+        //        //    foreach (var market in markets)
+        //        //    {
+        //        //        Markets.Add(market);
+        //        //    }
+
+        //        //}
+        //        //OnPropertyChanged(nameof(Markets));
+        //    }
 
     }
 

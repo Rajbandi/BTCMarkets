@@ -1,19 +1,25 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:chart="clr-namespace:Syncfusion.SfChart.XForms;assembly=Syncfusion.SfChart.XForms"
              xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
              xmlns:controls="clr-namespace:BtcMarkets.Wallet.Controls"
+             xmlns:microcharts="clr-namespace:Microcharts.Forms;assembly=Microcharts.Forms"
+             xmlns:chart="clr-namespace:Syncfusion.SfChart.XForms;assembly=Syncfusion.SfChart.XForms"
              ios:Page.UseSafeArea="true" 
              Title="{Binding Title}" 
              Style="{StaticResource DefaultPage}"
              x:Name="MarketDetails"
              x:Class="BtcMarkets.Wallet.Views.MarketDetailPage">
     <Shell.TitleView>
-        <StackLayout Orientation="Horizontal"  BindingContext="{Binding BindingContext,Source={x:Reference MarketDetails}}" Padding="0,0,10,0">
-            <StackLayout  HorizontalOptions="FillAndExpand">
-                <Label  Text="{Binding Title}" Style="{StaticResource LargeDefaultText}" HorizontalOptions="StartAndExpand"  VerticalOptions="CenterAndExpand" VerticalTextAlignment="Center">
-                </Label>
+        <StackLayout Orientation="Horizontal"  BindingContext="{Binding BindingContext,Source={x:Reference MarketDetails}}" Padding="0,10,10,0">
+            <StackLayout  HorizontalOptions="FillAndExpand" Orientation="Horizontal" VerticalOptions="CenterAndExpand">
+                <Image Source="{Binding Market.ImageSource}" WidthRequest="25" HeightRequest="25" VerticalOptions="CenterAndExpand" />
+                <!--<Label  Text="{Binding Title}" Style="{StaticResource LargeDefaultText}" HorizontalOptions="StartAndExpand"  VerticalOptions="CenterAndExpand" VerticalTextAlignment="Center">
+                
+                </Label>-->
+                    
+                <Label Text="{Binding Market.Pair}" Style="{StaticResource MediumDefaultText}" HorizontalOptions="FillAndExpand" VerticalOptions="CenterAndExpand"/>
+                
             </StackLayout>
             <StackLayout  Orientation="Horizontal" >
                 <!--<Image Source="{Binding Converter={StaticResource FontIconImage},ConverterParameter=settings}"></Image>-->
@@ -60,6 +66,7 @@
                         --><!--<Label Text="{Binding Market.LastPriceWithSymbol}" Style="{StaticResource LargeDefaultText}" HorizontalOptions="FillAndExpand" />--><!--
                         <controls:MarketValue Value="{Binding Market.LastPriceString}" ValueStyle="{StaticResource LargeDefaultText}" Symbol="{Binding Market.CurrencySymbol}" SymbolStyle="{StaticResource LargeDefaultAccentText}"  />
                         <Label>
+                    xmlns:chart="clr-namespace:Syncfusion.SfChart.XForms;assembly=Syncfusion.SfChart.XForms"
                             <Label.FormattedText>
                                 <FormattedString>
                                     <Span Text="24HR " Style="{StaticResource SmallDefaultAccentText}"/>
@@ -79,14 +86,14 @@
                             <ColumnDefinition Width="25*"></ColumnDefinition>
                         </Grid.ColumnDefinitions>-->
                     <StackLayout Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Orientation="Horizontal" Spacing="15" HorizontalOptions="FillAndExpand">
-                        <StackLayout Grid.Row="0" Grid.Column="0" Orientation="Horizontal" HorizontalOptions="FillAndExpand" >
-                            <!--<Image Source="{Binding Market.Image,Converter={StaticResource Base64ToImage}}" WidthRequest="20" HeightRequest="20" />-->
+                        <!--<StackLayout Grid.Row="0" Grid.Column="0" Orientation="Horizontal" HorizontalOptions="FillAndExpand" >
+                            --><!--<Image Source="{Binding Market.Image,Converter={StaticResource Base64ToImage}}" WidthRequest="20" HeightRequest="20" />--><!--
                             <Image Source="{Binding Market.ImageSource}" WidthRequest="20" HeightRequest="20" VerticalOptions="StartAndExpand"/>
                             <Label Text="{Binding Market.Pair}" Style="{StaticResource LargeDefaultText}" HorizontalOptions="FillAndExpand" />
-                        </StackLayout>
-                        <controls:MarketValue Grid.Row="0" Grid.Column="1" Value="{Binding Market.LastPriceString}" ValueStyle="{StaticResource LargeDefaultText}" Symbol="{Binding Market.CurrencySymbol}" SymbolStyle="{StaticResource LargeDefaultAccentText}"  />
+                        </StackLayout>-->
+                        <controls:MarketValue Grid.Row="0" Grid.Column="0" Value="{Binding Market.LastPriceString}" ValueStyle="{StaticResource MediumDefaultText}" Symbol="{Binding Market.CurrencySymbol}" SymbolStyle="{StaticResource MediumDefaultAccentText}"  />
 
-                        <Label Grid.Row="0" Grid.Column="2" VerticalOptions="CenterAndExpand">
+                        <Label Grid.Row="0" Grid.Column="1" VerticalOptions="CenterAndExpand">
                             <Label.FormattedText>
                                 <FormattedString>
                                     <Span Text="24HR " Style="{StaticResource SmallDefaultAccentText}"/>
@@ -214,6 +221,9 @@
                                 </Image>
 
                             </StackLayout>
+
+                            <!--<microcharts:ChartView HeightRequest="200"   Chart="{Binding LineChart}" />-->
+
 
                             <!--<oxy:PlotView x:Name="plotView" Model="{Binding CandleChart}" HeightRequest="250"  HorizontalOptions="FillAndExpand" 
                                BackgroundColor="Transparent" >

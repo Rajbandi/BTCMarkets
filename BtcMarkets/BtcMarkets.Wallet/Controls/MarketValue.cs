@@ -173,20 +173,23 @@ namespace BtcMarkets.Wallet.Controls
 
             try
             {
+
                 var view = (MarketValue)bindable;
                 if (view != null)
                 {
-                    var label = view.ValueView;
-                    var color = label.TextColor;
-
-                    label.Text = (string)newValue;
+                
 
                     double previousVal, newVal;
 
                     double.TryParse((string)oldValue, out previousVal);
                     double.TryParse((string)newValue, out newVal);
+                    
+                    var label = view.ValueView;
+                    var color = label.TextColor;
+
+                    label.Text = (string)newValue;
                     var change = newVal - previousVal;
-                    if (change != 0)
+                    if (change != 0 && oldValue != null)
                     {
                         Color newColor = color;
                         if (change > 0)
@@ -203,7 +206,7 @@ namespace BtcMarkets.Wallet.Controls
                         }
 
                         label.TextColor = newColor;
-                        await Task.Delay(1000);
+                        await Task.Delay(500);
                     }
                     label.TextColor = ((Color)Application.Current.Resources["DefaultTextColor"]);
                     view.ValueChanged?.Invoke(label, new TextChangedEventArgs((string)oldValue, (string)newValue));

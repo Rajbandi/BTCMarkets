@@ -31,7 +31,15 @@ namespace BtcMarkets.Wallet.Views
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            ViewModel.InitReport();
+            Task.Run(() =>
+            {
+                Device.BeginInvokeOnMainThread(() =>
+                {
+                    ViewModel.InitReport();
+                });
+                
+            });
+            
         }
 
         private void BtnTrades_Clicked(object sender, EventArgs e)

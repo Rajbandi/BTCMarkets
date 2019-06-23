@@ -69,9 +69,14 @@
         <!--<ShellSection Title="Home" Icon="{Binding Converter={StaticResource FontIconImage}, ConverterParameter=home}" Route="Home"  >
             <ShellContent ContentTemplate="{DataTemplate local:HomePage}" />
         </ShellSection>-->
-        <ShellSection Title="Markets" Icon="{Binding Converter={StaticResource FontIconImage},ConverterParameter=timeline}" Route="Markets" FlyoutIcon="{Binding Converter={StaticResource FontIconImage},ConverterParameter=timeline}" FlyoutDisplayOptions="AsMultipleItems">
-
-            <ShellContent  ContentTemplate="{DataTemplate local:MarketsPage}" Title="Markets"  Route="List"  Icon="{Binding Converter={StaticResource FontIconImage},ConverterParameter=timeline|AccentColor}" FlyoutIcon="{Binding Converter={StaticResource FontIconImage},ConverterParameter=timeline|AccentColor}"/>
+        <ShellSection Title="Markets" Icon="{Binding Converter={StaticResource FontIconImage},ConverterParameter=timeline}" Route="Markets" FlyoutIcon="{Binding Converter={StaticResource FontIconImage},ConverterParameter=timeline}" FlyoutDisplayOptions="AsMultipleItems" >
+            
+            <!--<ShellContent  ContentTemplate="{DataTemplate local:MarketsPage}" Title="Markets"  Route="List"  Icon="{Binding Converter={StaticResource FontIconImage},ConverterParameter=timeline|AccentColor}" FlyoutIcon="{Binding Converter={StaticResource FontIconImage},ConverterParameter=timeline|AccentColor}"/>-->
+            <!--<ShellContent  ContentTemplate="{DataTemplate local:FavMarketsPage}" Title="Favourites"  Route="FAV"  Icon="{Binding Converter={StaticResource FontIconImage},ConverterParameter=timeline|AccentColor}" FlyoutIcon="{Binding Converter={StaticResource FontIconImage},ConverterParameter=timeline|AccentColor}"/>
+            <ShellContent  ContentTemplate="{DataTemplate local:BtcMarketsPage}" Title="BTC Markets"  Route="BTC"  Icon="{Binding Converter={StaticResource FontIconImage},ConverterParameter=timeline|AccentColor}" FlyoutIcon="{Binding Converter={StaticResource FontIconImage},ConverterParameter=timeline|AccentColor}"/>-->
+            <ShellContent  ContentTemplate="{DataTemplate local:FavMarketsPage}" Title="Favourites"  Route="FAV"  Icon="{Binding Converter={StaticResource FontIconImage},ConverterParameter=timeline|AccentColor}" FlyoutIcon="{Binding Converter={StaticResource FontIconImage},ConverterParameter=timeline|AccentColor}"/>
+            <ShellContent  ContentTemplate="{DataTemplate local:AudMarketsPage}" Title="Aud Markets"  Route="AUD"  Icon="{Binding Converter={StaticResource FontIconImage},ConverterParameter=timeline|AccentColor}" FlyoutIcon="{Binding Converter={StaticResource FontIconImage},ConverterParameter=timeline|AccentColor}"/>
+            <ShellContent  ContentTemplate="{DataTemplate local:BtcMarketsPage}" Title="BTC Markets"  Route="BTC"  Icon="{Binding Converter={StaticResource FontIconImage},ConverterParameter=timeline|AccentColor}" FlyoutIcon="{Binding Converter={StaticResource FontIconImage},ConverterParameter=timeline|AccentColor}"/>
             <!--<ShellContent ContentTemplate="{DataTemplate local:BtcMarketsPage}" Title="BTC Markets" Route="Btc" />
             <ShellContent ContentTemplate="{DataTemplate local:FavMarketsPage}" Title="Favourites" Route="Fav" />-->
         </ShellSection>
@@ -133,7 +138,7 @@
                     <Image Source="{Binding Icon}" 
                        HeightRequest="30" />
                     <Label Grid.Column="1"
-                       Text="{Binding Title}" Style="{StaticResource MediumDefaultText}"
+                       Text="{Binding Title}" Style="{StaticResource SmallDefaultText}"
                        VerticalTextAlignment="Center" />
                 </Grid>
             </ContentView>
@@ -147,7 +152,7 @@
                 <ContentView.Padding>
                     <Thickness  Left="32"  Top="16" />
                 </ContentView.Padding>
-                <Label Text="{Binding Text}" FontAttributes="Bold" />
+                <Label Text="{Binding Text}" FontAttributes="Bold" FontSize="Medium" />
             </ContentView>
         </DataTemplate>
     </Shell.MenuItemTemplate>

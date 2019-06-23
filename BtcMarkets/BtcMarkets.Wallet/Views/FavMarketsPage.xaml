@@ -8,16 +8,17 @@
              Style="{StaticResource DefaultPage}"
              x:Name="FavPage"
              x:Class="BtcMarkets.Wallet.Views.FavMarketsPage">
-    <Shell.TitleView>
+    <!--<Shell.TitleView>
         <views:AccountHoldingsView BindingContext="{Binding BindingContext,Source={x:Reference FavPage}}" >
 
         </views:AccountHoldingsView>
-    </Shell.TitleView>
+    </Shell.TitleView>-->
 
     <ContentPage.Content>
 
-        <views:MarketsView Markets="{Binding FavMarkets}" BackgroundColor="Transparent"> 
+        <views:MarketsView BindingContext="{Binding BindingContext, Source={x:Reference FavPage}}">
 
         </views:MarketsView>
+
     </ContentPage.Content>
 </ContentPage>

@@ -19,9 +19,9 @@ namespace BtcMarkets.Wallet
             InitializeComponent();
             BindingContext = ViewModel = new MainPageViewModel();
             On<Xamarin.Forms.PlatformConfiguration.iOS>().SetUseSafeArea(true);
-         
+           
         }
-      
+
         protected override void OnAppearing()
         {
             base.OnAppearing();
@@ -34,35 +34,34 @@ namespace BtcMarkets.Wallet
             }
 
             AppHelper.TrackEvent(AppTrackEvents.MainPage);
-
-
-          
         }
 
-        
-        private bool isFirstTime = true;
+
+        private static bool isFirstTime = true;
         private void Shell_Navigating(object sender, ShellNavigatingEventArgs e)
         {
             var current = e.Current;
-            if (current != null && !current.Location.PathAndQuery.ToLower().Contains("/account"))
+            if (current != null)
             {
+                var currentLocation = current.Location.PathAndQuery.ToLower();
                 var path = e.Target.Location.PathAndQuery.ToLower();
-                if(path.Contains("/account"))
+                if (!currentLocation.Contains("/account") && path.Contains("/account"))
                 {
                     if (!AppData.Current.IsAccountSetup)
                     {
                         AppHelper.ShowAlert("Account features requires valid api crendentials. Use settings to setup.");
-
                     }
                 }
+              
+              
             }
-
+           
         }
 
         private void MainPageRef_Navigated(object sender, ShellNavigatedEventArgs e)
         {
-            
-            
+
+
         }
     }
 }

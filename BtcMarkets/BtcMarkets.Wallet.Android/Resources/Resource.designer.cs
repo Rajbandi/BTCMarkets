@@ -63,6 +63,7 @@ namespace BtcMarkets.Wallet.Droid
 			global::AndroidHUD.Resource.Styleable.ProgressWheel_ahText = global::BtcMarkets.Wallet.Droid.Resource.Styleable.ProgressWheel_ahText;
 			global::AndroidHUD.Resource.Styleable.ProgressWheel_ahTextColor = global::BtcMarkets.Wallet.Droid.Resource.Styleable.ProgressWheel_ahTextColor;
 			global::AndroidHUD.Resource.Styleable.ProgressWheel_ahTextSize = global::BtcMarkets.Wallet.Droid.Resource.Styleable.ProgressWheel_ahTextSize;
+			global::Microcharts.Droid.Resource.String.library_name = global::BtcMarkets.Wallet.Droid.Resource.String.library_name;
 			global::Syncfusion.XForms.Android.Core.Resource.Drawable.inputlayout_togglecollapseicon = global::BtcMarkets.Wallet.Droid.Resource.Drawable.inputlayout_togglecollapseicon;
 			global::Syncfusion.XForms.Android.Core.Resource.Drawable.inputlayout_togglevisibleicon = global::BtcMarkets.Wallet.Droid.Resource.Drawable.inputlayout_togglevisibleicon;
 			global::Syncfusion.SfChart.XForms.Droid.Resource.Animation.SfChart_Fade_In = global::BtcMarkets.Wallet.Droid.Resource.Animation.SfChart_Fade_In;

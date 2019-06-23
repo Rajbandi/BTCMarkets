@@ -1,66 +1,176 @@
 ﻿using BtcMarkets.Wallet.Models;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Input;
+using Xamarin.Forms;
 
 namespace BtcMarkets.Wallet.ViewModels
 {
     public class BaseMarketViewModel : BaseViewModel
     {
-        public BaseMarketViewModel()
+        public BaseMarketViewModel() : this("Markets")
         {
+
 
         }
 
         public BaseMarketViewModel(string title) : base(title)
         {
-
+            IsSearchBarVisible = false;
+            AppData.Current.MarketsUpdated += Current_MarketsUpdated;
+         
+            
         }
 
-        private AccountValue _accountValue;
-        public AccountValue AccountHoldings
+        private void Current_MarketsUpdated(object sender, EventArgs e)
         {
-            get => _accountValue;
-            set => SetProperty(ref _accountValue, value, nameof(AccountHoldings));
+            OnPropertyChanged(nameof(Markets));
         }
 
-
-        public void UpdateHoldings()
+        public ObservableCollection<Market> Markets => GetMarkets();
+        public virtual ObservableCollection<Market> GetMarkets()
         {
-            if (AccountHoldings == null)
-            {
-                AccountHoldings = new AccountValue();
-            }
+            return new ObservableCollection<Market>();
+        }
 
+        private Market _selectedMarket;
+        public Market SelectedMarket
+        {
+            get => _selectedMarket;
+            set => SetProperty(ref _selectedMarket, value, nameof(SelectedMarket));
+        }
+
+        private bool _isSearchBarVisible;
+        public bool IsSearchBarVisible
+        {
+            get => _isSearchBarVisible;
+            set => SetProperty(ref _isSearchBarVisible, value);
+        }
+      
+        public async Task RefreshMarkets()
+        {
             var appData = AppData.Current;
-
-            AccountHoldings.AccountValueInAud = appData.TotalHoldingsInAud;
-            AccountHoldings.AccountValueInBtc = appData.TotalHoldingsInBtc;
-
-            var accountBalances = new List<AccountBalance>();
-
-            var balances = appData.Balances.Where(x => x.Balance > 0).OrderBy(x => x.Currency);
-            var audBalance = balances.FirstOrDefault(x => x.Currency == Constants.Aud);
-            if (audBalance != null)
-            {
-                accountBalances.Add(audBalance);
-            }
-            var btcBalance = balances.FirstOrDefault(x => x.Currency == Constants.Btc);
-            if (btcBalance != null)
-            {
-                accountBalances.Add(btcBalance);
-            }
-            foreach (var balance in balances.Where(x => x.Currency != Constants.Aud && x.Currency != Constants.Btc))
-            {
-                accountBalances.Add(balance);
-            }
-            AccountHoldings.Balances = new ObservableCollection<AccountBalance>(accountBalances);
-
-            OnPropertyChanged(nameof(AccountHoldings));
+            await appData.RefreshMarkets();
         }
 
-        
+        public ICommand MarketDetailsCommand
+        {
+            get
+            {
+                return new Command((item) =>
+                {
+                    var m = (Market)item;
+                    var market = SelectedMarket;
+                });
+            }
+        }
+
+        public ICommand FavouriteCommand
+        {
+            get
+            {
+                return new Command((item) =>
+                {
+                    var market = (Market)item;
+                    if (market != null)
+                    {
+                        var state = market.Starred;
+                        market.Starred = !state;
+                        var data = AppData.Current;
+
+                        data.AddOrRemoveFavourite(market, state);
+                    }
+                });
+            }
+        }
+        public ICommand NotificationCommand
+        {
+            get
+            {
+                return new Command((item) =>
+                {
+                    var market = (Market)item;
+                    if (market != null)
+                    {
+                        market.Notification = !market.Notification;
+                    }
+
+                });
+            }
+        }
+
+        private bool _isRefreshing;
+        public bool IsRefreshing
+        {
+            get => _isRefreshing; 
+            set
+            {
+                SetProperty(ref _isRefreshing, value, nameof(IsRefreshing));
+            }
+        }
+
+      
+        public void Refresh(bool pullToRefresh = false)
+        {
+            Device.BeginInvokeOnMainThread(async () =>
+            {
+                
+                if (!pullToRefresh)
+                {
+                    IsBusy = true;
+                }
+                else
+                    IsRefreshing = true;
+
+                await RefreshMarkets();
+
+                if (!pullToRefresh)
+                    IsBusy = false;
+                else
+                 IsRefreshing = false;
+
+              
+            });
+        }
+        public ICommand RefreshDataCommand
+        {
+            get
+            {
+
+                return new Command(() =>
+                {
+                    Refresh(true);
+
+                });
+            }
+        }
+
+        public ICommand SearchCommand
+        {
+            get
+            {
+
+                return new Command((arg) =>
+                {
+                    var a = arg;
+
+                });
+            }
+        }
+
+        public ICommand ShowSearchCommand
+        {
+            get
+            {
+                return new Command((arg) =>
+                {
+                    IsSearchBarVisible = !IsSearchBarVisible;
+                });
+            }
+        }
     }
+
+
 }

@@ -1,17 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
 using BtcMarkets.Wallet.Helpers;
 using BtcMarkets.Wallet.Models;
 using Newtonsoft.Json;
 //using Microcharts;
-using SkiaSharp;
 using Xamarin.Forms;
-using Xamarin.Forms.Internals;
 using System.Threading.Tasks;
-using BtcMarkets.Core.Helpers;
 using BtcMarkets.Wallet.Controls;
 using System.Windows.Input;
 
@@ -163,8 +158,43 @@ namespace BtcMarkets.Wallet.ViewModels
             set
             {
                 SetProperty(ref _areaChartData, value, nameof(AreaChartData));
+                //OnPropertyChanged(nameof(LineChart));
             }
         }
+
+        //public Chart LineChart {
+        //    get {
+        //        var lineChart = new LineChart()
+        //        {
+        //            LineMode = LineMode.Straight,
+        //            PointMode = PointMode.Circle,
+        //            LineSize = 1,
+        //            LabelColor = SKColors.Tomato,
+        //            BackgroundColor = SKColors.Transparent,
+                    
+        //        };
+
+        //        if(AreaChartData != null)
+        //        {
+        //            try
+        //            {
+        //                lineChart.Entries = AreaChartData?.Select(x => new Microcharts.ChartEntry((float)x.Value)
+        //                {
+        //                    Color = SKColor.Parse(ResourceHelper.PrimaryColor.ToHexWeb())
+        //                }) ;
+        //                lineChart.MinValue = (float)AreaChartData?.Min(x => x.Value);
+        //                lineChart.MaxValue = (float)AreaChartData?.Max(x => x.Value);
+                        
+        //            }
+        //            catch(Exception ex)
+        //            {
+
+        //            }
+        //        }
+
+        //        return lineChart;
+        //    }
+        //}
 
         private double? _areaChartPriceMinimum;
         public double? AreaChartPriceMinimum

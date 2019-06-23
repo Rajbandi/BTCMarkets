@@ -9,56 +9,23 @@ using Xamarin.Forms.Internals;
 
 namespace BtcMarkets.Wallet.ViewModels
 {
-    public class FavMarketsViewModel : MarketsViewModel
+    public class FavMarketsViewModel : BaseMarketViewModel
     {
         public FavMarketsViewModel() : base("Favourites")
         {
-            Title = "Favourites";
-         //   Markets = new ObservableCollection<Market>();
-            IsSearchBarVisible = false;
-         //   Subscribe();
+            AppData.Current.FavouritesUpdated += Current_FavouritesUpdated;
         }
 
-        private void AppData_FavouritesUpdated(object sender, EventArgs e)
+        private void Current_FavouritesUpdated(object sender, EventArgs e)
         {
-            LoadMarkets();
             OnPropertyChanged(nameof(Markets));
         }
 
-        
-        protected override void LoadMarkets()
+        public override ObservableCollection<Market> GetMarkets()
         {
-          //  Markets = new ObservableCollection<Market>(AppData.Current.Favourites);
-          //if(Markets.Any())
-          //      Markets.Clear();
-
-          //  var markets = AppData.Current.Favourites;
-          //  foreach(var market in markets)
-          //  {
-          //      if(!market.Starred)
-          //      {
-          //          market.Starred = true;
-          //      }
-          //      Markets.Add(market);
-          //  }
-          //  base.LoadMarkets();
+            return new ObservableCollection<Market>(AppData.Current.Favourites);
         }
 
-        public void Subscribe()
-        {
-            var appData = AppData.Current;
-
-            appData.FavouritesUpdated += AppData_FavouritesUpdated;
-
-        }
-
-        public void Unsubscribe()
-        {
-            var appData = AppData.Current;
-
-            appData.FavouritesUpdated -= AppData_FavouritesUpdated;
-
-        }
 
     }
 

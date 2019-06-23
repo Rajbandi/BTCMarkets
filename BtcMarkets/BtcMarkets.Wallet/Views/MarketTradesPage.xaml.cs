@@ -1,6 +1,6 @@
 ﻿using BtcMarkets.Wallet.Models;
 using BtcMarkets.Wallet.ViewModels;
-
+using System;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -27,6 +27,15 @@ namespace BtcMarkets.Wallet.Views
         {
             base.OnAppearing();
             ViewModel.InitMarket();
+        }
+
+        private void Menu_Tapped(object sender, EventArgs e)
+        {
+            var shell = (AppShell)Application.Current.MainPage;
+            if (shell != null)
+            {
+                shell.FlyoutIsPresented = !shell.FlyoutIsPresented;
+            }
         }
     }
 }

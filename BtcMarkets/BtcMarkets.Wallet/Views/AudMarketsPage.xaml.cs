@@ -2,6 +2,7 @@
 using BtcMarkets.Wallet.Models;
 using BtcMarkets.Wallet.ViewModels;
 using System.Linq;
+using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -20,21 +21,16 @@ namespace BtcMarkets.Wallet.Views
          
         }
 
+        
 
         protected override void OnAppearing()
         {
             base.OnAppearing();
 
             AppHelper.TrackEvent(AppTrackEvents.AudMarkets);
-
-            //  CheckFavourites();
-
-
-            //CrossLocalNotifications.Current.Show("Hello", "My First ");
-
-            AppHelper.ShowNotification("Help","Loadded ");
-
+          
         }
+
 
         private static bool isFirst = true;
         public async void CheckFavourites()

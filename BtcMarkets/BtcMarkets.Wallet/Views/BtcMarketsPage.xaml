@@ -8,12 +8,12 @@
              ios:Page.UseSafeArea="true" 
              Style="{StaticResource DefaultPage}"
              x:Name="BtcPage"
-             x:Class="BtcMarkets.Wallet.Views.BtcMarketsPage">
-    <Shell.TitleView>
+             x:Class="BtcMarkets.Wallet.Views.BtcMarketsPage"  >
+    <!--<Shell.TitleView>
         <views:AccountHoldingsView BindingContext="{Binding BindingContext,Source={x:Reference BtcPage}}" >
 
         </views:AccountHoldingsView>
-    </Shell.TitleView>
+    </Shell.TitleView>-->
     <!--<Shell.TitleView>
 
         <StackLayout Orientation="Horizontal" BindingContext="{Binding BindingContext,Source={x:Reference BtcPage}}">
@@ -40,11 +40,10 @@
         </StackLayout>
     </Shell.TitleView>-->
     <ContentPage.Content>
-        <views:MarketsView Grid.Row="1" Grid.Column="0" Markets="{Binding BtcMarkets}">
-
+        <views:MarketsView BindingContext="{Binding BindingContext, Source={x:Reference BtcPage}}">
+            
         </views:MarketsView>
     </ContentPage.Content>
-
-
+   
 
 </ContentPage>

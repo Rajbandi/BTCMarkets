@@ -25,8 +25,8 @@ namespace BtcMarkets.Wallet.Views
           
             InitializeComponent();
             BindingContext = ViewModel = new BtcMarketsViewModel();
-          //        ViewModel.RefreshMarkets();
-          
+         
+
         }
 
         protected override void OnAppearing()
@@ -34,8 +34,9 @@ namespace BtcMarkets.Wallet.Views
             base.OnAppearing();
 
             AppHelper.TrackEvent(AppTrackEvents.BtcMarkets);
-
+           
         }
 
+       
     }
 }
