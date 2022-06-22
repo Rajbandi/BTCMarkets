@@ -15,7 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="PureWebSockets" Version="2.4.3" />
     <PackageReference Include="Refit" Version="4.6.48" />
     <PackageReference Include="SuperSocket.ClientEngine.Core" Version="0.10.0" />
